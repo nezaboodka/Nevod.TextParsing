@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace WordExtraction
 {
-    class Program
+    class WordExtractor
     {
-        static void Main(string[] args)
+        public static IEnumerable<string> GetWords(string text)
         {
+            yield return "word";
         }
     }
 }
