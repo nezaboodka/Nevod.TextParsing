@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WordExtraction
 {
@@ -14,7 +10,7 @@ namespace WordExtraction
         {
             foreach (var word in WordExtractor.GetWords(UNICODE_DEMO))
             {
-                Console.WriteLine(word);
+                Console.WriteLine(word);                
             }
         }
     }
