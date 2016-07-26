@@ -1,6 +1,7 @@
 from urllib import request
 from os import path, system, sys
 import re
+from collections import defaultdict
 
 
 UNICODE_VERSION = '6.3.0' 
@@ -23,12 +24,28 @@ def fetch_file(filename):
                 output.write(download_file(filename))
     except IOError:
         print("Can't load {}.".format(filename), file=sys.stderr)
+        sys.exit(1)
+
+
+def merge_ranges(properties):
+    result = defaultdict(list)
+    for property, ranges in properties.items():
+        current_result = result[property]
+        current_result.append(ranges[0])
+        
+        for range in ranges[1:]:
+            if range[0] == current_result[-1][1] + 1:
+                current_result[-1] = (current_result[-1][0], range[1])
+            else:
+                current_result.append(range)
+
+    return result
 
 
 def load_properties(filename):
     fetch_file(filename)
 
-    properties = {}    
+    properties = defaultdict(list)
 
     single_value_property_re = re.compile(SINGLE_PROPERTY)
     range_value_property_re = re.compile(RANGE_PROPERTY)
@@ -52,13 +69,14 @@ def load_properties(filename):
             else:
                 continue
         
-        if not property in properties:
-            properties[property] = []
         properties[property].append((low_bound, high_bound))
     
     return properties
-        
+
+
+def main():
+    ranges = {'a': [(1, 1), (2, 2), (3, 3), (5, 19), (20, 20)]}
+    print(merge_ranges(ranges))
 
 if __name__ == '__main__':
-    print(load_properties(WORD_BREAK_PROPERTY_FILENAME))
-    system('pause')
+    main()
