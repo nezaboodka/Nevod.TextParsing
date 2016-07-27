@@ -12,7 +12,7 @@ HEXADECIMAL = r'[0-9A-F]+'
 SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
-WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakProperty('{low_bound}', '{high_bound}', WordBreakPropertyType.{property})"
+WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakProperty('{}', '{}', WordBreakPropertyType.{})"
 
 TAB_LENGTH = 4
 INDENT = TAB_LENGTH * 3
@@ -59,6 +59,8 @@ def load_properties(filename):
     single_value_property_re = re.compile(SINGLE_PROPERTY)
     range_value_property_re = re.compile(RANGE_PROPERTY)
 
+    two_bytes = lambda x: x <= 0xFFFF
+
     for line in open(filename):
         property = None
         low_bound = None
@@ -77,21 +79,30 @@ def load_properties(filename):
                 property = range_property_match.group(3)
             else:
                 continue
-        
-        properties[property].append((low_bound, high_bound))
+        if two_bytes(low_bound) and two_bytes(high_bound):
+            properties[property].append((low_bound, high_bound))
     
     return merge_ranges(properties)
 
 
+def format_char(c):
+    return r"\u{:x}".format(c)
+
+
+def format_property(property):
+    return WORD_BREAK_PROPERTY_TEMPLATE.format(format_char(property[0]), format_char(property[1]), property[2])
+
+
 def format_table(properties_sequence, indent=INDENT):
-    result = properties_sequence[0] + ',\n'
+    result = format_property(properties_sequence[0]) + ',\n'
     
     first = True
     for property in properties_sequence:
+        property_string = format_property(property) + ','
         if first:
-            result += ' ' * INDENT + property + ', '
+            result += ' ' * INDENT + property_string + ' '
         else:
-            result += property + ',\n'
+            result += property_string + '\n'
 
         first = not first
 
@@ -104,8 +115,8 @@ def generate_table(properties):
     first = True
     for property, ranges in properties.items():
         for low_bound, high_bound in ranges:
-            properties_sequence.append(WORD_BREAK_PROPERTY_TEMPLATE.format(low_bound=low_bound, high_bound=high_bound, property=property))
-
+            properties_sequence.append((low_bound, high_bound, property))
+    properties_sequence.sort(key=lambda x: x[0])
     return format_table(properties_sequence)
 
 def produce_source(table):
