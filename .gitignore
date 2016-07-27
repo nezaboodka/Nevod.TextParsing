@@ -245,3 +245,5 @@ ModelManifest.xml
 .fake/
 WordBreakProperty.txt
 /WordExtraction/scripts/__pycache__
+/WordExtraction/scripts/WordBreakProperty.txt1
+/WordExtraction/scripts/out

@@ -8,10 +8,14 @@ namespace WordExtraction
 
         static void Main(string[] args)
         {
-            foreach (var word in WordExtractor.GetWords(UNICODE_DEMO))
-            {
-                Console.WriteLine(word);                
-            }
+            //foreach (var word in WordExtractor.GetWords(UNICODE_DEMO))
+            //{
+            //    Console.WriteLine(word);                
+            //}
+            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('b'));
+            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('e'));
+            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('z'));
+            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('g'));
         }
     }
 }
