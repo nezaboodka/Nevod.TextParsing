@@ -12,6 +12,15 @@ HEXADECIMAL = r'[0-9A-F]+'
 SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
+WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakProperty('{low_bound}', '{high_bound}', WordBreakPropertyType.{property})"
+
+TAB_LENGTH = 4
+INDENT = TAB_LENGTH * 3
+
+SOURCE_PATH = 'WordBreakPropertyTable.cs'
+TEMPLATE_PATH = 'WordBreakPropertyTable.cs.template'
+PROPERTIES_PLACEHOLDER = r'/* %properties% */'
+
 
 def download_file(filename):
     return request.urlopen(BASE_URL + filename).read().decode('utf-8')
@@ -71,12 +80,53 @@ def load_properties(filename):
         
         properties[property].append((low_bound, high_bound))
     
-    return properties
+    return merge_ranges(properties)
+
+
+def format_table(properties_sequence, indent=INDENT):
+    result = properties_sequence[0] + ',\n'
+    
+    first = True
+    for property in properties_sequence:
+        if first:
+            result += ' ' * INDENT + property + ', '
+        else:
+            result += property + ',\n'
+
+        first = not first
+
+    return result
+
+
+def generate_table(properties):
+    properties_sequence = []
+    properties_sequence.sort(key=lambda x: x[0])
+    first = True
+    for property, ranges in properties.items():
+        for low_bound, high_bound in ranges:
+            properties_sequence.append(WORD_BREAK_PROPERTY_TEMPLATE.format(low_bound=low_bound, high_bound=high_bound, property=property))
+
+    return format_table(properties_sequence)
+
+def produce_source(table):
+    with open(TEMPLATE_PATH) as input:
+        content = input.read()
+
+    content = content.replace(PROPERTIES_PLACEHOLDER, table)
+
+    with open(SOURCE_PATH, 'w') as output:
+        output.write(content)
+
 
 
 def main():
-    ranges = {'a': [(1, 1), (2, 2), (3, 3), (5, 19), (20, 20)]}
-    print(merge_ranges(ranges))
+    #ranges = {'a': [(1, 1), (2, 2), (3, 3), (5, 19), (20, 20)]}
+    #print(merge_ranges(ranges))
+    #with open('out', 'w') as output:
+    #    print(generate_table(load_properties(WORD_BREAK_PROPERTY_FILENAME)), file=output)
+    properties = load_properties(WORD_BREAK_PROPERTY_FILENAME)
+    table = generate_table(properties)
+    produce_source(table)
 
 if __name__ == '__main__':
     main()
