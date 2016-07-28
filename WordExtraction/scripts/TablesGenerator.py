@@ -13,13 +13,15 @@ SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL
 RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
 WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakProperty('{}', '{}', WordBreakPropertyType.{})"
+ENUM_VALUE_TEMPLATE = 'WBPT_{}'
 
 TAB_LENGTH = 4
-INDENT = TAB_LENGTH * 3
 
 SOURCE_PATH = 'WordBreakPropertyTable.cs'
 TEMPLATE_PATH = 'WordBreakPropertyTable.cs.template'
 PROPERTIES_PLACEHOLDER = r'/* %properties% */'
+TYPES_PLACEHOLDER = r'/* %types% */'
+
 
 
 def download_file(filename):
@@ -55,6 +57,7 @@ def load_properties(filename):
     fetch_file(filename)
 
     properties = defaultdict(list)
+    property_types = set()
 
     single_value_property_re = re.compile(SINGLE_PROPERTY)
     range_value_property_re = re.compile(RANGE_PROPERTY)
@@ -62,7 +65,7 @@ def load_properties(filename):
     two_bytes = lambda x: x <= 0xFFFF
 
     for line in open(filename):
-        property = None
+        property_type = None
         low_bound = None
         high_bound = None
 
@@ -70,74 +73,82 @@ def load_properties(filename):
         if single_property_match:
             low_bound = int(single_property_match.group(1), 16)
             high_bound = low_bound
-            property = single_property_match.group(2)
+            property_type = single_property_match.group(2)
         else:
             range_property_match = range_value_property_re.match(line)
             if range_property_match:
                 low_bound = int(range_property_match.group(1), 16)
                 high_bound = int(range_property_match.group(2), 16)
-                property = range_property_match.group(3)
+                property_type = range_property_match.group(3)
             else:
                 continue
         if two_bytes(low_bound) and two_bytes(high_bound):
-            properties[property].append((low_bound, high_bound))
+            property_type = format_property_type(property_type)
+            properties[property_type].append((low_bound, high_bound))
+            property_types.add(property_type)
     
-    return merge_ranges(properties)
+    return merge_ranges(properties), property_types
 
 
 def format_char(c):
-    return r"\u{:x}".format(c)
+    return r"\x{:x}".format(c)
 
 
 def format_property(property):
     return WORD_BREAK_PROPERTY_TEMPLATE.format(format_char(property[0]), format_char(property[1]), property[2])
 
 
-def format_table(properties_sequence, indent=INDENT):
-    result = format_property(properties_sequence[0]) + ',\n'
+def format_property_type(property_type):
+    return ENUM_VALUE_TEMPLATE.format(property_type.upper())
+
+
+def format_table(items, format_func, count_in_line, indent):
+    result = format_func(items[0]) + ',\n'
     
-    first = True
-    for property in properties_sequence:
-        property_string = format_property(property) + ','
-        if first:
-            result += ' ' * INDENT + property_string + ' '
-        else:
-            result += property_string + '\n'
-
-        first = not first
-
+    i = 0
+    for item in items[:-1]:
+        i += 1
+        item_string = format_func(item) + ','
+        if i == 1:
+            item_string = ' ' * indent + item_string + ' '
+        if i == count_in_line:
+            item_string += '\n'
+            i = 0
+        result += item_string
+    
     return result
 
 
 def generate_table(properties):
     properties_sequence = []
     properties_sequence.sort(key=lambda x: x[0])
-    first = True
+    
     for property, ranges in properties.items():
         for low_bound, high_bound in ranges:
             properties_sequence.append((low_bound, high_bound, property))
     properties_sequence.sort(key=lambda x: x[0])
-    return format_table(properties_sequence)
+    return format_table(properties_sequence, format_func=format_property, count_in_line=2, indent=TAB_LENGTH * 3)
 
-def produce_source(table):
+
+def generate_types_table(property_types):
+    return format_table(list(property_types), format_func=format_property_type, count_in_line=1, indent=TAB_LENGTH * 2)
+
+
+def produce_source(table, enum_values):
     with open(TEMPLATE_PATH) as input:
         content = input.read()
 
-    content = content.replace(PROPERTIES_PLACEHOLDER, table)
+    content = content.replace(PROPERTIES_PLACEHOLDER, table).replace(TYPES_PLACEHOLDER, enum_values)
 
     with open(SOURCE_PATH, 'w') as output:
         output.write(content)
 
 
-
 def main():
-    #ranges = {'a': [(1, 1), (2, 2), (3, 3), (5, 19), (20, 20)]}
-    #print(merge_ranges(ranges))
-    #with open('out', 'w') as output:
-    #    print(generate_table(load_properties(WORD_BREAK_PROPERTY_FILENAME)), file=output)
-    properties = load_properties(WORD_BREAK_PROPERTY_FILENAME)
-    table = generate_table(properties)
-    produce_source(table)
+    property_values, property_types = load_properties(WORD_BREAK_PROPERTY_FILENAME)
+    properties_table = generate_table(property_values)
+    types_table = generate_types_table(property_types)
+    produce_source(properties_table, types_table)
 
 if __name__ == '__main__':
     main()
