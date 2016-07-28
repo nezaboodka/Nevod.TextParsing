@@ -6,15 +6,15 @@ namespace WordExtraction
     {
         class ScanWindow
         {
-            public WordBreakPropertyType? Ahead { get; private set; }
+            public SymbolType? Ahead { get; private set; }
 
-            public WordBreakPropertyType? Current { get; private set; }
+            public SymbolType? Current { get; private set; }
 
-            public WordBreakPropertyType? Behind { get; private set; }
+            public SymbolType? Behind { get; private set; }
 
-            public WordBreakPropertyType? BehindOfBehind { get; private set; }
+            public SymbolType? BehindOfBehind { get; private set; }
 
-            public void Add(WordBreakPropertyType? nextSymbolType)
+            public void Add(SymbolType? nextSymbolType)
             {
                 BehindOfBehind = Behind;
                 Behind = Current;
@@ -22,7 +22,7 @@ namespace WordExtraction
                 Ahead = nextSymbolType;
             }
 
-            public ScanWindow(WordBreakPropertyType? firstSymbolType, WordBreakPropertyType? nexSymbolType)
+            public ScanWindow(SymbolType? firstSymbolType, SymbolType? nexSymbolType)
             {
                 Add(firstSymbolType);
                 Add(nexSymbolType);
@@ -35,7 +35,14 @@ namespace WordExtraction
             if (string.IsNullOrEmpty(text))
                 yield break;
 
-            WordBreakPropertyType[] typesCache = new WordBreakPropertyType[CACHE_SIZE];
+            if (text.Length == 1)
+            {
+                yield return text;
+                yield break;
+            }
+                
+
+            ScanWindow scanWindow = new ScanWindow(SymbolTable.GetSymbolType(text[0]), )
             int i = 0;
             foreach (char c in text)
             {

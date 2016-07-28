@@ -24,14 +24,14 @@ HEXADECIMAL = r'[0-9A-F]+'
 SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
-WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakProperty('{}', '{}', WordBreakPropertyType.{})"
-ENUM_VALUE_TEMPLATE = 'WBPT_{}'
+WORD_BREAK_PROPERTY_TEMPLATE = "new SymbolTypeInfo('{}', '{}', SymbolType.{})"
+ENUM_VALUE_TEMPLATE = 'ST_{}'
 
 TAB_LENGTH = 4
 
-SOURCE_PATH = 'WordBreakPropertyTable.cs'
-TEMPLATE_PATH = 'WordBreakPropertyTable.cs.template'
-PROPERTIES_PLACEHOLDER = r'/* %properties% */'
+SOURCE_PATH = 'SymbolTable.cs'
+TEMPLATE_PATH = SOURCE_PATH + '.template'
+PROPERTIES_PLACEHOLDER = r'/* %types_info% */'
 TYPES_PLACEHOLDER = r'/* %types% */'
 
 

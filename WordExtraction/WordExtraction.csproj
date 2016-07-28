@@ -66,13 +66,13 @@
   <ItemGroup>
     <Compile Include="Demo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordBreakPropertyTable.cs" />
+    <Compile Include="SymbolTable.cs" />
     <Compile Include="WordExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="scripts\TablesGenerator.py" />
-    <None Include="scripts\WordBreakPropertyTable.cs.template" />
+    <None Include="scripts\SymbolTable.cs.template" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

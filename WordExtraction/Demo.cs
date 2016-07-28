@@ -12,10 +12,10 @@ namespace WordExtraction
             //{
             //    Console.WriteLine(word);                
             //}
-            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('b'));
-            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('e'));
-            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('z'));
-            Console.WriteLine(WordBreakPropertyTable.GetWordBreakPropertyType('g'));
+            Console.WriteLine(SymbolTable.GetSymbolType('b'));
+            Console.WriteLine(SymbolTable.GetSymbolType('e'));
+            Console.WriteLine(SymbolTable.GetSymbolType('z'));
+            Console.WriteLine(SymbolTable.GetSymbolType('g'));
         }
     }
 }
