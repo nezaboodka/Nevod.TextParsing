@@ -102,11 +102,10 @@ def format_property_type(property_type):
     return ENUM_VALUE_TEMPLATE.format(property_type.upper())
 
 
-def format_table(items, count_in_line, indent, format_func=lambda x:x):
-    result = format_func(items[0]) + ',\n'
-    
-    i = 0
-    for item in items[:-1]:
+def format_table(items, count_in_line, indent, format_func=lambda x:x, init_position=0):
+    result = ''
+    i = init_position
+    for item in items:
         i += 1
 
         item_string = format_func(item) + ','
@@ -130,7 +129,7 @@ def generate_table(properties):
         for low_bound, high_bound in ranges:
             properties_sequence.append((low_bound, high_bound, property))
     properties_sequence.sort(key=lambda x: x[0])
-    return format_table(properties_sequence, format_func=format_property, count_in_line=2, indent=TAB_LENGTH * 3)
+    return format_table(properties_sequence, format_func=format_property, count_in_line=2, indent=TAB_LENGTH * 3, init_position=1)
 
 
 def generate_types_table(property_types):
