@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+
+# This script uses WordBreakProperty.txt from 
+# http://www.unicode.org/Public/6.3.0/ucd/auxiliary/WordBreakProperty.txt to
+# produce C# source from WordBreakPropertyTable.cs.template.
+# Unicode version can be set by UNICODE_VERSION constant. Keep in mind, that
+# you should modify C# code in WordExtractor.cs according to the new version 
+# in case of changing this constant.
+#
+# NOTE: This should not require frequent updates, so you should use pregenerated source from
+# the parent folder.
+
 from urllib import request
 from os import path, system, sys
 import re
@@ -21,7 +33,6 @@ SOURCE_PATH = 'WordBreakPropertyTable.cs'
 TEMPLATE_PATH = 'WordBreakPropertyTable.cs.template'
 PROPERTIES_PLACEHOLDER = r'/* %properties% */'
 TYPES_PLACEHOLDER = r'/* %types% */'
-
 
 
 def download_file(filename):
@@ -151,6 +162,7 @@ def main():
     properties_table = generate_table(property_values)
     types_table = generate_types_table(property_types)
     produce_source(properties_table, types_table)
+
 
 if __name__ == '__main__':
     main()
