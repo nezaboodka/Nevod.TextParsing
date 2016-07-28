@@ -72,6 +72,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="scripts\TablesGenerator.py" />
+    <None Include="scripts\WordBreakPropertyTable.cs.template" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
