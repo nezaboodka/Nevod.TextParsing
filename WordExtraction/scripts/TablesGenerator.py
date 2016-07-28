@@ -102,18 +102,21 @@ def format_property_type(property_type):
     return ENUM_VALUE_TEMPLATE.format(property_type.upper())
 
 
-def format_table(items, format_func, count_in_line, indent):
+def format_table(items, count_in_line, indent, format_func=lambda x:x):
     result = format_func(items[0]) + ',\n'
     
     i = 0
     for item in items[:-1]:
         i += 1
+
         item_string = format_func(item) + ','
+
         if i == 1:
             item_string = ' ' * indent + item_string + ' '
         if i == count_in_line:
             item_string += '\n'
             i = 0
+
         result += item_string
     
     return result
@@ -131,7 +134,7 @@ def generate_table(properties):
 
 
 def generate_types_table(property_types):
-    return format_table(list(property_types), format_func=format_property_type, count_in_line=1, indent=TAB_LENGTH * 2)
+    return format_table(list(property_types), count_in_line=1, indent=TAB_LENGTH * 2)
 
 
 def produce_source(table, enum_values):
