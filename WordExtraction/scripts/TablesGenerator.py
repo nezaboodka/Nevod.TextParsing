@@ -29,8 +29,9 @@ ENUM_VALUE_TEMPLATE = 'ST_{}'
 
 TAB_LENGTH = 4
 
-SOURCE_PATH = 'SymbolTable.cs'
-TEMPLATE_PATH = SOURCE_PATH + '.template'
+CLASS_NAME = 'SymbolTable'
+SOURCE_PATH = CLASS_NAME + '.cs'
+TEMPLATE_PATH = CLASS_NAME + '.template.cs'
 PROPERTIES_PLACEHOLDER = r'/* %types_info% */'
 TYPES_PLACEHOLDER = r'/* %types% */'
 
@@ -68,7 +69,7 @@ def load_properties(filename):
     fetch_file(filename)
 
     properties = defaultdict(list)
-    property_types = set()
+    property_types = {format_property_type('any')}
 
     single_value_property_re = re.compile(SINGLE_PROPERTY)
     range_value_property_re = re.compile(RANGE_PROPERTY)
@@ -98,7 +99,7 @@ def load_properties(filename):
             properties[property_type].append((low_bound, high_bound))
             property_types.add(property_type)
     
-    return merge_ranges(properties), property_types
+    return merge_ranges(properties), sorted(property_types)
 
 
 def format_char(c):

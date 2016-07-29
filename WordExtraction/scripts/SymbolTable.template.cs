@@ -5,8 +5,7 @@
 namespace WordExtraction
 {
     enum SymbolType
-    {
-        ST_ANY,
+    {        
 /* %types% */
     }
 

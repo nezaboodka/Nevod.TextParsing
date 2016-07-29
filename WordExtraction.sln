@@ -10,15 +10,25 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Generate SymbolTable|Any CPU = Generate SymbolTable|Any CPU
+		Generate table|Any CPU = Generate table|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Generate SymbolTable|Any CPU.ActiveCfg = Release|Any CPU
+		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Generate SymbolTable|Any CPU.Build.0 = Release|Any CPU
+		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Generate table|Any CPU.ActiveCfg = Release|Any CPU
+		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Generate table|Any CPU.Build.0 = Release|Any CPU
 		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Generate SymbolTable|Any CPU.ActiveCfg = Release|Any CPU
+		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Generate SymbolTable|Any CPU.Build.0 = Release|Any CPU
+		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Generate table|Any CPU.ActiveCfg = Release|Any CPU
+		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Generate table|Any CPU.Build.0 = Release|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

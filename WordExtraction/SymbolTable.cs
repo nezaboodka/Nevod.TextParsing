@@ -5,23 +5,23 @@
 namespace WordExtraction
 {
     enum SymbolType
-    {
-        ST_ANY,
+    {        
+        ST_ALETTER, 
+        ST_ANY, 
+        ST_CR, 
+        ST_DOUBLE_QUOTE, 
+        ST_EXTEND, 
         ST_EXTENDNUMLET, 
+        ST_FORMAT, 
         ST_HEBREW_LETTER, 
+        ST_KATAKANA, 
+        ST_LF, 
         ST_MIDLETTER, 
         ST_MIDNUM, 
-        ST_ALETTER, 
-        ST_KATAKANA, 
-        ST_SINGLE_QUOTE, 
         ST_MIDNUMLET, 
-        ST_LF, 
         ST_NEWLINE, 
-        ST_CR, 
-        ST_FORMAT, 
         ST_NUMERIC, 
-        ST_EXTEND, 
-        ST_DOUBLE_QUOTE, 
+        ST_SINGLE_QUOTE, 
 
     }
 
