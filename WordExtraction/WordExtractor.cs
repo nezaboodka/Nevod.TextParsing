@@ -2,35 +2,9 @@
 
 namespace WordExtraction
 {
-    class WordExtractor
+    class WordExtractor : IWordExtractor
     {
-        class ScanWindow
-        {
-            public SymbolType? Ahead { get; private set; }
-
-            public SymbolType? Current { get; private set; }
-
-            public SymbolType? Behind { get; private set; }
-
-            public SymbolType? BehindOfBehind { get; private set; }
-
-            public void Add(SymbolType? nextSymbolType)
-            {
-                BehindOfBehind = Behind;
-                Behind = Current;
-                Current = Ahead;
-                Ahead = nextSymbolType;
-            }
-
-            public ScanWindow(SymbolType? firstSymbolType, SymbolType? nexSymbolType)
-            {
-                Add(firstSymbolType);
-                Add(nexSymbolType);
-            }
-        }
-
-        private const int CACHE_SIZE = 3;
-        public static IEnumerable<string> GetWords(string text)
+        public IEnumerable<string> GetWords(string text)
         {
             if (string.IsNullOrEmpty(text))
                 yield break;
@@ -40,15 +14,34 @@ namespace WordExtraction
                 yield return text;
                 yield break;
             }
-                
 
-            ScanWindow scanWindow = new ScanWindow(SymbolTable.GetSymbolType(text[0]), )
-            int i = 0;
-            foreach (char c in text)
+            var scanWindow = new ScanWindow(text[0]);
+            int startPosition = 0;
+            bool isWord = false;
+            int i;
+
+            for (i = 0; i < text.Length; i++)
             {
+                if (i == text.Length - 1)
+                    scanWindow.AddEmpty();
+                else
+                    scanWindow.AddSymbol(text[i + 1]);
 
+                if (scanWindow.CheckForBreak())
+                {
+                    if (isWord)
+                        yield return text.Substring(startPosition, i - startPosition);
+                    startPosition = i;
+                    isWord = false;
+                }
+
+                if (!isWord && char.IsLetterOrDigit(text[i]))
+                    isWord = true;
             }
-            yield return "word";
+            if (isWord)
+            {
+                yield return text.Substring(startPosition, text.Length - startPosition);
+            }
         }
     }
 }

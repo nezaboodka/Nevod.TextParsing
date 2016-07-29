@@ -65,7 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Demo.cs" />
+    <Compile Include="IScanWindow.cs" />
+    <Compile Include="IWordExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanWindow.cs" />
     <Compile Include="SymbolTable.cs" />
     <Compile Include="WordExtractor.cs" />
   </ItemGroup>

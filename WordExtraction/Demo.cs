@@ -8,14 +8,15 @@ namespace WordExtraction
 
         static void Main(string[] args)
         {
-            //foreach (var word in WordExtractor.GetWords(UNICODE_DEMO))
-            //{
-            //    Console.WriteLine(word);                
-            //}
-            Console.WriteLine(SymbolTable.GetSymbolType('b'));
-            Console.WriteLine(SymbolTable.GetSymbolType('e'));
-            Console.WriteLine(SymbolTable.GetSymbolType('z'));
-            Console.WriteLine(SymbolTable.GetSymbolType('g'));
+            WordExtractor wordExtractor = new WordExtractor();
+            foreach (var word in wordExtractor.GetWords(UNICODE_DEMO))
+            {
+                Console.WriteLine(word);
+            }
+            //Console.WriteLine(SymbolTable.GetSymbolType(' '));
+            //Console.WriteLine(SymbolTable.GetSymbolType('e'));
+            //Console.WriteLine(SymbolTable.GetSymbolType('z'));
+            //Console.WriteLine(SymbolTable.GetSymbolType('g'));
         }
     }
 }
