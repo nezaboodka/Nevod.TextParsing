@@ -13,10 +13,6 @@ namespace WordExtraction
             {
                 Console.WriteLine("\"" + word + "\"");
             }
-            //Console.WriteLine(SymbolTable.GetSymbolType(' '));
-            //Console.WriteLine(SymbolTable.GetSymbolType('e'));
-            //Console.WriteLine(SymbolTable.GetSymbolType('z'));
-            //Console.WriteLine(SymbolTable.GetSymbolType('g'));
         }
     }
 }
