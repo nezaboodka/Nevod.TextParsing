@@ -2,7 +2,7 @@
 
 namespace WordExtraction
 {
-    class WordExtractor : IWordExtractor
+    public class WordExtractor : IWordExtractor
     {
         public IEnumerable<string> GetWords(string text)
         {
@@ -18,9 +18,8 @@ namespace WordExtraction
             var scanWindow = new ScanWindow(text[0]);
             int startPosition = 0;
             bool isWord = false;
-            int i;
 
-            for (i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 if (i == text.Length - 1)
                     scanWindow.AddEmpty();
