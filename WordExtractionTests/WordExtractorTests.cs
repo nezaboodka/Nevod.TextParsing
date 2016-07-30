@@ -58,8 +58,8 @@ namespace WordExtraction.Tests
         [TestMethod]
         public void Сyrillic()
         {
-            string testString = "1А класс; 56,31 световых года, потом 100500 45.10 дней!";
-            string[] expectedResult = { "1А", "класс", "56,31", "световых", "года", "потом", "100500", "45.10", "дней" };
+            string testString = "1А класс; 56,31 светового года, потом 45.1 дня!";
+            string[] expectedResult = { "1А", "класс", "56,31", "светового", "года", "потом", "45.1", "дня" };
 
             PerformTest(testString, expectedResult);
         }
