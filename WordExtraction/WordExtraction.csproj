@@ -62,18 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Demo.cs" />
-    <Compile Include="IScanWindow.cs" />
-    <Compile Include="IWordExtractor.cs" />
+    <Compile Include="WordExtractor\IScanWindow.cs" />
+    <Compile Include="WordExtractor\IWordExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScanWindow.cs" />
-    <Compile Include="SymbolTable.cs" />
-    <Compile Include="WordExtractor.cs" />
+    <Compile Include="WordExtractor\ScanWindow.cs" />
+    <Compile Include="WordExtractor\SymbolTable.cs" />
+    <Compile Include="WordExtractor\WordExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="scripts\generate.bat" />
-    <None Include="scripts\TablesGenerator.py" />
-    <None Include="scripts\SymbolTable.template.cs" />
+    <None Include="Scripts\generate.bat" />
+    <None Include="Scripts\TablesGenerator.py" />
+    <None Include="Scripts\SymbolTable.template.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -88,7 +88,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WordBreakProperty.txt" />
+    <Content Include="Scripts\WordBreakProperty.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
