@@ -1,2 +1,2 @@
 TablesGenerator.py
-move /Y SymbolTable.cs ..
+move /Y SymbolTable.cs ../WordExtractor
