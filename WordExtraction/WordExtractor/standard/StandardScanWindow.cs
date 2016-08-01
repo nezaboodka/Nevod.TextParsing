@@ -2,7 +2,7 @@
 
 namespace WordExtraction
 {
-    public class StandardScanWindow : IScanWindow
+    public class StandardScanWindow : ScanWindow
     {
         private readonly Predicate<SymbolType?> ALetterOrHebrewLetter = (SymbolType? type) => (type == SymbolType.ST_ALETTER || type == SymbolType.ST_HEBREW_LETTER);
 
@@ -26,7 +26,7 @@ namespace WordExtraction
             AddSymbol(firstSymbol);
         }
 
-        public void MoveWindow()
+        public override void MoveWindow()
         {
             BehindOfBehind = Behind;
             Behind = Current;
@@ -34,13 +34,13 @@ namespace WordExtraction
             Ahead = null;
         }
 
-        public void AddSymbol(char symbol)
+        public override void AddSymbol(char symbol)
         {
             MoveWindow();
             Ahead = SymbolTable.GetSymbolType(symbol);
         }
 
-        public bool CheckForBreak()
+        public override bool CheckForBreak()
         {
             bool result;
 

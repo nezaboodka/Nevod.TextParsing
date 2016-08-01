@@ -62,8 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WordExtractionDemo.cs" />
-    <Compile Include="WordExtractor\IScanWindow.cs" />
-    <Compile Include="WordExtractor\IWordExtractor.cs" />
+    <Compile Include="WordExtractor\ScanWindow.cs" />
+    <Compile Include="WordExtractor\WordExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordExtractor\standard\StandardScanWindow.cs" />
     <Compile Include="WordExtractor\standard\SymbolTable.cs" />

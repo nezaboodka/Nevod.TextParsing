@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace WordExtraction
 {
-    public class StandardWordExtractor : IWordExtractor
+    public class StandardWordExtractor : WordExtractor
     {
-        private IScanWindow ScanWindow { get; set; }
+        private ScanWindow ScanWindow { get; set; }
 
-        public StandardWordExtractor(IScanWindow scanWindow)
+        public StandardWordExtractor(ScanWindow scanWindow)
         {
             ScanWindow = scanWindow;
         }
@@ -17,7 +17,7 @@ namespace WordExtraction
             ScanWindow = new StandardScanWindow();
         }
 
-        public IEnumerable<string> GetWords(string text)
+        public override IEnumerable<string> GetWords(string text)
         {
             if (string.IsNullOrEmpty(text))
                 yield break;
