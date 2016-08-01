@@ -15,15 +15,15 @@ namespace WordExtraction
 
         private struct SymbolTypeInfo
         {
-            public char lowBound;
-            public char highBound;
-            public SymbolType symbolType;
+            public char LowBound;
+            public char HighBound;
+            public SymbolType SymbolType;
 
             public SymbolTypeInfo(char lowBound, char highBound, SymbolType symbolType)
             {
-                this.lowBound = lowBound;
-                this.highBound = highBound;
-                this.symbolType = symbolType;
+                this.LowBound = lowBound;
+                this.HighBound = highBound;
+                this.SymbolType = symbolType;
             }
         }
 
@@ -31,9 +31,9 @@ namespace WordExtraction
         {
             int result;
 
-            if ((symbolTypeInfo.lowBound <= c) && (c <= symbolTypeInfo.highBound))
+            if ((symbolTypeInfo.LowBound <= c) && (c <= symbolTypeInfo.HighBound))
                 result = 0;
-            else if (symbolTypeInfo.highBound < c)
+            else if (symbolTypeInfo.HighBound < c)
                 result = 1;
             else
                 result = -1;
@@ -55,7 +55,7 @@ namespace WordExtraction
 
                 if (comparisonResult == 0)
                 {
-                    result = SYMBOL_TYPES_INFO[i].symbolType;
+                    result = SYMBOL_TYPES_INFO[i].SymbolType;
                     isFound = true;
                 }
                 else if (comparisonResult < 0)

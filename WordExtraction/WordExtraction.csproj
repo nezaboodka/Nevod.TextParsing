@@ -62,12 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WordExtractionDemo.cs" />
-    <Compile Include="WordExtractor\ScanWindow.cs" />
-    <Compile Include="WordExtractor\WordExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractor\standard\StandardScanWindow.cs" />
-    <Compile Include="WordExtractor\standard\SymbolTable.cs" />
-    <Compile Include="WordExtractor\standard\StandardWordExtractor.cs" />
+    <Compile Include="WordExtractor\ScanWindow.cs" />
+    <Compile Include="WordExtractor\SymbolTable.cs" />
+    <Compile Include="WordExtractor\WordExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -90,6 +88,7 @@
   <ItemGroup>
     <Content Include="Scripts\WordBreakProperty.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

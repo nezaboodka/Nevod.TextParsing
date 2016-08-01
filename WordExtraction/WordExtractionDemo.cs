@@ -6,7 +6,7 @@ namespace WordExtraction
     {
         static void Main(string[] args)
         {
-            WordExtractor wordExtractor = new StandardWordExtractor();
+            WordExtractor wordExtractor = new WordExtractor();
             foreach (string arg in args)
             {
                 foreach (var word in wordExtractor.GetWords(arg))

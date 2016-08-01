@@ -150,7 +150,7 @@ def generate_types_table(property_types):
 
 def produce_source(table, enum_values):
     with open(TEMPLATE_PATH) as input:
-        content = input.read()
+        content = ''.join(input.readlines())
 
     content = content.replace(PROPERTIES_PLACEHOLDER, table).replace(TYPES_PLACEHOLDER, enum_values)
 
