@@ -63,5 +63,14 @@ namespace WordExtraction.Tests
 
             PerformTest(testString, expectedResult);
         }
+
+        [TestMethod]
+        public void OneSymbol()
+        {
+            string testString = "L";
+            string[] expectedResult = { "L" };
+
+            PerformTest(testString, expectedResult);
+        }
     }
 }

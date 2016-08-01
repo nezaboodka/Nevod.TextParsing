@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace WordExtraction
 {
@@ -31,12 +32,9 @@ namespace WordExtraction
             int startPosition = 0;
             bool isWord = false;
 
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length - 1; i++)
             {
-                if (i == text.Length - 1)
-                    ScanWindow.MoveWindow();
-                else
-                    ScanWindow.AddSymbol(text[i + 1]);
+                ScanWindow.AddSymbol(text[i + 1]);
 
                 if (ScanWindow.CheckForBreak())
                 {
@@ -49,9 +47,19 @@ namespace WordExtraction
                 if (!isWord && char.IsLetterOrDigit(text[i]))
                     isWord = true;
             }
-            if (isWord)
+
+            ScanWindow.MoveWindow();
+
+            if (ScanWindow.CheckForBreak())
             {
-                yield return text.Substring(startPosition, text.Length - startPosition);
+                if (isWord)
+                    yield return text.Substring(startPosition, text.Length - startPosition - 1);
+                startPosition = text.Length - 1;
+            }
+
+            if (char.IsLetterOrDigit(text.Last()))
+            {
+                yield return text.Substring(startPosition);
             }
         }
     }
