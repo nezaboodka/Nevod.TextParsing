@@ -1,8 +1,9 @@
 ﻿namespace WordExtraction
 {
-    interface IScanWindow
+    public interface IScanWindow
     {
         void AddSymbol(char symbol);
+        void MoveWindow();
         bool CheckForBreak();
     }
 }

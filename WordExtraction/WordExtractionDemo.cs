@@ -2,11 +2,11 @@
 
 namespace WordExtraction
 {
-    class Demo
+    class WordExtractionDemo
     {
         static void Main(string[] args)
         {
-            WordExtractor wordExtractor = new WordExtractor();
+            IWordExtractor wordExtractor = new StandardWordExtractor();
             foreach (string arg in args)
             {
                 foreach (var word in wordExtractor.GetWords(arg))

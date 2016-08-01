@@ -2,8 +2,20 @@
 
 namespace WordExtraction
 {
-    public class WordExtractor : IWordExtractor
+    public class StandardWordExtractor : IWordExtractor
     {
+        private IScanWindow ScanWindow { get; set; }
+
+        public StandardWordExtractor(IScanWindow scanWindow)
+        {
+            ScanWindow = scanWindow;
+        }
+
+        public StandardWordExtractor()
+        {
+            ScanWindow = new StandardScanWindow();
+        }
+
         public IEnumerable<string> GetWords(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -15,18 +27,18 @@ namespace WordExtraction
                 yield break;
             }
 
-            var scanWindow = new ScanWindow(text[0]);
+            ScanWindow.AddSymbol(text[0]);
             int startPosition = 0;
             bool isWord = false;
 
             for (int i = 0; i < text.Length; i++)
             {
                 if (i == text.Length - 1)
-                    scanWindow.AddEmpty();
+                    ScanWindow.MoveWindow();
                 else
-                    scanWindow.AddSymbol(text[i + 1]);
+                    ScanWindow.AddSymbol(text[i + 1]);
 
-                if (scanWindow.CheckForBreak())
+                if (ScanWindow.CheckForBreak())
                 {
                     if (isWord)
                         yield return text.Substring(startPosition, i - startPosition);

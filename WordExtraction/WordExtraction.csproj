@@ -61,13 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Demo.cs" />
+    <Compile Include="WordExtractionDemo.cs" />
     <Compile Include="WordExtractor\IScanWindow.cs" />
     <Compile Include="WordExtractor\IWordExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractor\ScanWindow.cs" />
-    <Compile Include="WordExtractor\SymbolTable.cs" />
-    <Compile Include="WordExtractor\WordExtractor.cs" />
+    <Compile Include="WordExtractor\standard\StandardScanWindow.cs" />
+    <Compile Include="WordExtractor\standard\SymbolTable.cs" />
+    <Compile Include="WordExtractor\standard\StandardWordExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

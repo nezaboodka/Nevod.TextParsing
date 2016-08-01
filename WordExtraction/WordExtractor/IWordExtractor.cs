@@ -2,7 +2,7 @@
 
 namespace WordExtraction
 {
-    interface IWordExtractor
+    public interface IWordExtractor
     {
         IEnumerable<string> GetWords(string text);
     }

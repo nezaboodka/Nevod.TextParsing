@@ -8,7 +8,7 @@ namespace WordExtraction.Tests
     {
         private string[] ExtractWords(string text)
         {
-            var wordExtractor = new WordExtractor();
+            var wordExtractor = new StandardWordExtractor();
             string[] result = wordExtractor.GetWords(text).ToArray();
             return result;
         }
