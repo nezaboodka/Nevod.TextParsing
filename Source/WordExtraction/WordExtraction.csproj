@@ -44,7 +44,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\bin\WordExtraction\</OutputPath>
-	<IntermediateOutputPath>..\..\Build\Release\obj\WordExtraction</IntermediateOutputPath>
+    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtraction</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -63,11 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScanWindow.cs" />
+    <Compile Include="SymbolTable.cs" />
     <Compile Include="WordExtractionDemo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractor\ScanWindow.cs" />
-    <Compile Include="WordExtractor\SymbolTable.cs" />
-    <Compile Include="WordExtractor\WordExtractor.cs" />
+    <Compile Include="WordExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
