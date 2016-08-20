@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections testAttr="test attribute">
+    <section name="connectionStrings" type="System.Configuration.ConnectionStringsSection" requirePermission="false" comment="some comment" />
+    <section name="text">The quick brown fox jumps over the lazy dog</section>
+    <section name="mscorlib" type="System.Configuration.IgnoreSection" allowLocation="false" />
+    <section name="runtime" type="System.Configuration.IgnoreSection" allowLocation="false" />
+    <section name="appSettings" requirePermission="false" type="System.Configuration.AppSettingsSection" />
+The quick brown fox<section name="mySettings" type="MySettingsSection" />jumps over the lazy dog</configSections>
+</configuration>

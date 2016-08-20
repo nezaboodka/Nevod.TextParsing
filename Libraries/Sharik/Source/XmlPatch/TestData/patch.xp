@@ -1,0 +1,58 @@
+!!This is the test XML patching script.
+! It's used to patch an empty XML file consisting of <configuration/> node only.
+
++ /configuration/configSections
+testAttr = "test attribute"
+
++ /configuration/configSections/section
+name="appSettings"
+type="System.Configuration.AppSettingsSection"
+restartOnExternalChanges="false"
+requirePermission="false"
+
++ /configuration/configSections/section
+name="connectionStrings"
+type="System.Configuration.ConnectionStringsSection"
+requirePermission="false"
+
++ /configuration/configSections/section
+name="text"
+@="The quick brown fox jumps over the lazy dog"
+
++ /configuration/configSections/section
+name="mscorlib"
+type="System.Configuration.IgnoreSection"
+allowLocation="false"
+
++ /configuration/configSections/section
+name="runtime"
+type="System.Configuration.IgnoreSection"
+allowLocation="false"
+
+* /configuration/configSections/section[2]
+comment="some comment"
+
+* /configuration/configSections/section[@name="mscorlib"]
+comment=-
+
+* /configuration/configSections/section[1]
+comment=-
+
+- /configuration/configSections/section[@name="connectionStrings" and @requirePermission="true"]
+
+- /configuration/configSections/section[@name="appSettings" and @requirePermission="false"]
+
+* /configuration/configSections[@testAttr="test attribute"]/section[@name="appSettings" and @requirePermission="false"]
+type="System.Configuration.AppSettingsSection"
+restartOnExternalChanges=-
+requirePermission="false"
+* /configuration/configSections
+@@="
+The quick brown fox"
+
++ /configuration/configSections/section
+name="mySettings"
+type="MySettingsSection"
+
+* /configuration/configSections
+@@="jumps over the lazy dog"

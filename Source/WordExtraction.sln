@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordExtraction", "WordExtra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordExtractionTests", "WordExtractionTests\WordExtractionTests.csproj", "{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharik.System", "..\Libraries\Sharik\Source\System\Sharik.System.csproj", "{116E8E3F-811D-4014-B197-0D7D17F6CEE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116E8E3F-811D-4014-B197-0D7D17F6CEE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116E8E3F-811D-4014-B197-0D7D17F6CEE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116E8E3F-811D-4014-B197-0D7D17F6CEE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116E8E3F-811D-4014-B197-0D7D17F6CEE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
