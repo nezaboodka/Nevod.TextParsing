@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sharik.Text;
 
 namespace WordExtraction
 {
@@ -12,7 +13,7 @@ namespace WordExtraction
 
         // Public
 
-        public virtual IEnumerable<string> GetWords(string text)
+        public virtual IEnumerable<Slice> GetWords(string text)
         {
             if (!string.IsNullOrEmpty(text))
             {
@@ -25,7 +26,7 @@ namespace WordExtraction
                     if (CheckForBreak())
                     {
                         if (isWord)
-                            yield return text.Substring(startPosition, i - startPosition);
+                            yield return SliceUtilities.Slice(text, startPosition, i - startPosition);
                         startPosition = i;
                         isWord = false;
                     }
@@ -36,12 +37,12 @@ namespace WordExtraction
                 if (CheckForBreak())
                 {
                     if (isWord)
-                        yield return text.Substring(startPosition, text.Length - startPosition - 1);
+                        yield return SliceUtilities.Slice(text, startPosition, text.Length - startPosition - 1);
                     startPosition = text.Length - 1;
                 }
                 if (char.IsLetterOrDigit(text.Last()))
                 {
-                    yield return text.Substring(startPosition);
+                    yield return SliceUtilities.Slice(text, startPosition);
                 }
             }
         }

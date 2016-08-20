@@ -6,19 +6,6 @@ namespace WordExtraction.Tests
     [TestClass]
     public class WordExtractorTests
     {
-        private string[] ExtractWords(string text)
-        {
-            var wordExtractor = new WordExtractor();
-            string[] result = wordExtractor.GetWords(text).ToArray();
-            return result;
-        }
-
-        private void PerformTest(string testString, string[] expectedResult)
-        {
-            string[] result = ExtractWords(testString);
-            CollectionAssert.AreEqual(result, expectedResult);
-        }
-
         [TestMethod]
         public void SiteExample()
         {
@@ -41,7 +28,7 @@ namespace WordExtraction.Tests
         public void EmptyString()
         {
             string testString = "";
-            string[] expectedResult = {};
+            string[] expectedResult = { };
 
             PerformTest(testString, expectedResult);
         }
@@ -50,7 +37,7 @@ namespace WordExtraction.Tests
         public void Null()
         {
             string testString = null;
-            string[] expectedResult = {};
+            string[] expectedResult = { };
 
             PerformTest(testString, expectedResult);
         }
@@ -71,6 +58,21 @@ namespace WordExtraction.Tests
             string[] expectedResult = { "L" };
 
             PerformTest(testString, expectedResult);
+        }
+
+        // Private
+
+        private static void PerformTest(string testString, string[] expectedResult)
+        {
+            string[] result = ExtractWords(testString);
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
+        private static string[] ExtractWords(string text)
+        {
+            var wordExtractor = new WordExtractor();
+            string[] result = wordExtractor.GetWords(text).Select(x => x.ToString()).ToArray();
+            return result;
         }
     }
 }

@@ -83,7 +83,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Sharik\Source\System\Sharik.System.csproj">
+      <Project>{116e8e3f-811d-4014-b197-0d7d17f6cee5}</Project>
+      <Name>Sharik.System</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
