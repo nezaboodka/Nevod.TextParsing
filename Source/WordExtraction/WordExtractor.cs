@@ -11,8 +11,6 @@ namespace WordExtraction
         private WordBreak fBehind = WordBreak.Empty;
         private WordBreak fBehindOfBehind = WordBreak.Empty;
 
-        // Public
-
         public virtual IEnumerable<Slice> GetWords(string text)
         {
             if (!string.IsNullOrEmpty(text))
@@ -124,8 +122,6 @@ namespace WordExtraction
             fCurrent = fAhead;
             fAhead = WordBreak.Empty;
         }        
-
-        // Private
 
         private static bool IsAlphabeticOrHebrewLetter(WordBreak symbolType)
         {
