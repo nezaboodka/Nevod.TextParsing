@@ -14,47 +14,35 @@ namespace WordExtraction
 
         public virtual IEnumerable<string> GetWords(string text)
         {
-            if (string.IsNullOrEmpty(text))
-                yield break;
-
-            if (text.Length == 1)
+            if (!string.IsNullOrEmpty(text))
             {
-                yield return text;
-                yield break;
-            }
-
-            AddSymbol(text[0]);
-            int startPosition = 0;
-            bool isWord = false;
-
-            for (int i = 0; i < text.Length - 1; i++)
-            {
-                AddSymbol(text[i + 1]);
-
+                AddSymbol(text[0]);
+                int startPosition = 0;
+                bool isWord = false;
+                for (int i = 0; i < text.Length - 1; i++)
+                {
+                    AddSymbol(text[i + 1]);
+                    if (CheckForBreak())
+                    {
+                        if (isWord)
+                            yield return text.Substring(startPosition, i - startPosition);
+                        startPosition = i;
+                        isWord = false;
+                    }
+                    if (!isWord && char.IsLetterOrDigit(text[i]))
+                        isWord = true;
+                }
+                MoveWindow();
                 if (CheckForBreak())
                 {
                     if (isWord)
-                        yield return text.Substring(startPosition, i - startPosition);
-                    startPosition = i;
-                    isWord = false;
+                        yield return text.Substring(startPosition, text.Length - startPosition - 1);
+                    startPosition = text.Length - 1;
                 }
-
-                if (!isWord && char.IsLetterOrDigit(text[i]))
-                    isWord = true;
-            }
-
-            MoveWindow();
-
-            if (CheckForBreak())
-            {
-                if (isWord)
-                    yield return text.Substring(startPosition, text.Length - startPosition - 1);
-                startPosition = text.Length - 1;
-            }
-
-            if (char.IsLetterOrDigit(text.Last()))
-            {
-                yield return text.Substring(startPosition);
+                if (char.IsLetterOrDigit(text.Last()))
+                {
+                    yield return text.Substring(startPosition);
+                }
             }
         }
 
@@ -67,7 +55,6 @@ namespace WordExtraction
         public virtual bool CheckForBreak()
         {
             bool result;
-
             // WB3.
             if (IsLineBreak(fBehind) || IsLineBreak(fCurrent))
                 result = !((fBehind == WordBreak.CarriageReturn) && (fCurrent == WordBreak.LineFeed));
@@ -126,7 +113,6 @@ namespace WordExtraction
             // WB14.
             else
                 result = true;
-
             return result;
         }
 
