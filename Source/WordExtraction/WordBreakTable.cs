@@ -1,4 +1,6 @@
-﻿namespace WordExtraction
+﻿using System;
+
+namespace WordExtraction
 {
     enum WordBreak
     {
@@ -23,7 +25,7 @@
 
     static class WordBreakTable
     {
-        private static readonly WordBreakInfo[] SYMBOL_TYPES_INFO = { new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed),
+        private static readonly WordBreakInfo[] wordBreaksInfo = { new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed),
             new WordBreakInfo('\xb', '\xc', WordBreak.Newline), new WordBreakInfo('\xd', '\xd', WordBreak.CarriageReturn),
             new WordBreakInfo('\x22', '\x22', WordBreak.DoubleQuote), new WordBreakInfo('\x27', '\x27', WordBreak.SingleQuote),
             new WordBreakInfo('\x2c', '\x2c', WordBreak.MidNumber), new WordBreakInfo('\x2e', '\x2e', WordBreak.MidNumberAndLetter),
@@ -323,7 +325,7 @@
             new WordBreakInfo('\xffd2', '\xffd7', WordBreak.AlphabeticLetter), new WordBreakInfo('\xffda', '\xffdc', WordBreak.AlphabeticLetter),
             new WordBreakInfo('\xfff9', '\xfffb', WordBreak.Format) };
 
-        private struct WordBreakInfo
+        private struct WordBreakInfo : IComparable<WordBreakInfo>
         {
             public char LowBound;
             public char HighBound;
@@ -335,47 +337,27 @@
                 this.HighBound = highBound;
                 this.WordBreak = wordBreak;
             }
-        }
 
-        private static int InRange(char c, WordBreakInfo symbolTypeInfo)
-        {
-            int result;
-
-            if ((symbolTypeInfo.LowBound <= c) && (c <= symbolTypeInfo.HighBound))
-                result = 0;
-            else if (symbolTypeInfo.HighBound < c)
-                result = 1;
-            else
-                result = -1;
-
-            return result;
+            public int CompareTo(WordBreakInfo other)
+            {
+                int result;
+                if (this.HighBound < other.LowBound)
+                    result = -1;
+                else if (other.HighBound < this.LowBound)
+                    result = 1;
+                else
+                    result = 0;
+                return result;
+            }
         }
 
         public static WordBreak GetSymbolType(char c)
         {
             WordBreak result = WordBreak.Any;
-
-            int beginIndex = 0, endIndex = SYMBOL_TYPES_INFO.Length;
-            bool isFound = false;
-
-            while ((beginIndex <= endIndex) && !isFound)
-            {
-                int i = (beginIndex + endIndex) / 2;
-                int comparisonResult = InRange(c, SYMBOL_TYPES_INFO[i]);
-
-                if (comparisonResult == 0)
-                {
-                    result = SYMBOL_TYPES_INFO[i].WordBreak;
-                    isFound = true;
-                }
-                else if (comparisonResult < 0)
-                    endIndex = i - 1;
-                else
-                    beginIndex = i + 1;
-            }
-
+            int index = System.Array.BinarySearch(wordBreaksInfo, new WordBreakInfo(c, c, WordBreak.Empty));
+            if (index >= 0)
+                result = wordBreaksInfo[index].WordBreak;
             return result;
         }
-
     }
 }
