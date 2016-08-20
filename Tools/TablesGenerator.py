@@ -20,12 +20,12 @@ HEXADECIMAL = r'[0-9A-F]+'
 SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
-WORD_BREAK_PROPERTY_TEMPLATE = "new SymbolTypeInfo('{}', '{}', SymbolType.{})"
+WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakInfo('{}', '{}', WordBreak.{})"
 NAMES_REPLACEMENTS = {
     'ALetter': 'AlphabeticLetter', 
     'CR': 'CarriageReturn', 
     'Extend': 'Extender', 
-    'ExtendNumlet': 'ExtenderForNumbersAndLetters', 
+    'ExtendNumLet': 'ExtenderForNumbersAndLetters', 
     'LF': 'LineFeed', 
     'MidNum': 'MidNumber', 
     'MidNumLet': 'MidNumberAndLetter'

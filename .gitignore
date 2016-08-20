@@ -249,3 +249,4 @@ WordBreakProperty.txt
 /WordExtraction/scripts/out
 /WordExtraction/scripts/WordBreakPropertyTable.cs
 /WordExtraction/WordBreakTest.txt
+/Tools/out.txt
