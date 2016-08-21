@@ -21,7 +21,7 @@ namespace WordExtraction
                 for (int i = 0; i < text.Length - 1; i++)
                 {
                     AddSymbol(text[i + 1]);
-                    if (CheckForBreak())
+                    if (IsBreak())
                     {
                         if (isWord)
                             yield return SliceUtilities.Slice(text, startPosition, i - startPosition);
@@ -32,7 +32,7 @@ namespace WordExtraction
                         isWord = true;
                 }
                 MoveWindow();
-                if (CheckForBreak())
+                if (IsBreak())
                 {
                     if (isWord)
                         yield return SliceUtilities.Slice(text, startPosition, text.Length - startPosition - 1);
@@ -51,7 +51,7 @@ namespace WordExtraction
             fAhead = WordBreakTable.GetSymbolType(symbol);
         }
 
-        public virtual bool CheckForBreak()
+        public virtual bool IsBreak()
         {
             bool result;
             // WB3.
