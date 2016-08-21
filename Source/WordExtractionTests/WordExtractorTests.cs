@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace WordExtraction.Tests
@@ -63,14 +62,14 @@ namespace WordExtraction.Tests
 
         private static void PerformTest(string testString, string[] expectedResult)
         {
-            IEnumerable<string> result = ExtractWords(testString);
-            Assert.IsTrue(result.SequenceEqual(expectedResult));
+            string[] result = ExtractWords(testString);
+            CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        private static IEnumerable<string> ExtractWords(string text)
+        private static string[] ExtractWords(string text)
         {
             var wordExtractor = new WordExtractor();
-            IEnumerable<string> result = wordExtractor.GetWords(text).Select(x => x.ToString());
+            string[] result = wordExtractor.GetWords(text).Select(x => x.ToString()).ToArray();
             return result;
         }
     }
