@@ -11,16 +11,28 @@ namespace WordExtraction
         private WordBreak fBehind = WordBreak.Empty;
         private WordBreak fBehindOfBehind = WordBreak.Empty;
 
-        public virtual IEnumerable<Slice> GetWords(string text)
+        // Public
+
+        public IEnumerable<Slice> GetWords(string text)
+        {
+
+            IEnumerable<Slice> result = InternalGetWords(text);
+            ResetState();
+            return result;
+        }
+
+        // Protected
+
+        protected virtual IEnumerable<Slice> InternalGetWords(string text)
         {
             if (!string.IsNullOrEmpty(text))
             {
-                AddSymbol(text[0]);
+                AddCharacter(text[0]);
                 int startPosition = 0;
                 bool isWord = false;
                 for (int i = 0; i < text.Length - 1; i++)
                 {
-                    AddSymbol(text[i + 1]);
+                    AddCharacter(text[i + 1]);
                     if (IsBreak())
                     {
                         if (isWord)
@@ -31,7 +43,7 @@ namespace WordExtraction
                     if (!isWord && char.IsLetterOrDigit(text[i]))
                         isWord = true;
                 }
-                MoveWindow();
+                NextCharacter();
                 if (IsBreak())
                 {
                     if (isWord)
@@ -45,10 +57,18 @@ namespace WordExtraction
             }
         }
 
-        protected virtual void AddSymbol(char symbol)
+        protected virtual void ResetState()
         {
-            MoveWindow();
-            fAhead = WordBreakTable.GetSymbolType(symbol);
+            fBehindOfBehind = WordBreak.Empty;
+            fBehind = WordBreak.Empty;
+            fCurrent = WordBreak.Empty;
+            fAhead = WordBreak.Empty;
+        }
+
+        protected virtual void AddCharacter(char c)
+        {
+            NextCharacter();
+            fAhead = WordBreakTable.GetCharacterWordBreak(c);
         }
 
         protected virtual bool IsBreak()
@@ -115,13 +135,15 @@ namespace WordExtraction
             return result;
         }
 
-        protected virtual void MoveWindow()
+        protected virtual void NextCharacter()
         {
             fBehindOfBehind = fBehind;
             fBehind = fCurrent;
             fCurrent = fAhead;
             fAhead = WordBreak.Empty;
-        }        
+        }
+        
+        // Static internals        
 
         private static bool IsAlphabeticOrHebrewLetter(WordBreak symbolType)
         {

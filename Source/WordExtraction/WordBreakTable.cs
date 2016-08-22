@@ -25,7 +25,7 @@ namespace WordExtraction
 
     static class WordBreakTable
     {
-        public static WordBreak GetSymbolType(char c)
+        public static WordBreak GetCharacterWordBreak(char c)
         {
             WordBreak result = WordBreak.Any;
             int index = System.Array.BinarySearch(wordBreaksInfo, new WordBreakInfo(c, c, WordBreak.Empty));
