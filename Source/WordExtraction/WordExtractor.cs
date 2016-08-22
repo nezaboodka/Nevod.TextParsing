@@ -45,13 +45,13 @@ namespace WordExtraction
             }
         }
 
-        public virtual void AddSymbol(char symbol)
+        protected virtual void AddSymbol(char symbol)
         {
             MoveWindow();
             fAhead = WordBreakTable.GetSymbolType(symbol);
         }
 
-        public virtual bool IsBreak()
+        protected virtual bool IsBreak()
         {
             bool result;
             // WB3.
@@ -115,7 +115,7 @@ namespace WordExtraction
             return result;
         }
 
-        public virtual void MoveWindow()
+        protected virtual void MoveWindow()
         {
             fBehindOfBehind = fBehind;
             fBehind = fCurrent;
