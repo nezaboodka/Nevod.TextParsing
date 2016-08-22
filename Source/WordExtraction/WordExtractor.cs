@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sharik.Text;
+using System;
 
 namespace WordExtraction
 {
@@ -15,10 +16,11 @@ namespace WordExtraction
 
         public IEnumerable<Slice> GetWords(string text)
         {
-
-            IEnumerable<Slice> result = InternalGetWords(text);
+            foreach (Slice word in InternalGetWords(text))
+            {
+                yield return word;
+            }
             ResetState();
-            return result;
         }
 
         // Protected
