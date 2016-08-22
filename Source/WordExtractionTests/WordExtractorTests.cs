@@ -60,6 +60,8 @@ namespace WordExtraction.Tests
             PerformTest(testString, expectedResult);
         }
 
+        // Static internals
+
         private static void PerformTest(string testString, string[] expectedResult)
         {
             string[] result = ExtractWords(testString);

@@ -25,41 +25,6 @@ namespace WordExtraction
 
     static class WordBreakTable
     {
-        public static WordBreak GetCharacterWordBreak(char c)
-        {
-            WordBreak result = WordBreak.Any;
-            int index = System.Array.BinarySearch(wordBreaksInfo, new WordBreakInfo(c, c, WordBreak.Empty));
-            if (index >= 0)
-                result = wordBreaksInfo[index].WordBreak;
-            return result;
-        }
-
-        private struct WordBreakInfo : IComparable<WordBreakInfo>
-        {
-            public char LowBound;
-            public char HighBound;
-            public WordBreak WordBreak;
-
-            public WordBreakInfo(char lowBound, char highBound, WordBreak wordBreak)
-            {
-                this.LowBound = lowBound;
-                this.HighBound = highBound;
-                this.WordBreak = wordBreak;
-            }
-
-            public int CompareTo(WordBreakInfo other)
-            {
-                int result;
-                if (this.HighBound < other.LowBound)
-                    result = -1;
-                else if (other.HighBound < this.LowBound)
-                    result = 1;
-                else
-                    result = 0;
-                return result;
-            }
-        }
-
         private static readonly WordBreakInfo[] wordBreaksInfo = { new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed),
             new WordBreakInfo('\xb', '\xc', WordBreak.Newline), new WordBreakInfo('\xd', '\xd', WordBreak.CarriageReturn),
             new WordBreakInfo('\x22', '\x22', WordBreak.DoubleQuote), new WordBreakInfo('\x27', '\x27', WordBreak.SingleQuote),
@@ -359,5 +324,44 @@ namespace WordExtraction
             new WordBreakInfo('\xffc2', '\xffc7', WordBreak.AlphabeticLetter), new WordBreakInfo('\xffca', '\xffcf', WordBreak.AlphabeticLetter),
             new WordBreakInfo('\xffd2', '\xffd7', WordBreak.AlphabeticLetter), new WordBreakInfo('\xffda', '\xffdc', WordBreak.AlphabeticLetter),
             new WordBreakInfo('\xfff9', '\xfffb', WordBreak.Format) };
+
+        // Public
+
+        public static WordBreak GetCharacterWordBreak(char c)
+        {
+            WordBreak result = WordBreak.Any;
+            int index = System.Array.BinarySearch(wordBreaksInfo, new WordBreakInfo(c, c, WordBreak.Empty));
+            if (index >= 0)
+                result = wordBreaksInfo[index].WordBreak;
+            return result;
+        }
+
+        // Private
+
+        private struct WordBreakInfo : IComparable<WordBreakInfo>
+        {
+            public char LowBound;
+            public char HighBound;
+            public WordBreak WordBreak;
+
+            public WordBreakInfo(char lowBound, char highBound, WordBreak wordBreak)
+            {
+                this.LowBound = lowBound;
+                this.HighBound = highBound;
+                this.WordBreak = wordBreak;
+            }
+
+            public int CompareTo(WordBreakInfo other)
+            {
+                int result;
+                if (this.HighBound < other.LowBound)
+                    result = -1;
+                else if (other.HighBound < this.LowBound)
+                    result = 1;
+                else
+                    result = 0;
+                return result;
+            }
+        }        
     }
 }
