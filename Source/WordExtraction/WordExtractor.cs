@@ -147,14 +147,14 @@ namespace WordExtraction
         
         // Static internals        
 
-        private static bool IsAlphabeticOrHebrewLetter(WordBreak symbolType)
+        private static bool IsAlphabeticOrHebrewLetter(WordBreak wordBreak)
         {
-            return symbolType == WordBreak.AlphabeticLetter || symbolType == WordBreak.HebrewLetter;
+            return wordBreak == WordBreak.AlphabeticLetter || wordBreak == WordBreak.HebrewLetter;
         }
 
-        private static bool IsLineBreak(WordBreak symbolType)
+        private static bool IsLineBreak(WordBreak wordBreak)
         {
-            return symbolType == WordBreak.Newline || symbolType == WordBreak.LineFeed || symbolType == WordBreak.CarriageReturn;
+            return wordBreak == WordBreak.Newline || wordBreak == WordBreak.LineFeed || wordBreak == WordBreak.CarriageReturn;
         }              
     }
 }
