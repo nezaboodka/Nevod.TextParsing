@@ -23,7 +23,7 @@ namespace WordExtraction
             ResetState();
         }
 
-        // Protected
+        // Internals
 
         protected virtual IEnumerable<Slice> InternalGetWords(string text)
         {
@@ -69,8 +69,12 @@ namespace WordExtraction
 
         protected virtual void AddCharacter(char c)
         {
-            NextCharacter();
-            fAhead = WordBreakTable.GetCharacterWordBreak(c);
+            WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);            
+            if (!(IsIgnorable(wordBreak) && !IsFirstCharacter())) // WB4.
+            {
+                NextCharacter();
+                fAhead = WordBreakTable.GetCharacterWordBreak(c);
+            }
         }
 
         protected virtual bool IsBreak()
@@ -144,17 +148,27 @@ namespace WordExtraction
             fCurrent = fAhead;
             fAhead = WordBreak.Empty;
         }
+
+        private bool IsFirstCharacter()
+        {
+            return (fBehindOfBehind == WordBreak.Empty) && (fAhead == WordBreak.Empty);
+        }
         
         // Static internals        
 
+        private static bool IsIgnorable(WordBreak wordBreak)
+        {
+            return (wordBreak == WordBreak.Format) || (wordBreak == WordBreak.Extender);
+        }
+
         private static bool IsAlphabeticOrHebrewLetter(WordBreak wordBreak)
         {
-            return wordBreak == WordBreak.AlphabeticLetter || wordBreak == WordBreak.HebrewLetter;
+            return (wordBreak == WordBreak.AlphabeticLetter) || (wordBreak == WordBreak.HebrewLetter);
         }
 
         private static bool IsLineBreak(WordBreak wordBreak)
         {
-            return wordBreak == WordBreak.Newline || wordBreak == WordBreak.LineFeed || wordBreak == WordBreak.CarriageReturn;
-        }              
+            return (wordBreak == WordBreak.Newline) || (wordBreak == WordBreak.LineFeed) || (wordBreak == WordBreak.CarriageReturn);
+        }                     
     }
 }
