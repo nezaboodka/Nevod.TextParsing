@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Sharik.Text;
 
 namespace WordExtraction.Tests
 {
@@ -11,7 +13,7 @@ namespace WordExtraction.Tests
         {
             string testString = "The quick(\"brown\") fox can't jump 32.3 feet, right.";
             string[] expectedResult = { "The", "quick", "brown", "fox", "can't", "jump", "32.3", "feet", "right" };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -19,7 +21,7 @@ namespace WordExtraction.Tests
         {
             string testString = "word";
             string[] expectedResult = { "word" };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -27,7 +29,7 @@ namespace WordExtraction.Tests
         {
             string testString = "";
             string[] expectedResult = { };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -35,7 +37,7 @@ namespace WordExtraction.Tests
         {
             string testString = null;
             string[] expectedResult = { };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -43,7 +45,7 @@ namespace WordExtraction.Tests
         {
             string testString = "1А класс; 56,31 светового года, потом 45.1 дня!";
             string[] expectedResult = { "1А", "класс", "56,31", "светового", "года", "потом", "45.1", "дня" };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -51,7 +53,7 @@ namespace WordExtraction.Tests
         {
             string testString = "L";
             string[] expectedResult = { "L" };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -59,12 +61,25 @@ namespace WordExtraction.Tests
         {
             string testString = "a\u0308b\u0308cd 3.4";
             string[] expectedResult = { "a\u0308b\u0308cd", "3.4" };
-            PerformTest(testString, expectedResult);
+            PerformEqualityTest(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void MultipleEnumeration()
+        {
+            string testString = "word word";
+            string[] expectedResult = {"word", "word"};
+            var wordExtractor = new WordExtractor();
+            IEnumerable<Slice> enumerable = wordExtractor.GetWords(testString);
+            string[] firstResult = SliceEnumerableToStringArray(enumerable);
+            string[] secondResult = SliceEnumerableToStringArray(enumerable);
+            CollectionAssert.AreEqual(firstResult, expectedResult);
+            CollectionAssert.AreEqual(secondResult, expectedResult);
         }
 
         // Static internals
 
-        private static void PerformTest(string testString, string[] expectedResult)
+        private static void PerformEqualityTest(string testString, string[] expectedResult)
         {
             string[] result = ExtractWords(testString);
             CollectionAssert.AreEqual(result, expectedResult);
@@ -73,8 +88,13 @@ namespace WordExtraction.Tests
         private static string[] ExtractWords(string text)
         {
             var wordExtractor = new WordExtractor();
-            string[] result = wordExtractor.GetWords(text).Select(x => x.ToString()).ToArray();
+            string[] result = SliceEnumerableToStringArray(wordExtractor.GetWords(text));
             return result;
+        }
+
+        private static string[] SliceEnumerableToStringArray(IEnumerable<Slice> sliceEnumerable)
+        {
+            return sliceEnumerable.Select(x => x.ToString()).ToArray();
         }
     }
 }
