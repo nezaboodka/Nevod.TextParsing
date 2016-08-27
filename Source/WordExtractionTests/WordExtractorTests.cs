@@ -11,7 +11,6 @@ namespace WordExtraction.Tests
         {
             string testString = "The quick(\"brown\") fox can't jump 32.3 feet, right.";
             string[] expectedResult = { "The", "quick", "brown", "fox", "can't", "jump", "32.3", "feet", "right" };
-
             PerformTest(testString, expectedResult);
         }
 
@@ -20,7 +19,6 @@ namespace WordExtraction.Tests
         {
             string testString = "word";
             string[] expectedResult = { "word" };
-
             PerformTest(testString, expectedResult);
         }
 
@@ -29,7 +27,6 @@ namespace WordExtraction.Tests
         {
             string testString = "";
             string[] expectedResult = { };
-
             PerformTest(testString, expectedResult);
         }
 
@@ -38,7 +35,6 @@ namespace WordExtraction.Tests
         {
             string testString = null;
             string[] expectedResult = { };
-
             PerformTest(testString, expectedResult);
         }
 
@@ -47,7 +43,6 @@ namespace WordExtraction.Tests
         {
             string testString = "1А класс; 56,31 светового года, потом 45.1 дня!";
             string[] expectedResult = { "1А", "класс", "56,31", "светового", "года", "потом", "45.1", "дня" };
-
             PerformTest(testString, expectedResult);
         }
 
@@ -56,7 +51,14 @@ namespace WordExtraction.Tests
         {
             string testString = "L";
             string[] expectedResult = { "L" };
+            PerformTest(testString, expectedResult);
+        }
 
+        [TestMethod]
+        public void FormatCharacters()
+        {
+            string testString = "a\u0308b\u0308cd 3.4";
+            string[] expectedResult = { "a\u0308b\u0308cd", "3.4" };
             PerformTest(testString, expectedResult);
         }
 
