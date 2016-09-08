@@ -41,7 +41,7 @@ namespace WordExtraction.Tests
         }
 
         [TestMethod]
-        public void Сyrillic()
+        public void Cyrillic()
         {
             string testString = "1А класс; 56,31 светового года, потом 45.1 дня!";
             string[] expectedResult = { "1А", "класс", "56,31", "светового", "года", "потом", "45.1", "дня" };
