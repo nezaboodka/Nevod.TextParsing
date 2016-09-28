@@ -4,37 +4,22 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{06C5207A-124F-4520-8E25-30C4D2A374BE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WordExtraction</RootNamespace>
-    <AssemblyName>WordExtraction</AssemblyName>
+    <RootNamespace>WordExtractionDemoApplication</RootNamespace>
+    <AssemblyName>WordExtractionDemoApplication</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\bin\WordExtraction\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Debug\obj\WordExtraction</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Debug\bin\WordExtractionDemoApplication\</OutputPath>
+	<IntermediateOutputPath>..\..\Build\Debug\obj\WordExtractionDemoApplication\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,14 +28,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\bin\WordExtraction\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtraction</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Release\bin\WordExtractionDemoApplication\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtractionDemoApplication\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -63,34 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WordBreakTable.cs" />
+    <Compile Include="WordExtractionDemo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractor.cs" />
-    <Compile Include="WordExtractorState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Sharik\Source\System\Sharik.System.csproj">
       <Project>{116e8e3f-811d-4014-b197-0d7d17f6cee5}</Project>
       <Name>Sharik.System</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WordExtraction\WordExtraction.csproj">
+      <Project>{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}</Project>
+      <Name>WordExtraction</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

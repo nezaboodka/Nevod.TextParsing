@@ -1,6 +1,7 @@
 ﻿using System;
+using WordExtraction;
 
-namespace WordExtraction
+namespace WordExtractionDemoApplication
 {
     class WordExtractionDemo
     {
