@@ -10,9 +10,9 @@ namespace TokenizerDemoApplication
             Tokenizer tokenizer = new Tokenizer();
             foreach (string arg in args)
             {
-                foreach (var token in tokenizer.GetTokens(arg))
+                foreach (Token token in tokenizer.GetTokens(arg))
                 {
-                    Console.WriteLine("\"" + token + "\"");
+                    Console.WriteLine("\"" + token.Text + "\"");
                 }
             }
         }

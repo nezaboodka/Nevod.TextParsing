@@ -4,9 +4,36 @@ using Sharik.Text;
 
 namespace TextParser
 {
+    public enum TokenKind
+    {
+        Word,
+        Number,
+        Url,
+        SentenceSeparator
+    }
+
+    public struct Token
+    {
+        public Slice Text;
+        public TokenKind TokenKind;
+        public int Position => Text.Position;
+
+        public Token(Slice text)
+        {
+            Text = text;
+            TokenKind = TokenKind.Word;;
+        }
+
+        public Token(Slice text, TokenKind tokenKind)
+        {
+            Text = text;
+            TokenKind = tokenKind;
+        }
+    }
+
     public class Tokenizer
     {
-        public virtual IEnumerable<Slice> GetTokens(string source)
+        public virtual IEnumerable<Token> GetTokens(string source)
         {
             if (!string.IsNullOrEmpty(source))
             {
@@ -20,7 +47,7 @@ namespace TextParser
                     if (tokenizerState.IsBreak())
                     {
                         if (isWord)
-                            yield return source.Slice(startPosition, i - startPosition);
+                            yield return new Token(source.Slice(startPosition, i - startPosition));
                         startPosition = i;
                         isWord = false;
                     }
@@ -31,12 +58,12 @@ namespace TextParser
                 if (tokenizerState.IsBreak())
                 {
                     if (isWord)
-                        yield return source.Slice(startPosition, source.Length - startPosition - 1);
+                        yield return new Token(source.Slice(startPosition, source.Length - startPosition - 1));
                     startPosition = source.Length - 1;
                 }
                 if (char.IsLetterOrDigit(source.Last()))
                 {
-                    yield return source.Slice(startPosition);
+                    yield return new Token(source.Slice(startPosition));
                 }
             }
         }         

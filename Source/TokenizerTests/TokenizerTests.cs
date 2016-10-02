@@ -69,10 +69,10 @@ namespace TextParser.Tests
         {
             string testString = "word word";
             string[] expectedResult = {"word", "word"};
-            var wordExtractor = new Tokenizer();
-            IEnumerable<Slice> enumerable = wordExtractor.GetTokens(testString);
-            string[] firstResult = SliceEnumerableToStringArray(enumerable);
-            string[] secondResult = SliceEnumerableToStringArray(enumerable);
+            var tokenizer = new Tokenizer();
+            IEnumerable<Token> enumerable = tokenizer.GetTokens(testString);
+            string[] firstResult = TokenEnumerableToStringArray(enumerable);
+            string[] secondResult = TokenEnumerableToStringArray(enumerable);
             CollectionAssert.AreEqual(firstResult, expectedResult);
             CollectionAssert.AreEqual(secondResult, expectedResult);
         }
@@ -87,14 +87,14 @@ namespace TextParser.Tests
 
         private static string[] ExtractWords(string text)
         {
-            var wordExtractor = new Tokenizer();
-            string[] result = SliceEnumerableToStringArray(wordExtractor.GetTokens(text));
+            var tokenizer = new Tokenizer();
+            string[] result = TokenEnumerableToStringArray(tokenizer.GetTokens(text));
             return result;
         }
 
-        private static string[] SliceEnumerableToStringArray(IEnumerable<Slice> sliceEnumerable)
+        private static string[] TokenEnumerableToStringArray(IEnumerable<Token> sliceEnumerable)
         {
-            return sliceEnumerable.Select(x => x.ToString()).ToArray();
+            return sliceEnumerable.Select(x => x.Text.ToString()).ToArray();
         }
     }
 }
