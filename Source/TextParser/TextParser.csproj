@@ -7,8 +7,8 @@
     <ProjectGuid>{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WordExtraction</RootNamespace>
-    <AssemblyName>WordExtraction</AssemblyName>
+    <RootNamespace>TextParser</RootNamespace>
+    <AssemblyName>TextParser</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,8 +33,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\bin\WordExtraction\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Debug\obj\WordExtraction</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Debug\bin\TextParser\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Debug\obj\TextParser\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,8 +43,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\bin\WordExtraction\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtraction</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Release\bin\TextParser\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Release\obj\TextParser\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -65,8 +65,8 @@
   <ItemGroup>
     <Compile Include="WordBreakTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractor.cs" />
-    <Compile Include="WordExtractorState.cs" />
+    <Compile Include="Tokenizer.cs" />
+    <Compile Include="TokenizerState.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

@@ -6,8 +6,8 @@
     <ProjectGuid>{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WordExtractionTests</RootNamespace>
-    <AssemblyName>WordExtractionTests</AssemblyName>
+    <RootNamespace>TokenizerTests</RootNamespace>
+    <AssemblyName>TokenizerTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -22,8 +22,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\bin\WordExtractionTests\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Debug\obj\WordExtractionTests</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Debug\bin\TokenizerTests\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Debug\obj\TokenizerTests</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,8 +31,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\bin\WordExtractionTests\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtractionTests</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Release\bin\TokenizerTests\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Release\obj\TokenizerTests</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -54,16 +54,16 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordExtractorTests.cs" />
+    <Compile Include="TokenizerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Sharik\Source\System\Sharik.System.csproj">
       <Project>{116e8e3f-811d-4014-b197-0d7d17f6cee5}</Project>
       <Name>Sharik.System</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WordExtraction\WordExtraction.csproj">
+    <ProjectReference Include="..\TextParser\TextParser.csproj">
       <Project>{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}</Project>
-      <Name>WordExtraction</Name>
+      <Name>TextParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -2,22 +2,22 @@
 using System.Linq;
 using Sharik.Text;
 
-namespace WordExtraction
+namespace TextParser
 {
-    public class WordExtractor
+    public class Tokenizer
     {
-        public virtual IEnumerable<Slice> GetWords(string source)
+        public virtual IEnumerable<Slice> GetTokens(string source)
         {
             if (!string.IsNullOrEmpty(source))
             {
                 bool isWord = false;
                 int startPosition = 0;
-                var wordExtractorState = new WordExtractorState();
-                wordExtractorState.AddCharacter(source[0]);
+                var tokenizerState = new TokenizerState();
+                tokenizerState.AddCharacter(source[0]);
                 for (int i = 0; i < source.Length - 1; i++)
                 {
-                    wordExtractorState.AddCharacter(source[i + 1]);
-                    if (wordExtractorState.IsBreak())
+                    tokenizerState.AddCharacter(source[i + 1]);
+                    if (tokenizerState.IsBreak())
                     {
                         if (isWord)
                             yield return source.Slice(startPosition, i - startPosition);
@@ -27,8 +27,8 @@ namespace WordExtraction
                     if (!isWord && char.IsLetterOrDigit(source[i]))
                         isWord = true;
                 }
-                wordExtractorState.NextCharacter();
-                if (wordExtractorState.IsBreak())
+                tokenizerState.NextCharacter();
+                if (tokenizerState.IsBreak())
                 {
                     if (isWord)
                         yield return source.Slice(startPosition, source.Length - startPosition - 1);

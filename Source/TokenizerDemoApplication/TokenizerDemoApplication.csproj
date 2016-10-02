@@ -7,8 +7,8 @@
     <ProjectGuid>{06C5207A-124F-4520-8E25-30C4D2A374BE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WordExtractionDemoApplication</RootNamespace>
-    <AssemblyName>WordExtractionDemoApplication</AssemblyName>
+    <RootNamespace>TokenizerDemoApplication</RootNamespace>
+    <AssemblyName>TokenizerDemoApplication</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -18,8 +18,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\bin\WordExtractionDemoApplication\</OutputPath>
-	<IntermediateOutputPath>..\..\Build\Debug\obj\WordExtractionDemoApplication\</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Debug\bin\TokenizerDemoApplication\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Debug\obj\TokenizerDemoApplication\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,8 +28,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\bin\WordExtractionDemoApplication\</OutputPath>
-    <IntermediateOutputPath>..\..\Build\Release\obj\WordExtractionDemoApplication\</IntermediateOutputPath>
+    <OutputPath>..\..\Build\Release\bin\TokenizerDemoApplication\</OutputPath>
+    <IntermediateOutputPath>..\..\Build\Release\obj\TokenizerDemoApplication\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WordExtractionDemo.cs" />
+    <Compile Include="TokenizerDemo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +56,9 @@
       <Project>{116e8e3f-811d-4014-b197-0d7d17f6cee5}</Project>
       <Name>Sharik.System</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WordExtraction\WordExtraction.csproj">
+    <ProjectReference Include="..\TextParser\TextParser.csproj">
       <Project>{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}</Project>
-      <Name>WordExtraction</Name>
+      <Name>TextParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

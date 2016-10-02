@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using Sharik.Text;
 
-namespace WordExtraction.Tests
+namespace TextParser.Tests
 {
     [TestClass]
-    public class WordExtractorTests
+    public class TokenizerTests
     {
         [TestMethod]
         public void SiteExample()
@@ -69,8 +69,8 @@ namespace WordExtraction.Tests
         {
             string testString = "word word";
             string[] expectedResult = {"word", "word"};
-            var wordExtractor = new WordExtractor();
-            IEnumerable<Slice> enumerable = wordExtractor.GetWords(testString);
+            var wordExtractor = new Tokenizer();
+            IEnumerable<Slice> enumerable = wordExtractor.GetTokens(testString);
             string[] firstResult = SliceEnumerableToStringArray(enumerable);
             string[] secondResult = SliceEnumerableToStringArray(enumerable);
             CollectionAssert.AreEqual(firstResult, expectedResult);
@@ -87,8 +87,8 @@ namespace WordExtraction.Tests
 
         private static string[] ExtractWords(string text)
         {
-            var wordExtractor = new WordExtractor();
-            string[] result = SliceEnumerableToStringArray(wordExtractor.GetWords(text));
+            var wordExtractor = new Tokenizer();
+            string[] result = SliceEnumerableToStringArray(wordExtractor.GetTokens(text));
             return result;
         }
 

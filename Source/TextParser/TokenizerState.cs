@@ -1,6 +1,6 @@
-﻿namespace WordExtraction
+﻿namespace TextParser
 {
-    internal class WordExtractorState
+    internal class TokenizerState
     {
         private WordBreak fNextWordBreak = WordBreak.Empty;
         private WordBreak fCurrentWordBreak = WordBreak.Empty;
