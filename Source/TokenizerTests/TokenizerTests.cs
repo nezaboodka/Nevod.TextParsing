@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using Sharik.Text;
@@ -67,34 +68,37 @@ namespace TextParser.Tests
         [TestMethod]
         public void MultipleEnumeration()
         {
-            string testString = "word word";
-            string[] expectedResult = {"word", "word"};
-            var tokenizer = new Tokenizer();
-            IEnumerable<Token> enumerable = tokenizer.GetTokens(testString);
-            string[] firstResult = TokenEnumerableToStringArray(enumerable);
-            string[] secondResult = TokenEnumerableToStringArray(enumerable);
-            CollectionAssert.AreEqual(firstResult, expectedResult);
-            CollectionAssert.AreEqual(secondResult, expectedResult);
+            //string testString = "word word";
+            //string[] expectedResult = {"word", "word"};
+            //var tokenizer = new Tokenizer();
+            //IEnumerable<TokenizerResult> enumerable = tokenizer.GetTokens(testString);
+            //string[] firstResult = TokenEnumerableToStringArray(enumerable);
+            //string[] secondResult = TokenEnumerableToStringArray(enumerable);
+            //CollectionAssert.AreEqual(firstResult, expectedResult);
+            //CollectionAssert.AreEqual(secondResult, expectedResult);
+            throw new NotImplementedException();
         }
 
         // Static internals
 
         private static void PerformEqualityTest(string testString, string[] expectedResult)
         {
-            string[] result = ExtractWords(testString);
-            CollectionAssert.AreEqual(result, expectedResult);
+            //string[] result = ExtractWords(testString);
+            //CollectionAssert.AreEqual(result, expectedResult);
+            throw new NotImplementedException();
         }
 
         private static string[] ExtractWords(string text)
         {
-            var tokenizer = new Tokenizer();
-            string[] result = TokenEnumerableToStringArray(tokenizer.GetTokens(text));
-            return result;
+            //var tokenizer = new Tokenizer();
+            //string[] result = TokenEnumerableToStringArray(tokenizer.GetTokens(text));
+            //return result;
+            throw new NotImplementedException();
         }
 
-        private static string[] TokenEnumerableToStringArray(IEnumerable<Token> sliceEnumerable)
+        private static string[] TokenEnumerableToStringArray(IEnumerable<TokenizerResult> sliceEnumerable)
         {
-            return sliceEnumerable.Select(x => x.Text.ToString()).ToArray();
+            throw new NotImplementedException();
         }
     }
 }
