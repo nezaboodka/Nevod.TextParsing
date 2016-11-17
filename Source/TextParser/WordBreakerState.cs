@@ -15,7 +15,7 @@
             if (!ShoudIgnore(wordBreak)) // WB4.
             {
                 NextCharacter();
-                fNextWordBreak = WordBreakTable.GetCharacterWordBreak(c);
+                fNextWordBreak = wordBreak;
             }
         }
 
