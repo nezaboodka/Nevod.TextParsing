@@ -7,31 +7,67 @@ namespace TextParser
 {
     public class Tokenizer
     {
-        public virtual TokenizerResult GetTokens(string source)
-        {   
-            throw new NotImplementedException();         
-            //if (!string.IsNullOrEmpty(source))
-            //{
-            //    int startPosition = 0;
-            //    var tokenizerState = new TokenizerState();
-            //    tokenizerState.AddCharacter(source[0]);
-            //    for (int i = 0; i < source.Length - 1; i++)
-            //    {
-            //        tokenizerState.AddCharacter(source[i + 1]);
-            //        if (tokenizerState.IsBreak())
-            //        {
-            //            yield return new TokenizerResult(source.Slice(startPosition, i - startPosition));
-            //            startPosition = i;                        
-            //        }                    
-            //    }
-            //    tokenizerState.NextCharacter();
-            //    if (tokenizerState.IsBreak())
-            //    {                    
-            //        yield return new TokenizerResult(source.Slice(startPosition, source.Length - startPosition - 1));
-            //        startPosition = source.Length - 1;
-            //    }                
-            //    yield return new TokenizerResult(source.Slice(startPosition));
-            //}
-        }         
+        private readonly WordBreakerState fWordBreakerState;
+        private readonly TokenizerState fTokenizerState;
+        private readonly string fText;
+        private int position;
+
+        public static TokenizerResult GetTokensFromPlainText(string text)
+        {
+            var tokenizer = new Tokenizer(text);
+            return tokenizer.GetTokensFromPlainText();
+        }
+
+        // Internals
+
+        private Tokenizer(string text)
+        {
+            fText = text;
+            fWordBreakerState = new WordBreakerState();
+            fTokenizerState = new TokenizerState();
+            position = 0;
+        }
+
+        protected virtual TokenizerResult GetTokensFromPlainText()
+        {
+            var result = new TokenizerResult(fText);
+
+            if (!string.IsNullOrEmpty(fText))
+            {
+                int startPosition = 0;
+
+                NextCharacter();
+                for (position = 0; position < fText.Length - 1; position++)
+                {
+                    NextCharacter();
+                    if (fWordBreakerState.IsBreak())
+                    {
+                        //yield return new TokenizerResult(source.Slice(startPosition, i - startPosition));
+                        startPosition = position;
+                    }
+                }
+                NextCharacter();
+                if (fWordBreakerState.IsBreak())
+                {
+                    //yield return new TokenizerResult(source.Slice(startPosition, source.Length - startPosition - 1));
+                    startPosition = fText.Length - 1;
+                }
+                //yield return new TokenizerResult(source.Slice(startPosition));
+            }
+
+            return result;
+        }
+
+        protected virtual void NextCharacter()
+        {
+            if (position < fText.Length - 1)
+            {
+                fWordBreakerState.AddCharacter(fText[position]);
+            }
+            else
+            {
+                fWordBreakerState.NextCharacter();
+            }
+        }        
     }
 }

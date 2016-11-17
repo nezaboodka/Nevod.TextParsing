@@ -124,19 +124,20 @@ namespace TextParser.Tests
         [TestMethod]
         public void MultipleEnumeration()
         {
-            string testString = "word word";
-            Token[] expectedResult =
-            {
-                new Token("word".Slice(), Token.Alphabetic),
-                new Token(" ".Slice(), Token.WhiteSpace), 
-                new Token("word".Slice(), Token.Alphabetic)
-            };
-            var tokenizer = new Tokenizer();
-            IEnumerable<Token> enumerable = tokenizer.GetTokens(testString);
-            Token[] firstResult = enumerable.ToArray();
-            Token[] secondResult = enumerable.ToArray();
-            CollectionAssert.AreEqual(firstResult, expectedResult);
-            CollectionAssert.AreEqual(secondResult, expectedResult);
+            //string testString = "word word";
+            //Token[] expectedResult =
+            //{
+            //    new Token("word".Slice(), Token.Alphabetic),
+            //    new Token(" ".Slice(), Token.WhiteSpace), 
+            //    new Token("word".Slice(), Token.Alphabetic)
+            //};
+            //var tokenizer = new Tokenizer();
+            //IEnumerable<Token> enumerable = tokenizer.GetTokensFromPlainText(testString);
+            //Token[] firstResult = enumerable.ToArray();
+            //Token[] secondResult = enumerable.ToArray();
+            //CollectionAssert.AreEqual(firstResult, expectedResult);
+            //CollectionAssert.AreEqual(secondResult, expectedResult);
+            throw new NotImplementedException();
         }
 
         // Static internals
@@ -148,9 +149,8 @@ namespace TextParser.Tests
         }
 
         private static Token[] Tokenize(string text)
-        {
-            var tokenizer = new Tokenizer();
-            Token[] result = tokenizer.GetTokens(text).ToArray();
+        {            
+            Token[] result = Tokenizer.GetTokensFromPlainText(text).ToArray();
             return result;
         }
     }
