@@ -2,7 +2,7 @@
 
 namespace TextParser
 {
-    enum WordBreak
+   internal enum WordBreak
     {
         AlphabeticLetter,
         Any,
@@ -23,7 +23,7 @@ namespace TextParser
         SingleQuote
     }
 
-    static class WordBreakTable
+    internal static class WordBreakTable
     {
         private static readonly WordBreakInfo[] wordBreaksInfo = { new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed),
             new WordBreakInfo('\xb', '\xc', WordBreak.Newline), new WordBreakInfo('\xd', '\xd', WordBreak.CarriageReturn),
