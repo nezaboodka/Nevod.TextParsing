@@ -2,85 +2,103 @@
 {
     internal class WordBreakerState
     {
+        private WordBreak fNextOfNextWordBreak = WordBreak.Empty;
         private WordBreak fNextWordBreak = WordBreak.Empty;
         private WordBreak fCurrentWordBreak = WordBreak.Empty;
         private WordBreak fPreviousWordBreak = WordBreak.Empty;
-        private WordBreak fPreviousOfPreviousWordBreak = WordBreak.Empty;
+
+        private readonly string fText;
+        private int fCurrentPosition;
 
         // Internals
 
-        internal void AddCharacter(char c)
+        internal WordBreakerState(string text)
         {
-            WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-            if (!ShoudIgnore(wordBreak)) // WB4.
+            fText = text;
+            fCurrentPosition = -1;
+            InitializeLookaheadBuffer();
+        }
+
+        internal void InitializeLookaheadBuffer()
+        {
+            NextCharacter();
+            NextCharacter();
+        }
+
+        internal void NextCharacter()
+        {            
+            if (!IsLastCharacter())
             {
-                NextCharacter();
-                fNextWordBreak = wordBreak;
+                fCurrentPosition++;
+                WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(fText[fCurrentPosition]);
+                if (!ShoudIgnore(wordBreak)) // WB4.
+                {
+                    AddWordBreak(wordBreak);
+                }                
             }
+            else
+            {
+                ShiftLookaheadBuffer();
+            }
+            
         }
 
         internal bool IsBreak()
         {
             bool result;
-            if (!IsEnoughCharacters())
-                result = false;
+            // WB2.
+            if (!IsEnoughCharacters() && !IsLastCharacter())
+                result = false;            
             // WB3.
-            else if (IsLineBreak(fPreviousWordBreak) || IsLineBreak(fCurrentWordBreak))
-                result = !((fPreviousWordBreak == WordBreak.CarriageReturn) && (fCurrentWordBreak == WordBreak.LineFeed));
+            else if (IsLineBreak(fCurrentWordBreak) || IsLineBreak(fNextWordBreak))
+                result = !((fCurrentWordBreak == WordBreak.CarriageReturn) && (fNextWordBreak == WordBreak.LineFeed));
             // WB5.
-            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && IsAlphabeticOrHebrewLetter(fCurrentWordBreak))
+            else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
-            // WB6.
-            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && (fCurrentWordBreak == WordBreak.MidLetter ||
-                fCurrentWordBreak == WordBreak.MidNumberAndLetter || fCurrentWordBreak == WordBreak.SingleQuote) 
+            // WB6. (without single quotes)
+            else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && (fNextWordBreak == WordBreak.MidLetter ||
+                fNextWordBreak == WordBreak.MidNumberAndLetter) 
+                && IsAlphabeticOrHebrewLetter(fNextOfNextWordBreak))
+                result = false;
+            // WB7. (without single quotes)
+            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && (fCurrentWordBreak == WordBreak.MidLetter
+                || fCurrentWordBreak == WordBreak.MidNumberAndLetter)
                 && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
-            // WB7.
-            else if (IsAlphabeticOrHebrewLetter(fPreviousOfPreviousWordBreak) && (fPreviousWordBreak == WordBreak.MidLetter
-                || fPreviousWordBreak == WordBreak.MidNumberAndLetter || fPreviousWordBreak == WordBreak.SingleQuote)
-                && IsAlphabeticOrHebrewLetter(fCurrentWordBreak))
-                result = false;
             // WB7a.
-            else if (fPreviousWordBreak == WordBreak.HebrewLetter && fCurrentWordBreak == WordBreak.SingleQuote)
-                return false;
+            else if (fCurrentWordBreak == WordBreak.HebrewLetter && fNextWordBreak == WordBreak.SingleQuote)
+                result = false;
             // WB7b.
-            else if (fPreviousWordBreak == WordBreak.HebrewLetter && fCurrentWordBreak == WordBreak.DoubleQuote
-                && fNextWordBreak == WordBreak.HebrewLetter)
+            else if (fCurrentWordBreak == WordBreak.HebrewLetter && fNextWordBreak == WordBreak.DoubleQuote
+                && fNextOfNextWordBreak == WordBreak.HebrewLetter)
                 result = false;
             // WB7c.
-            else if (fPreviousOfPreviousWordBreak == WordBreak.HebrewLetter && fPreviousWordBreak == WordBreak.DoubleQuote 
-                && fCurrentWordBreak == WordBreak.HebrewLetter)
+            else if (fPreviousWordBreak == WordBreak.HebrewLetter && fCurrentWordBreak == WordBreak.DoubleQuote 
+                && fNextWordBreak == WordBreak.HebrewLetter)
                 result = false;
             // WB8.
-            else if (fPreviousWordBreak == WordBreak.Numeric && (fCurrentWordBreak == WordBreak.Numeric))
+            else if (fCurrentWordBreak == WordBreak.Numeric && (fNextWordBreak == WordBreak.Numeric))
                 result = false;
             // WB9.
-            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && fCurrentWordBreak == WordBreak.Numeric)
+            else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && fNextWordBreak == WordBreak.Numeric)
                 result = false;
             // WB10.
-            else if (fPreviousWordBreak == WordBreak.Numeric && IsAlphabeticOrHebrewLetter(fCurrentWordBreak))
-                result = false;
-            // WB11.
-            else if (fPreviousOfPreviousWordBreak == WordBreak.Numeric &&
-                (fPreviousWordBreak == WordBreak.MidNumber || fPreviousWordBreak == WordBreak.MidNumberAndLetter 
-                || fPreviousWordBreak == WordBreak.SingleQuote) && fCurrentWordBreak == WordBreak.Numeric)
-                result = false;
-            // WB12.
-            else if (fPreviousWordBreak == WordBreak.Numeric && (fCurrentWordBreak == WordBreak.MidNumber 
-                || fCurrentWordBreak == WordBreak.MidNumberAndLetter || fCurrentWordBreak == WordBreak.SingleQuote) 
-                && fNextWordBreak == WordBreak.Numeric)
+            else if (fCurrentWordBreak == WordBreak.Numeric && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
             // WB13.
-            else if (fPreviousWordBreak == WordBreak.Katakana && fCurrentWordBreak == WordBreak.Katakana)
+            else if (fCurrentWordBreak == WordBreak.Katakana && fNextWordBreak == WordBreak.Katakana)
                 result = false;
             // WB13a.
-            else if ((IsAlphabeticOrHebrewLetter(fPreviousWordBreak) || fPreviousWordBreak == WordBreak.Numeric 
-                || fPreviousWordBreak == WordBreak.Katakana || fPreviousWordBreak == WordBreak.ExtenderForNumbersAndLetters) 
-                && fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters)
+            else if ((IsAlphabeticOrHebrewLetter(fCurrentWordBreak) || fCurrentWordBreak == WordBreak.Numeric 
+                || fCurrentWordBreak == WordBreak.Katakana || fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters) 
+                && fNextWordBreak == WordBreak.ExtenderForNumbersAndLetters)
                 result = false;
             // WB13b.
-            else if ((fPreviousWordBreak == WordBreak.ExtenderForNumbersAndLetters) && (IsAlphabeticOrHebrewLetter(fCurrentWordBreak)
-                || fCurrentWordBreak == WordBreak.Numeric || fCurrentWordBreak == WordBreak.Katakana))
+            else if ((fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters) && (IsAlphabeticOrHebrewLetter(fNextWordBreak)
+                || fNextWordBreak == WordBreak.Numeric || fNextWordBreak == WordBreak.Katakana))
+                result = false;
+            // custom: do not break between whitespaces
+            else if ((fCurrentWordBreak == WordBreak.Whitespace) && (fNextWordBreak == WordBreak.Whitespace))
                 result = false;
             // WB14.
             else
@@ -88,22 +106,33 @@
             return result;
         }
 
-        private bool IsEnoughCharacters()
+        private void AddWordBreak(WordBreak wordBreak)
         {
-            return (fCurrentWordBreak != WordBreak.Empty) && (fPreviousWordBreak != WordBreak.Empty);
+            ShiftLookaheadBuffer();
+            fNextOfNextWordBreak = wordBreak;
         }
 
-        internal void NextCharacter()
+        private void ShiftLookaheadBuffer()
         {
-            fPreviousOfPreviousWordBreak = fPreviousWordBreak;
             fPreviousWordBreak = fCurrentWordBreak;
             fCurrentWordBreak = fNextWordBreak;
-            fNextWordBreak = WordBreak.Empty;
+            fNextWordBreak = fNextOfNextWordBreak;
+            fNextOfNextWordBreak = WordBreak.Empty;
+        }
+
+        private bool IsEnoughCharacters()
+        {
+            return (fNextWordBreak != WordBreak.Empty) && (fCurrentWordBreak != WordBreak.Empty);
+        }
+
+        private bool IsLastCharacter()
+        {
+            return fCurrentPosition == fText.Length - 1;
         }
 
         private bool IsFirstCharacter()
         {
-            return (fPreviousOfPreviousWordBreak == WordBreak.Empty) && (fNextWordBreak == WordBreak.Empty);
+            return (fPreviousWordBreak == WordBreak.Empty) && (fNextOfNextWordBreak == WordBreak.Empty);
         }
 
         private bool ShoudIgnore(WordBreak wordBreak)

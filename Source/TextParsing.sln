@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharik.System", "..\Librari
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParser", "TextParser\TextParser.csproj", "{8E0ED902-CFDE-4BFF-95A8-0A5AB9DADF84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenizerDemoApplication", "TokenizerDemoApplication\TokenizerDemoApplication.csproj", "{06C5207A-124F-4520-8E25-30C4D2A374BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParserDemoApplication", "TextParserDemoApplication\TextParserDemoApplication.csproj", "{06C5207A-124F-4520-8E25-30C4D2A374BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenizerTests", "TokenizerTests\TokenizerTests.csproj", "{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParserTests", "TextParserTests\TextParserTests.csproj", "{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

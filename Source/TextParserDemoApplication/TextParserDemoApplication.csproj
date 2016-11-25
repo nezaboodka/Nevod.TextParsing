@@ -7,8 +7,8 @@
     <ProjectGuid>{06C5207A-124F-4520-8E25-30C4D2A374BE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TokenizerDemoApplication</RootNamespace>
-    <AssemblyName>TokenizerDemoApplication</AssemblyName>
+    <RootNamespace>TextParserDemoApplication</RootNamespace>
+    <AssemblyName>TextParserDemoApplication</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

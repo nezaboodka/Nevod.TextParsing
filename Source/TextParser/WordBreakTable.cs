@@ -20,13 +20,15 @@ namespace TextParser
         MidNumberAndLetter,
         Newline,
         Numeric,
-        SingleQuote
+        SingleQuote,
+        Whitespace,
     }
 
     internal static class WordBreakTable
     {
-        private static readonly WordBreakInfo[] wordBreaksInfo = { new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed),
-            new WordBreakInfo('\xb', '\xc', WordBreak.Newline), new WordBreakInfo('\xd', '\xd', WordBreak.CarriageReturn),
+        private static readonly WordBreakInfo[] wordBreaksInfo = { new WordBreakInfo('\x9', '\x9', WordBreak.Whitespace),
+            new WordBreakInfo('\xa', '\xa', WordBreak.LineFeed), new WordBreakInfo('\xb', '\xc', WordBreak.Newline),
+            new WordBreakInfo('\xd', '\xd', WordBreak.CarriageReturn), new WordBreakInfo('\x20', '\x20', WordBreak.Whitespace),
             new WordBreakInfo('\x22', '\x22', WordBreak.DoubleQuote), new WordBreakInfo('\x27', '\x27', WordBreak.SingleQuote),
             new WordBreakInfo('\x2c', '\x2c', WordBreak.MidNumber), new WordBreakInfo('\x2e', '\x2e', WordBreak.MidNumberAndLetter),
             new WordBreakInfo('\x30', '\x39', WordBreak.Numeric), new WordBreakInfo('\x3a', '\x3a', WordBreak.MidLetter),

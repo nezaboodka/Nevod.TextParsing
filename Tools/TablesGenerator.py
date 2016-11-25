@@ -35,11 +35,10 @@ TAB_LENGTH = 4
 
 
 def main():
-    property_values, property_types = load_properties(WORD_BREAK_PROPERTY_FILENAME)
+    property_values, property_types = get_properties(WORD_BREAK_PROPERTY_FILENAME)
     properties_table = generate_table(property_values)
     types_table = generate_types_table(property_types)
     write_result(properties_table, types_table, get_output_filename())
-
 
 def get_output_filename():
     argument_parser = argparse.ArgumentParser(description='Generate C# code from WordBreakProperty.txt.')
@@ -47,11 +46,15 @@ def get_output_filename():
     args = argument_parser.parse_args()
     return args.output_filename
 
-
+def get_properties(filename):
+    property_values, property_types = load_properties(filename)
+    add_custom_values(property_values, property_types )
+    return merge_ranges(property_values), sorted(property_types)
+    
 def load_properties(filename):
     fetch_file(filename)
 
-    properties = defaultdict(list)
+    property_values = defaultdict(list)
     property_types = {'Any', 'Empty'}
 
     single_value_property_re = re.compile(SINGLE_PROPERTY)
@@ -79,11 +82,21 @@ def load_properties(filename):
                 continue
         if two_bytes(low_bound) and two_bytes(high_bound):
             property_type = format_property_type(property_type)
-            properties[property_type].append((low_bound, high_bound))
+            property_values[property_type].append((low_bound, high_bound))
             property_types.add(property_type)
     
-    return merge_ranges(properties), sorted(property_types)
+    return property_values, property_types
 
+def add_custom_values(property_values, property_types):
+    WHITESPACE_PROPERTY = "Whitespace"
+    SPACE_CODE = ord(' ')
+    TAB_CODE = ord('\t')    
+
+    property_types.add(WHITESPACE_PROPERTY)
+    property_values[WHITESPACE_PROPERTY].extend([
+        (SPACE_CODE, SPACE_CODE),
+        (TAB_CODE, TAB_CODE)
+    ])
 
 def generate_table(properties):
     properties_sequence = []

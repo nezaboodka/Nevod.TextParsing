@@ -16,9 +16,9 @@ namespace TextParser.Tests
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void AddTokenWithNegativePosition()
         {
-            TokenizerResult tokenizerResult = new TokenizerResult(string.Empty);
+            ParsedText parsedText = new ParsedText(string.Empty);
 
-            tokenizerResult.AddToken(-1, 0);
+            parsedText.AddToken(-1, 0);
             
             // Assert - IndexOutOfRangeException
         }
@@ -28,9 +28,9 @@ namespace TextParser.Tests
         public void AddTokenWithTooBigPosition()
         {
             string s = string.Empty;
-            TokenizerResult tokenizerResult = new TokenizerResult(s);
+            ParsedText parsedText = new ParsedText(s);
 
-            tokenizerResult.AddToken(s.Length, 0);
+            parsedText.AddToken(s.Length, 0);
 
             // Assert - IndexOutOfRangeException
         }
@@ -39,22 +39,22 @@ namespace TextParser.Tests
         public void TokenEnumeration()
         {
             string s = "hello, world";
-            TokenizerResult tokenizerResult = new TokenizerResult(s);
+            ParsedText parsedText = new ParsedText(s);
 
-            tokenizerResult.AddToken(s.IndexOf("hello") + "hello".Length - 1, 0);
-            tokenizerResult.AddToken(s.IndexOf(","), 1);
-            tokenizerResult.AddToken(s.IndexOf(" "), 2);
-            tokenizerResult.AddToken(s.IndexOf("world") + "world".Length - 1, 3);
-                        
+            parsedText.AddToken(s.IndexOf("hello") + "hello".Length - 1, TokenKind.Alphabetic);
+            parsedText.AddToken(s.IndexOf(","), TokenKind.Symbol);
+            parsedText.AddToken(s.IndexOf(" "), TokenKind.WhiteSpace);
+            parsedText.AddToken(s.IndexOf("world") + "world".Length - 1, TokenKind.Alphabetic);
+
             Token[] expected =
             {
-                new Token("hello".Slice(), 0),
-                new Token(",".Slice(), 1),
-                new Token(" ".Slice(), 2),
-                new Token("world".Slice(), 3)
+                new Token("hello".Slice(), TokenKind.Alphabetic),
+                new Token(",".Slice(), TokenKind.Symbol),
+                new Token(" ".Slice(), TokenKind.WhiteSpace),
+                new Token("world".Slice(), TokenKind.Alphabetic)
             };
 
-            CollectionAssert.AreEqual(expected, tokenizerResult.ToArray());
+            CollectionAssert.AreEqual(expected, parsedText.ToArray());
         }
     }
 }

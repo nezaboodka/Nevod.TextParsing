@@ -3,18 +3,21 @@ using Sharik.Text;
 
 namespace TextParser
 {
+    public enum TokenKind : byte
+    {
+        WhiteSpace,
+        Alphabetic,
+        Alphanumeric,
+        Numeric,
+        Symbol
+    }
+
     public struct Token
     {
-        public const byte WhiteSpace = 0;
-        public const byte Alphabetic = 1;
-        public const byte Alphanumeric = 2;
-        public const byte Numeric = 3;
-        public const byte Symbol = 4;
-
         public Slice Text;
-        public byte TokenKind;
+        public TokenKind TokenKind;
 
-        public Token(Slice text, byte tokenKind)
+        public Token(Slice text, TokenKind tokenKind)
         {
             Text = text;
             TokenKind = tokenKind;

@@ -5,10 +5,10 @@ using Sharik.Text;
 
 namespace TextParser
 {
-    public class TokenizerResult : IEnumerable<Token>
+    public class ParsedText : IEnumerable<Token>
     {
         private readonly List<int> fTokenEnds;
-        private readonly List<byte> fTokenKinds;
+        private readonly List<TokenKind> fTokenKinds;
 
         // Public
         
@@ -38,20 +38,20 @@ namespace TextParser
 
         // Internal
 
-        internal TokenizerResult(string plainText)
+        internal ParsedText(string plainText)
         {
             PlainText = plainText;
             fTokenEnds = new List<int> { -1 };
-            fTokenKinds = new List<byte>();
+            fTokenKinds = new List<TokenKind>();
         }
 
-        internal virtual void AddToken(int position, byte kind)
+        internal virtual void AddToken(int tokenEnd, TokenKind kind)
         {
-            if (position < 0 || position >= PlainText.Length)
+            if (tokenEnd < 0 || tokenEnd >= PlainText.Length)
             {
-                throw new IndexOutOfRangeException("Invalid token start position");
+                throw new IndexOutOfRangeException("Invalid token token end position");
             }
-            fTokenEnds.Add(position);
+            fTokenEnds.Add(tokenEnd);
             fTokenKinds.Add(kind);
         }
     }
