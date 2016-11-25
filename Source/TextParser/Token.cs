@@ -5,11 +5,12 @@ namespace TextParser
 {
     public enum TokenKind : byte
     {
-        WhiteSpace,
         Alphabetic,
         Alphanumeric,
         Numeric,
-        Symbol
+        Symbol,
+        WhiteSpace,
+        Empty
     }
 
     public struct Token
