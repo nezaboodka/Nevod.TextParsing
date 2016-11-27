@@ -9,7 +9,7 @@ namespace TextParserDemoApplication
         {
             foreach (string arg in args)
             {
-                foreach (Token token in Parser.GetTokensFromPlainText(arg))
+                foreach (Token token in Parser.GetTokensFromPlainText(arg).Tokens)
                 {
                     Console.WriteLine("\"" + token.Text + "\"");
                 }

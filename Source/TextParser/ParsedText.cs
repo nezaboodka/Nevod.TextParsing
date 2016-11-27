@@ -5,7 +5,7 @@ using Sharik.Text;
 
 namespace TextParser
 {
-    public class ParsedText : IEnumerable<Token>
+    public class ParsedText
     {
         private readonly List<int> fTokenEnds;
         private readonly List<TokenKind> fTokenKinds;
@@ -13,27 +13,23 @@ namespace TextParser
         // Public
         
         public virtual string PlainText { get; }
-        public virtual int Count => fTokenKinds.Count;
-        public virtual Token this[int index]
+        public virtual int TokenCount => fTokenKinds.Count;
+
+        public virtual Token GetToken(int index)
+        {
+            Slice text = PlainText.Slice(fTokenEnds[index] + 1, fTokenEnds[index + 1] - fTokenEnds[index]);
+            return new Token(text, fTokenKinds[index]);
+        }
+
+        public virtual IEnumerable<Token> Tokens
         {
             get
             {
-                Slice text = PlainText.Slice(fTokenEnds[index] + 1, fTokenEnds[index + 1] - fTokenEnds[index]);
-                return new Token(text, fTokenKinds[index]);
-            }
-        }
-
-        public IEnumerator<Token> GetEnumerator()
-        {
-            for (int i = 0; i < Count; i++)
-            {
-                yield return this[i];
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+                for (int i = 0; i < TokenCount; i++)
+                {
+                    yield return GetToken(i);
+                }
+            }            
         }
 
         // Internal

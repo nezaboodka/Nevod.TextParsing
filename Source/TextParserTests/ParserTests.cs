@@ -7,7 +7,7 @@ using Sharik.Text;
 namespace TextParser.Tests
 {
     [TestClass]
-    public class ParserTests
+    public class TokenizerTests
     {
         [TestMethod]
         public void Latin()
@@ -147,7 +147,7 @@ namespace TextParser.Tests
 
         private static Token[] Tokenize(string text)
         {            
-            Token[] result = Parser.GetTokensFromPlainText(text).ToArray();
+            Token[] result = Parser.GetTokensFromPlainText(text).Tokens.ToArray();
             return result;
         }
     }

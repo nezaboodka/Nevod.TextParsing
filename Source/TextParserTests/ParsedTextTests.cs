@@ -54,7 +54,7 @@ namespace TextParser.Tests
                 new Token("world".Slice(), TokenKind.Alphabetic)
             };
 
-            CollectionAssert.AreEqual(expected, parsedText.ToArray());
+            CollectionAssert.AreEqual(expected, parsedText.Tokens.ToArray());
         }
     }
 }
