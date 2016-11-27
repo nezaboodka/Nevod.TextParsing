@@ -1,9 +1,9 @@
 ﻿using System;
 using TextParser;
 
-namespace TokenizerDemoApplication
+namespace TextParserDemoApplication
 {
-    class TokenizerDemo
+    class ParserDemo
     {
         static void Main(string[] args)
         {

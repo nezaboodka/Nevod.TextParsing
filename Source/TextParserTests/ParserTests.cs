@@ -7,7 +7,7 @@ using Sharik.Text;
 namespace TextParser.Tests
 {
     [TestClass]
-    public class TokenizerTests
+    public class ParserTests
     {
         [TestMethod]
         public void Latin()

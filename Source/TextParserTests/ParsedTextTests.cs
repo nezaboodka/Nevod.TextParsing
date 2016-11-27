@@ -10,7 +10,7 @@ using Sharik.Text;
 namespace TextParser.Tests
 {
     [TestClass]
-    public class TokenizerResultTests
+    public class ParsedTextTests
     {
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
