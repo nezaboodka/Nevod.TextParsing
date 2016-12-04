@@ -9,6 +9,7 @@ namespace TextParser
         private readonly ParserState fParserState;
         private readonly string fText;
         private int fCurrentPosition;
+        private int fTokenStart;
         private readonly ParsedText fParsedText;
 
         public static ParsedText GetTokensFromPlainText(string text)
@@ -25,8 +26,10 @@ namespace TextParser
             fText = text;
             fWordBreakerState = new WordBreakerState(text);
             fParserState = new ParserState();
-            fParsedText = new ParsedText(text);
+            fParsedText = new ParsedText();
+            fParsedText.AddXhtmlElement(text, true);
             fCurrentPosition = -1;
+            fTokenStart = 0;
         }
         
         protected virtual ParsedText GetTokensFromPlainText()
@@ -52,7 +55,7 @@ namespace TextParser
                 fParserState.AddCharacter(fText[fCurrentPosition]);
                 result = true;
             }
-            return result;            
+            return result;
         }
 
         protected virtual bool IsBreak()
@@ -62,7 +65,15 @@ namespace TextParser
 
         protected virtual void NextToken()
         {
-            fParsedText.AddToken(fCurrentPosition, fParserState.TokenKind);
+            var token = new Token
+            {
+                TokenKind = fParserState.TokenKind,
+                XhtmlIndex = 0,
+                StringPosition = fTokenStart,
+                StringLength = fCurrentPosition - fTokenStart + 1
+            };
+            fParsedText.AddToken(token);
+            fTokenStart = fCurrentPosition + 1;
             fParserState.Reset();
         }
     }

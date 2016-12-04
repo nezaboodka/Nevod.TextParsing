@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using Sharik.Text;
 
 namespace TextParser.Tests
 {
@@ -13,29 +11,29 @@ namespace TextParser.Tests
         public void Latin()
         {
             string testString = "The (\"brown\") can't 32.3 feet, right?";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token("The".Slice(), TokenKind.Alphabetic),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),                 
-                new Token("(".Slice(), TokenKind.Symbol), 
-                new Token("\"".Slice(), TokenKind.Symbol), 
-                new Token("brown".Slice(), TokenKind.Alphabetic),
-                new Token("\"".Slice(), TokenKind.Symbol),
-                new Token(")".Slice(), TokenKind.Symbol),                
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("can".Slice(), TokenKind.Alphabetic),
-                new Token("'".Slice(), TokenKind.Symbol),
-                new Token("t".Slice(), TokenKind.Alphabetic),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),                
-                new Token("32".Slice(), TokenKind.Numeric),
-                new Token(".".Slice(), TokenKind.Symbol),
-                new Token("3".Slice(), TokenKind.Numeric),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("feet".Slice(), TokenKind.Alphabetic),
-                new Token(",".Slice(), TokenKind.Symbol),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("right".Slice(), TokenKind.Alphabetic),
-                new Token("?".Slice(), TokenKind.Symbol),
+                new Tuple<string, TokenKind>("The", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("(", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("\"", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("brown", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("\"", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(")", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("can", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("'", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("t", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("32", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("3", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("feet", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("right", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("?", TokenKind.Symbol),
             };
             PerformEqualityTest(testString, expectedResult);
         }
@@ -44,9 +42,9 @@ namespace TextParser.Tests
         public void OneWord()
         {
             string testString = "word";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token(testString.Slice(), TokenKind.Alphabetic) 
+                new Tuple<string, TokenKind>("word", TokenKind.Alphabetic)
             };
             PerformEqualityTest(testString, expectedResult);
         }
@@ -55,9 +53,9 @@ namespace TextParser.Tests
         public void Whitespaces()
         {
             string testString = "  \t";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token(testString.Slice(), TokenKind.WhiteSpace)
+                new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace)
             };
 
             PerformEqualityTest(testString, expectedResult);
@@ -68,7 +66,7 @@ namespace TextParser.Tests
         public void EmptyString()
         {
             string testString = "";
-            Token[] expectedResult = { };
+            Tuple<string, TokenKind>[] expectedResult = { };
             PerformEqualityTest(testString, expectedResult);
         }
 
@@ -77,36 +75,33 @@ namespace TextParser.Tests
         public void Null()
         {
             string testString = null;
-            Token[] expectedResult = { };
-            PerformEqualityTest(testString, expectedResult);
-
-            // Assert - ArgumentNullException
+            Parser.GetTokensFromPlainText(testString);
         }
 
         [TestMethod]
         public void Cyrillic()
         {
             string testString = "1А класс; 56,31 светового, 45.1 дня!";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token("1А".Slice(), TokenKind.Alphanumeric),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("класс".Slice(), TokenKind.Alphabetic),
-                new Token(";".Slice(), TokenKind.Symbol),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("56".Slice(), TokenKind.Numeric),
-                new Token(",".Slice(), TokenKind.Symbol),
-                new Token("31".Slice(), TokenKind.Numeric),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("светового".Slice(), TokenKind.Alphabetic),
-                new Token(",".Slice(), TokenKind.Symbol),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("45".Slice(), TokenKind.Numeric),
-                new Token(".".Slice(), TokenKind.Symbol),
-                new Token("1".Slice(), TokenKind.Numeric),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("дня".Slice(), TokenKind.Alphabetic),
-                new Token("!".Slice(), TokenKind.Symbol),
+                new Tuple<string, TokenKind>("1А", TokenKind.Alphanumeric),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("класс", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(";", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("56", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("31", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("светового", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("45", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("1", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("дня", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("!", TokenKind.Symbol),
             };
             PerformEqualityTest(testString, expectedResult);
         }
@@ -115,9 +110,9 @@ namespace TextParser.Tests
         public void OneSymbol()
         {
             string testString = "L";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token("L".Slice(), TokenKind.Alphabetic), 
+                new Tuple<string, TokenKind>("L", TokenKind.Alphabetic),
             };
             PerformEqualityTest(testString, expectedResult);
         }
@@ -126,28 +121,29 @@ namespace TextParser.Tests
         public void FormatCharacters()
         {
             string testString = "a\u0308b\u0308cd 3.4";
-            Token[] expectedResult =
+            Tuple<string, TokenKind>[] expectedResult =
             {
-                new Token("a\u0308b\u0308cd".Slice(), TokenKind.Symbol),
-                new Token(" ".Slice(), TokenKind.WhiteSpace), 
-                new Token("3".Slice(), TokenKind.Numeric),
-                new Token(".".Slice(), TokenKind.Symbol),
-                new Token("4".Slice(), TokenKind.Numeric), 
+                new Tuple<string, TokenKind>("a\u0308b\u0308cd", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("3", TokenKind.Numeric),
+                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("4", TokenKind.Numeric),
             };
             PerformEqualityTest(testString, expectedResult);
         }
 
         // Static internals
 
-        private static void PerformEqualityTest(string testString, Token[] expectedResult)
+        private static void PerformEqualityTest(string testString, Tuple<string, TokenKind>[] expectedResult)
         {
-            Token[] result = Tokenize(testString);
+            Tuple<string, TokenKind>[] result = Tokenize(testString);
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        private static Token[] Tokenize(string text)
-        {            
-            Token[] result = Parser.GetTokensFromPlainText(text).Tokens.ToArray();
+        private static Tuple<string, TokenKind>[] Tokenize(string text)
+        {
+            var parsedText = Parser.GetTokensFromPlainText(text);
+            Tuple<string, TokenKind>[] result = parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetPlainText(x), x.TokenKind)).ToArray();
             return result;
         }
     }

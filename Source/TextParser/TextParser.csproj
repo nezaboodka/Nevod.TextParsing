@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tag.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="ParsedText.cs" />
     <Compile Include="ParserState.cs" />

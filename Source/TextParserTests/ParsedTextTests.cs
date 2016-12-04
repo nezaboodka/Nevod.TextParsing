@@ -1,60 +1,69 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TextParser;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sharik.Text;
 
 namespace TextParser.Tests
 {
     [TestClass]
     public class ParsedTextTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void AddTokenWithNegativePosition()
-        {
-            ParsedText parsedText = new ParsedText(string.Empty);
+        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "w", "</b>", "orld", "</p>" };        
+        private static readonly ISet<int> PlainTextInXhtml = new HashSet<int> { 1, 3, 5 };
 
-            parsedText.AddToken(-1, 0);
-            
-            // Assert - IndexOutOfRangeException
-        }
+        // Public
 
         [TestMethod]
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void AddTokenWithTooBigPosition()
+        public void TokenInSinglePlainTextElement()
         {
-            string s = string.Empty;
-            ParsedText parsedText = new ParsedText(s);
-
-            parsedText.AddToken(s.Length, 0);
-
-            // Assert - IndexOutOfRangeException
-        }
-
-        [TestMethod]
-        public void TokenEnumeration()
-        {
-            string s = "hello, world";
-            ParsedText parsedText = new ParsedText(s);
-
-            parsedText.AddToken(s.IndexOf("hello") + "hello".Length - 1, TokenKind.Alphabetic);
-            parsedText.AddToken(s.IndexOf(","), TokenKind.Symbol);
-            parsedText.AddToken(s.IndexOf(" "), TokenKind.WhiteSpace);
-            parsedText.AddToken(s.IndexOf("world") + "world".Length - 1, TokenKind.Alphabetic);
-
-            Token[] expected =
+            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+            Token testToken = new Token
             {
-                new Token("hello".Slice(), TokenKind.Alphabetic),
-                new Token(",".Slice(), TokenKind.Symbol),
-                new Token(" ".Slice(), TokenKind.WhiteSpace),
-                new Token("world".Slice(), TokenKind.Alphabetic)
+                XhtmlIndex = 1,
+                StringPosition = 0,
+                StringLength = 5,
+                TokenKind = TokenKind.Alphabetic
             };
 
-            CollectionAssert.AreEqual(expected, parsedText.Tokens.ToArray());
+            string expected = "Hello";
+            string actual = parsedText.GetPlainText(testToken);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void CompoundToken()
+        {
+            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+            Token testToken = new Token
+            {
+                XhtmlIndex = 3,
+                StringPosition = 0,
+                StringLength = 5
+            };
+
+            string expected = "world";
+            string actual = parsedText.GetPlainText(testToken);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void PlainText()
+        {
+            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+
+            string expected = "Hello, world";
+            string actual = parsedText.GetAllPlainText();
+
+            Assert.AreEqual(expected, actual);;
+        }
+
+        // Internal
+
+        private ParsedText CreateParsedText(string[] xhtml, ISet<int> plainTextInXhtml)
+        {
+            var result = new ParsedText();
+            result.SetXhtml(xhtml, plainTextInXhtml);            
+            return result;
         }
     }
 }

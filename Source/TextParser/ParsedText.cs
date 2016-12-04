@@ -1,54 +1,112 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Sharik.Text;
 
 namespace TextParser
 {
     public class ParsedText
     {
-        private readonly List<int> fTokenEnds;
-        private readonly List<TokenKind> fTokenKinds;
+
+        private List<Token> fTokens;
+        private List<Tag> fTags;        
+        private List<string> fXhtmlElements;
+        internal List<int> fPlainTextInXhtml;
 
         // Public
-        
-        public virtual string PlainText { get; }
-        public virtual int TokenCount => fTokenKinds.Count;
 
-        public virtual Token GetToken(int index)
+        public List<Token> Tokens => fTokens;
+        public IEnumerable<Tag> Tags  => fTags;
+        public List<string> XhtmlElements => fXhtmlElements;
+
+        public ParsedText()
         {
-            Slice text = PlainText.Slice(fTokenEnds[index] + 1, fTokenEnds[index + 1] - fTokenEnds[index]);
-            return new Token(text, fTokenKinds[index]);
+            fTokens = new List<Token>();
+            fTags = new List<Tag>();
+            fXhtmlElements = new List<string>();
+            fPlainTextInXhtml = new List<int>();
         }
 
-        public virtual IEnumerable<Token> Tokens
+        public string GetAllPlainText()
         {
-            get
+            StringBuilder plainTextBuilder = new StringBuilder();
+            foreach (int plainTextElementIndex in fPlainTextInXhtml)
             {
-                for (int i = 0; i < TokenCount; i++)
-                {
-                    yield return GetToken(i);
-                }
-            }            
+                plainTextBuilder.Append(fXhtmlElements[plainTextElementIndex]);
+            }
+            return plainTextBuilder.ToString();
         }
+
+        public string GetPlainText(Token token)
+        {
+            int firstElementIndex = token.XhtmlIndex;
+            string firstElement = fXhtmlElements[firstElementIndex];
+            string result;
+
+            if (token.StringPosition + token.StringLength <= firstElement.Length)
+            {
+                result = firstElement.Substring(token.StringPosition, token.StringLength);
+            }
+            else
+            {
+                result = GetCompoundTokenText(token);
+            }
+
+            return result;
+        }        
 
         // Internal
 
-        internal ParsedText(string plainText)
+        internal void AddToken(Token token)
         {
-            PlainText = plainText;
-            fTokenEnds = new List<int> { -1 };
-            fTokenKinds = new List<TokenKind>();
+            if ((token.XhtmlIndex < fXhtmlElements.Count) || (token.XhtmlIndex < 0))
+            {
+                fTokens.Add(token);
+            }
+            else
+            {
+                throw new ArgumentException("Can't add token with invalid XhtmlIndex.");
+            }
         }
 
-        internal virtual void AddToken(int tokenEnd, TokenKind kind)
+        internal void AddTag(Tag tag)
         {
-            if (tokenEnd < 0 || tokenEnd >= PlainText.Length)
-            {
-                throw new IndexOutOfRangeException("Invalid token token end position");
-            }
-            fTokenEnds.Add(tokenEnd);
-            fTokenKinds.Add(kind);
+            fTags.Add(tag);
         }
+
+        internal void AddXhtmlElement(string xhtmlElement, bool isPlainText)
+        {
+            fXhtmlElements.Add(xhtmlElement);
+            if (isPlainText)
+            {
+                fPlainTextInXhtml.Add(fXhtmlElements.Count - 1);               
+            }            
+        }
+
+        private string GetCompoundTokenText(Token token)
+        {
+            StringBuilder tokenTextBuilder = new StringBuilder();
+            int copiedLength = 0;
+            int stringPosition = token.StringPosition;
+            int plainTextElementIndex = fPlainTextInXhtml.BinarySearch(token.XhtmlIndex);
+
+            while (copiedLength < token.StringLength)
+            {
+                int currentElemendIndex = fPlainTextInXhtml[plainTextElementIndex];
+                int remainedLength = token.StringLength - copiedLength;
+                int currentSubstringLength = fXhtmlElements[currentElemendIndex].Length - stringPosition;
+                if (currentSubstringLength > remainedLength)
+                {
+                    currentSubstringLength = remainedLength;
+                }
+                tokenTextBuilder.Append(fXhtmlElements[currentElemendIndex].Substring(stringPosition, currentSubstringLength));
+                copiedLength += currentSubstringLength;
+                plainTextElementIndex++;
+                
+            }
+
+            return tokenTextBuilder.ToString();
+        }      
     }
 }
