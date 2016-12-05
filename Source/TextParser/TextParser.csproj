@@ -66,11 +66,11 @@
     <Compile Include="Tag.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="ParsedText.cs" />
-    <Compile Include="ParserState.cs" />
+    <Compile Include="TokenClassifier.cs" />
     <Compile Include="WordBreakTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="WordBreakerState.cs" />
+    <Compile Include="WordBreaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

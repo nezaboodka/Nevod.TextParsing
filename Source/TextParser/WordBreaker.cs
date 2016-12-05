@@ -1,6 +1,6 @@
 ﻿namespace TextParser
 {
-    internal class WordBreakerState
+    internal class WordBreaker
     {
         private WordBreak fNextOfNextWordBreak = WordBreak.Empty;
         private WordBreak fNextWordBreak = WordBreak.Empty;
@@ -12,7 +12,7 @@
 
         // Internals
 
-        internal WordBreakerState(string text)
+        internal WordBreaker(string text)
         {
             fText = text;
             fCurrentPosition = -1;

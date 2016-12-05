@@ -5,8 +5,8 @@ namespace TextParser
 {
     public class Parser
     {
-        private readonly WordBreakerState fWordBreakerState;
-        private readonly ParserState fParserState;
+        private readonly WordBreaker fWordBreakerState;
+        private readonly TokenClassifier fTokenClassifier;
         private readonly string fText;
         private int fCurrentPosition;
         private int fTokenStart;
@@ -24,8 +24,8 @@ namespace TextParser
         private Parser(string text)
         {
             fText = text;
-            fWordBreakerState = new WordBreakerState(text);
-            fParserState = new ParserState();
+            fWordBreakerState = new WordBreaker(text);
+            fTokenClassifier = new TokenClassifier();
             fParsedText = new ParsedText();
             fParsedText.AddXhtmlElement(text, true);
             fCurrentPosition = -1;
@@ -52,7 +52,7 @@ namespace TextParser
             if (fCurrentPosition < fText.Length)
             {
                 fWordBreakerState.NextCharacter();
-                fParserState.AddCharacter(fText[fCurrentPosition]);
+                fTokenClassifier.AddCharacter(fText[fCurrentPosition]);
                 result = true;
             }
             return result;
@@ -67,14 +67,14 @@ namespace TextParser
         {
             var token = new Token
             {
-                TokenKind = fParserState.TokenKind,
+                TokenKind = fTokenClassifier.TokenKind,
                 XhtmlIndex = 0,
                 StringPosition = fTokenStart,
                 StringLength = fCurrentPosition - fTokenStart + 1
             };
             fParsedText.AddToken(token);
             fTokenStart = fCurrentPosition + 1;
-            fParserState.Reset();
+            fTokenClassifier.Reset();
         }
     }
 }

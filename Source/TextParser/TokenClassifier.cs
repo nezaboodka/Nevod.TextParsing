@@ -2,11 +2,11 @@
 
 namespace TextParser
 {
-    internal class ParserState
+    internal class TokenClassifier
     {
         internal TokenKind TokenKind { get; private set; }
 
-        internal ParserState()
+        internal TokenClassifier()
         {
             TokenKind = TokenKind.Empty;
         }
