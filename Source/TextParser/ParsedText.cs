@@ -40,13 +40,11 @@ namespace TextParser
 
         public string GetPlainText(Token token)
         {
-            int firstElementIndex = token.XhtmlIndex;
-            string firstElement = fXhtmlElements[firstElementIndex];
             string result;
 
-            if (token.StringPosition + token.StringLength <= firstElement.Length)
+            if (token.StringPosition + token.StringLength <= fXhtmlElements[token.XhtmlIndex].Length)
             {
-                result = firstElement.Substring(token.StringPosition, token.StringLength);
+                result = fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, token.StringLength);
             }
             else
             {
@@ -87,23 +85,26 @@ namespace TextParser
         private string GetCompoundTokenText(Token token)
         {
             StringBuilder tokenTextBuilder = new StringBuilder();
-            int copiedLength = 0;
-            int stringPosition = token.StringPosition;
-            int plainTextElementIndex = fPlainTextInXhtml.BinarySearch(token.XhtmlIndex);
+            int currentSubstringLength = fXhtmlElements[token.XhtmlIndex].Length - token.StringPosition;
+            tokenTextBuilder.Append(fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, currentSubstringLength));
+            int copiedLength = currentSubstringLength;            
+            int plainTextElement = fPlainTextInXhtml.BinarySearch(token.XhtmlIndex) + 1;
 
             while (copiedLength < token.StringLength)
             {
-                int currentElemendIndex = fPlainTextInXhtml[plainTextElementIndex];
-                int remainedLength = token.StringLength - copiedLength;
-                int currentSubstringLength = fXhtmlElements[currentElemendIndex].Length - stringPosition;
-                if (currentSubstringLength > remainedLength)
+                int xhtmlElement = fPlainTextInXhtml[plainTextElement];
+                int remainedLength = token.StringLength - copiedLength;                
+                if (fXhtmlElements[xhtmlElement].Length <= remainedLength)
+                {
+                    currentSubstringLength = fXhtmlElements[xhtmlElement].Length;
+                }
+                else
                 {
                     currentSubstringLength = remainedLength;
                 }
-                tokenTextBuilder.Append(fXhtmlElements[currentElemendIndex].Substring(stringPosition, currentSubstringLength));
+                tokenTextBuilder.Append(fXhtmlElements[xhtmlElement].Substring(0, currentSubstringLength));
                 copiedLength += currentSubstringLength;
-                plainTextElementIndex++;
-                
+                plainTextElement++;
             }
 
             return tokenTextBuilder.ToString();
