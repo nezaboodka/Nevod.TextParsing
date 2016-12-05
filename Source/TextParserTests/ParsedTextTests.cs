@@ -6,7 +6,7 @@ namespace TextParser.Tests
     [TestClass]
     public class ParsedTextTests
     {
-        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "w", "</b>", "orld", "</p>" };        
+        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "my w", "</b>", "orld!", "</p>" };        
         private static readonly ISet<int> PlainTextInXhtml = new HashSet<int> { 1, 3, 5 };
 
         // Public
@@ -36,7 +36,7 @@ namespace TextParser.Tests
             Token testToken = new Token
             {
                 XhtmlIndex = 3,
-                StringPosition = 0,
+                StringPosition = 3,
                 StringLength = 5
             };
 
@@ -51,7 +51,7 @@ namespace TextParser.Tests
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
 
-            string expected = "Hello, world";
+            string expected = "Hello, my world!";
             string actual = parsedText.GetAllPlainText();
 
             Assert.AreEqual(expected, actual);;
