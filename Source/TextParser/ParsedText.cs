@@ -9,10 +9,10 @@ namespace TextParser
     public class ParsedText
     {
 
-        private List<Token> fTokens;
-        private List<Tag> fTags;        
-        private List<string> fXhtmlElements;
-        internal List<int> fPlainTextInXhtml;
+        private readonly List<Token> fTokens;
+        private readonly List<Tag> fTags;        
+        private readonly List<string> fXhtmlElements;
+        internal readonly List<int> fPlainTextInXhtml;
 
         // Public
 
@@ -58,14 +58,7 @@ namespace TextParser
 
         internal void AddToken(Token token)
         {
-            if ((token.XhtmlIndex < fXhtmlElements.Count) || (token.XhtmlIndex < 0))
-            {
-                fTokens.Add(token);
-            }
-            else
-            {
-                throw new ArgumentException("Can't add token with invalid XhtmlIndex.");
-            }
+            fTokens.Add(token);
         }
 
         internal void AddTag(Tag tag)
