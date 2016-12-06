@@ -4,14 +4,19 @@ namespace TextParser
 {
     internal class TokenClassifier
     {
-        internal TokenKind TokenKind { get; private set; }
+        private const char CR = '\r';
+        private const char LF = '\n';
 
-        internal TokenClassifier()
+        // Public
+
+        public TokenKind TokenKind { get; private set; }
+
+        public TokenClassifier()
         {
             TokenKind = TokenKind.Empty;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             TokenKind = TokenKind.Empty;
         }
@@ -37,6 +42,8 @@ namespace TextParser
                     break;
             }
         }
+
+        // Internals
 
         private void ProcessAlphabetic(char c)
         {
@@ -73,7 +80,7 @@ namespace TextParser
 
         private void ProcessWhiteSpace(char c)
         {
-            if (!char.IsWhiteSpace(c))
+            if (WordBreakTable.GetCharacterWordBreak(c) != WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.Symbol;                
             }
@@ -88,14 +95,24 @@ namespace TextParser
             } else if (char.IsLetter(c))
             {
                 TokenKind = TokenKind.Alphabetic;
-            } else if (char.IsWhiteSpace(c))
+            } else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.WhiteSpace;
+            } else if (IsLineSeparator(c))
+            {
+                TokenKind = TokenKind.LineSeparator;                
             }
             else
             {
                 TokenKind = TokenKind.Symbol;
             }            
+        }
+
+        // Static internals
+
+        private static bool IsLineSeparator(char c)
+        {
+            return (c == CR) || (c == LF);
         }
     }
 }

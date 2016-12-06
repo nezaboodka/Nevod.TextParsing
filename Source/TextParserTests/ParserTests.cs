@@ -132,6 +132,23 @@ namespace TextParser.Tests
             PerformEqualityTest(testString, expectedResult);
         }
 
+        [TestMethod]
+        public void LineSeparator()
+        {
+            string testString = "a\nb\r\nc\rd";
+            Tuple<string, TokenKind>[] expectedResult =
+            {
+                new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("\n", TokenKind.LineSeparator),
+                new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("\r\n", TokenKind.LineSeparator),
+                new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("\r", TokenKind.LineSeparator), 
+                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
+            };
+            PerformEqualityTest(testString, expectedResult);
+        }
+
         // Static internals
 
         private static void PerformEqualityTest(string testString, Tuple<string, TokenKind>[] expectedResult)

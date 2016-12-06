@@ -4,6 +4,7 @@
     {
         Alphabetic,
         Alphanumeric,
+        LineSeparator,
         Numeric,
         Symbol,
         WhiteSpace,
