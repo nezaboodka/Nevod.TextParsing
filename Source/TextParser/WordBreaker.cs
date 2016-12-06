@@ -56,46 +56,46 @@
             else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
             // WB6. (without single quotes)
-            else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && (fNextWordBreak == WordBreak.MidLetter ||
-                fNextWordBreak == WordBreak.MidNumberAndLetter) 
+            else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && ((fNextWordBreak == WordBreak.MidLetter) ||
+                (fNextWordBreak == WordBreak.MidNumberAndLetter)) 
                 && IsAlphabeticOrHebrewLetter(fNextOfNextWordBreak))
                 result = false;
             // WB7. (without single quotes)
-            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && (fCurrentWordBreak == WordBreak.MidLetter
-                || fCurrentWordBreak == WordBreak.MidNumberAndLetter)
+            else if (IsAlphabeticOrHebrewLetter(fPreviousWordBreak) && ((fCurrentWordBreak == WordBreak.MidLetter)
+                || (fCurrentWordBreak == WordBreak.MidNumberAndLetter))
                 && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
             // WB7a.
-            else if (fCurrentWordBreak == WordBreak.HebrewLetter && fNextWordBreak == WordBreak.SingleQuote)
+            else if ((fCurrentWordBreak == WordBreak.HebrewLetter) && (fNextWordBreak == WordBreak.SingleQuote))
                 result = false;
             // WB7b.
-            else if (fCurrentWordBreak == WordBreak.HebrewLetter && fNextWordBreak == WordBreak.DoubleQuote
-                && fNextOfNextWordBreak == WordBreak.HebrewLetter)
+            else if ((fCurrentWordBreak == WordBreak.HebrewLetter) && (fNextWordBreak == WordBreak.DoubleQuote)
+                && (fNextOfNextWordBreak == WordBreak.HebrewLetter))
                 result = false;
             // WB7c.
-            else if (fPreviousWordBreak == WordBreak.HebrewLetter && fCurrentWordBreak == WordBreak.DoubleQuote 
-                && fNextWordBreak == WordBreak.HebrewLetter)
+            else if ((fPreviousWordBreak == WordBreak.HebrewLetter) && (fCurrentWordBreak == WordBreak.DoubleQuote) 
+                && (fNextWordBreak == WordBreak.HebrewLetter))
                 result = false;
             // WB8.
-            else if (fCurrentWordBreak == WordBreak.Numeric && (fNextWordBreak == WordBreak.Numeric))
+            else if ((fCurrentWordBreak == WordBreak.Numeric) && (fNextWordBreak == WordBreak.Numeric))
                 result = false;
             // WB9.
             else if (IsAlphabeticOrHebrewLetter(fCurrentWordBreak) && fNextWordBreak == WordBreak.Numeric)
                 result = false;
             // WB10.
-            else if (fCurrentWordBreak == WordBreak.Numeric && IsAlphabeticOrHebrewLetter(fNextWordBreak))
+            else if ((fCurrentWordBreak == WordBreak.Numeric) && IsAlphabeticOrHebrewLetter(fNextWordBreak))
                 result = false;
             // WB13.
-            else if (fCurrentWordBreak == WordBreak.Katakana && fNextWordBreak == WordBreak.Katakana)
+            else if ((fCurrentWordBreak == WordBreak.Katakana) && (fNextWordBreak == WordBreak.Katakana))
                 result = false;
             // WB13a.
-            else if ((IsAlphabeticOrHebrewLetter(fCurrentWordBreak) || fCurrentWordBreak == WordBreak.Numeric 
-                || fCurrentWordBreak == WordBreak.Katakana || fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters) 
-                && fNextWordBreak == WordBreak.ExtenderForNumbersAndLetters)
+            else if ((IsAlphabeticOrHebrewLetter(fCurrentWordBreak) || (fCurrentWordBreak == WordBreak.Numeric) 
+                || (fCurrentWordBreak == WordBreak.Katakana) || (fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters)) 
+                && (fNextWordBreak == WordBreak.ExtenderForNumbersAndLetters))
                 result = false;
             // WB13b.
             else if ((fCurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters) && (IsAlphabeticOrHebrewLetter(fNextWordBreak)
-                || fNextWordBreak == WordBreak.Numeric || fNextWordBreak == WordBreak.Katakana))
+                || (fNextWordBreak == WordBreak.Numeric) || (fNextWordBreak == WordBreak.Katakana)))
                 result = false;
             // custom: do not break between whitespaces
             else if ((fCurrentWordBreak == WordBreak.Whitespace) && (fNextWordBreak == WordBreak.Whitespace))
