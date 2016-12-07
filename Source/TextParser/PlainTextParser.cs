@@ -11,7 +11,7 @@ namespace TextParser
         private int fTokenStart;
         private readonly ParsedText fParsedText;
 
-        internal PlainTextParser(string text)
+        public PlainTextParser(string text)
         {
             fText = text;
             fWordBreakerState = new WordBreaker(text);
@@ -21,6 +21,8 @@ namespace TextParser
             fCurrentPosition = -1;
             fTokenStart = 0;
         }
+
+        // Internals
 
         protected override ParsedText Parse()
         {

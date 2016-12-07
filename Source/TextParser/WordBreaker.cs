@@ -10,22 +10,20 @@
         private readonly string fText;
         private int fCurrentPosition;
 
-        // Internals
-
-        internal WordBreaker(string text)
+        public WordBreaker(string text)
         {
             fText = text;
             fCurrentPosition = -1;
             InitializeLookaheadBuffer();
         }
 
-        internal void InitializeLookaheadBuffer()
+        public void InitializeLookaheadBuffer()
         {
             NextCharacter();
             NextCharacter();
         }
 
-        internal void NextCharacter()
+        public void NextCharacter()
         {            
             if (!IsLastCharacter())
             {
@@ -43,7 +41,7 @@
             
         }
 
-        internal bool IsBreak()
+        public bool IsBreak()
         {
             bool result;
             // WB2.
@@ -105,6 +103,8 @@
                 result = true;
             return result;
         }
+
+        // Internals
 
         private void AddWordBreak(WordBreak wordBreak)
         {

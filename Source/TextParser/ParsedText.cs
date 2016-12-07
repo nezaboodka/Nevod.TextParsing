@@ -12,7 +12,7 @@ namespace TextParser
         private readonly List<Token> fTokens;
         private readonly List<Tag> fTags;        
         private readonly List<string> fXhtmlElements;
-        internal readonly List<int> fPlainTextInXhtml;
+        private readonly List<int> fPlainTextInXhtml;
 
         // Public
 
@@ -54,7 +54,7 @@ namespace TextParser
             return result;
         }        
 
-        // Internal
+        // Internals
 
         internal void AddToken(Token token)
         {

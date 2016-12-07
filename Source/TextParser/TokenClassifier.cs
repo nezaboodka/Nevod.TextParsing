@@ -21,7 +21,7 @@ namespace TextParser
             TokenKind = TokenKind.Empty;
         }
 
-        internal void AddCharacter(char c)
+        public void AddCharacter(char c)
         {
             switch (TokenKind)
             {
