@@ -8,8 +8,14 @@ namespace TextParser.Tests
         {
             for (int i = 0; i < xhtml.Count; i++)
             {
-                bool isPlainText = plainTextElements.Contains(i);
-                parsedText.AddXhtmlElement(xhtml[i], isPlainText);
+                if (plainTextElements.Contains(i))
+                {
+                    parsedText.AddPlainTextElement(xhtml[i]);
+                }
+                else
+                {
+                    parsedText.AddXhtmlElement(xhtml[i]);
+                }
             }
         }
     }

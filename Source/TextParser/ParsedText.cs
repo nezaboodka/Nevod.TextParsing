@@ -17,7 +17,7 @@ namespace TextParser
         // Public
 
         public List<Token> Tokens => fTokens;
-        public IEnumerable<Tag> Tags  => fTags;
+        public IEnumerable<Tag> Tags => fTags;
         public List<string> XhtmlElements => fXhtmlElements;
 
         public ParsedText()
@@ -66,13 +66,15 @@ namespace TextParser
             fTags.Add(tag);
         }
 
-        internal void AddXhtmlElement(string xhtmlElement, bool isPlainText)
+        internal void AddXhtmlElement(string xhtmlElement)
         {
-            fXhtmlElements.Add(xhtmlElement);
-            if (isPlainText)
-            {
-                fPlainTextInXhtml.Add(fXhtmlElements.Count - 1);               
-            }            
+            fXhtmlElements.Add(xhtmlElement);            
+        }
+
+        internal void AddPlainTextElement(string plainTextElement)
+        {
+            AddXhtmlElement(plainTextElement);
+            fPlainTextInXhtml.Add(fXhtmlElements.Count - 1);
         }
 
         private string GetCompoundTokenText(Token token)

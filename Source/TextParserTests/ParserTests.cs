@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace TextParser.Tests
 {
     [TestClass]
-    public class TokenizerTests
+    public class ParserTests
     {
         [TestMethod]
         public void Latin()
