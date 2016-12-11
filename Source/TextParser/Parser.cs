@@ -89,8 +89,8 @@ namespace TextParser
                 StringLength = currentCharacterPosition - fTokenStartPosition + 1
             };
             fParsedText.AddToken(token);
-            fTokenStartPosition = currentCharacterPosition + 1;
-            fTokenStartXhtmlIndex = fXhtmlIndex;
+            fTokenStartPosition = fCharacterBuffer.NextCharacterInfo.StringPosition;
+            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
             fTokenClassifier.Reset();
         }
     }

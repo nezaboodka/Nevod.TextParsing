@@ -24,6 +24,7 @@ namespace TextParser
         // Public
 
         public CharacterInfo CurrentCharacterInfo => fCharacters[BufferSize - 1];
+        public CharacterInfo NextCharacterInfo => fCharacters[BufferSize - 2];
 
         public void AddCharacter(CharacterInfo characterInfo)
         {
