@@ -36,7 +36,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("right", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("?", TokenKind.Symbol),
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("word", TokenKind.Alphabetic)
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace)
             };
 
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
 
@@ -68,7 +68,7 @@ namespace TextParser.Tests
         {
             string testString = "";
             Tuple<string, TokenKind>[] expectedResult = { };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("дня", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("!", TokenKind.Symbol),
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -115,7 +115,7 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("L", TokenKind.Alphabetic),
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>(".", TokenKind.Symbol),
                 new Tuple<string, TokenKind>("4", TokenKind.Numeric),
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
         }
 
         [TestMethod]
@@ -147,22 +147,45 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("\r", TokenKind.LineSeparator), 
                 new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
             };
-            PerformEqualityTest(testString, expectedResult);
+            ParsePlainTextAndTest(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void Xhtml()
+        {
+            string testString = "<p>Hello, <b>w</b>orld!</p>";
+            Tuple<string, TokenKind>[] expectedTokens =
+            {
+                new Tuple<string, TokenKind>("Hello", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("world", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("!", TokenKind.Symbol)
+            };
+            string[] expectedXhtmlElements = {"<p>", "Hello, ", "<b>", "w", "</b>", "orld!", "</p>"};
+            ParseXhtmlAndTest(testString, expectedTokens, expectedXhtmlElements);
         }
 
         // Static internals
 
-        private static void PerformEqualityTest(string testString, Tuple<string, TokenKind>[] expectedResult)
+        private static void ParsePlainTextAndTest(string testString, Tuple<string, TokenKind>[] expectedResult)
         {
-            Tuple<string, TokenKind>[] result = Tokenize(testString);
+            Tuple<string, TokenKind>[] result = GetTokensFromParsedText(Parser.ParsePlainText(testString));
             CollectionAssert.AreEqual(result, expectedResult);
+        }        
+
+        private static void ParseXhtmlAndTest(string testString, Tuple<string, TokenKind>[] expectedTokens, string[] expectedXhtmlElements)
+        {
+            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            Tuple<string, TokenKind>[] actualTokens = GetTokensFromParsedText(parsedText);
+            List<string> actualXhtmlElements = parsedText.XhtmlElements;
+            CollectionAssert.AreEqual(expectedTokens, actualTokens);
+            CollectionAssert.AreEqual(expectedXhtmlElements, actualXhtmlElements);
         }
 
-        private static Tuple<string, TokenKind>[] Tokenize(string text)
+        private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
-            var parsedText = Parser.ParsePlainText(text);
-            Tuple<string, TokenKind>[] result = parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetPlainText(x), x.TokenKind)).ToArray();
-            return result;
+            return parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetPlainText(x), x.TokenKind)).ToArray();
         }
     }
 }
