@@ -76,7 +76,7 @@ namespace TextParser.Tests
         public void Null()
         {
             string testString = null;
-            Parser.GetTokensFromPlainText(testString);
+            Parser.ParsePlainText(testString);
         }
 
         [TestMethod]
@@ -160,7 +160,7 @@ namespace TextParser.Tests
 
         private static Tuple<string, TokenKind>[] Tokenize(string text)
         {
-            var parsedText = Parser.GetTokensFromPlainText(text);
+            var parsedText = Parser.ParsePlainText(text);
             Tuple<string, TokenKind>[] result = parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetPlainText(x), x.TokenKind)).ToArray();
             return result;
         }

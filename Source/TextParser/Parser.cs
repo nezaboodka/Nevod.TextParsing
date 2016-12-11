@@ -16,16 +16,14 @@ namespace TextParser
         
         // Public static
 
-        public static ParsedText GetTokensFromPlainText(string text)
+        public static ParsedText ParsePlainText(string plainText)
         {
-            if (text == null) throw new ArgumentNullException(nameof(text));
-            Parser parser = new PlainTextParser(text);
-            return parser.Parse();
+            return ParseText(new PlainTextParserFactory(), plainText);
         }
 
-        public static ParsedText GetTokensFromXhtml(string xhtmlText)
+        public static ParsedText ParseXhtmlText(string xhtmlText)
         {
-            throw new NotImplementedException();
+            return ParseText(new XhtmlParserFactory(), xhtmlText);
         }
 
         // Public
@@ -92,6 +90,14 @@ namespace TextParser
             fTokenStartPosition = fCharacterBuffer.NextCharacterInfo.StringPosition;
             fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
             fTokenClassifier.Reset();
+        }
+
+        // Static internals
+
+        private static ParsedText ParseText(IParserFactory parserFactory, string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            return parserFactory.CreateParser(text).Parse();
         }
     }
 }

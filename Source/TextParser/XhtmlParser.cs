@@ -6,7 +6,12 @@ namespace TextParser
     internal class XhtmlParser : Parser
     {
         private XmlReader fXmlReader;
-        //private int fXhtml
+        private string fXhtmlText;
+
+        public XhtmlParser(string xhtmlText)
+        {
+            fXhtmlText = xhtmlText;
+        }
 
         public override void Dispose()
         {
