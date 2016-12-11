@@ -27,11 +27,11 @@ namespace TextParser
 
         public void AddCharacter(CharacterInfo characterInfo)
         {
-            ShiftBuffer();
+            NextCharacter();
             fCharacters[0] = characterInfo;
         }
 
-        public void ShiftBuffer()
+        public void NextCharacter()
         {
             Array.Copy(fCharacters, 0, fCharacters, 1, BufferSize - 1);            
         }        

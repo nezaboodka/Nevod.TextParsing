@@ -6,7 +6,7 @@ namespace TextParser
     {
         private readonly TokenClassifier fTokenClassifier = new TokenClassifier();                
         private readonly CharacterBuffer fCharacterBuffer = new CharacterBuffer();
-        private readonly WordBreakBuffer fWordBreakBuffer = new WordBreakBuffer();
+        private readonly WordBreaker fWordBreaker = new WordBreaker();
         private int fTokenStartPosition;
         private int fTokenStartXhtmlIndex;
 
@@ -40,7 +40,7 @@ namespace TextParser
             while (NextCharacter())
             {                
                 fTokenClassifier.AddCharacter(fCharacterBuffer.CurrentCharacterInfo.Character);
-                if (IsBreak())
+                if (fWordBreaker.IsBreak())
                 {
                     SaveToken();
                 }                
@@ -62,16 +62,14 @@ namespace TextParser
             {
                 fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCurrentPosition));
                 WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-                if (!ShoudIgnore(wordBreak)) // WB4.
-                {
-                    fWordBreakBuffer.AddWordBreak(wordBreak);   
-                }
+                fWordBreaker.AddWordBreak(wordBreak);                
             }
             else
             {
-                if (!IsEmptyBuffer())
+                if (!fWordBreaker.IsEmptyBuffer())
                 {
-                    ShiftBuffers();
+                    fCharacterBuffer.NextCharacter();
+                    fWordBreaker.NextWordBreak();
                     result = true;
                 }
             }            
@@ -79,100 +77,6 @@ namespace TextParser
         }
 
         protected abstract bool Read(out char c);
-
-        private bool IsBreak()
-        {
-            bool result;
-            // WB2.
-            if (!IsEnoughCharacters() && !IsLastCharacter())
-                result = false;
-            // WB3.
-            else if (IsLineBreak(fWordBreakBuffer.CurrentWordBreak) || IsLineBreak(fWordBreakBuffer.NextWordBreak))
-                result = !((fWordBreakBuffer.CurrentWordBreak == WordBreak.CarriageReturn) && (fWordBreakBuffer.NextWordBreak == WordBreak.LineFeed));
-            // WB5.
-            else if (IsAlphabeticOrHebrewLetter(fWordBreakBuffer.CurrentWordBreak) && IsAlphabeticOrHebrewLetter(fWordBreakBuffer.NextWordBreak))
-                result = false;
-            // WB6. (without single quotes)
-            else if (IsAlphabeticOrHebrewLetter(fWordBreakBuffer.CurrentWordBreak) && ((fWordBreakBuffer.NextWordBreak == WordBreak.MidLetter) ||
-                (fWordBreakBuffer.NextWordBreak == WordBreak.MidNumberAndLetter))
-                && IsAlphabeticOrHebrewLetter(fWordBreakBuffer.NextOfNextWordBreak))
-                result = false;
-            // WB7. (without single quotes)
-            else if (IsAlphabeticOrHebrewLetter(fWordBreakBuffer.PreviousWordBreak) && ((fWordBreakBuffer.CurrentWordBreak == WordBreak.MidLetter)
-                || (fWordBreakBuffer.CurrentWordBreak == WordBreak.MidNumberAndLetter))
-                && IsAlphabeticOrHebrewLetter(fWordBreakBuffer.NextWordBreak))
-                result = false;
-            // WB7a.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.HebrewLetter) && (fWordBreakBuffer.NextWordBreak == WordBreak.SingleQuote))
-                result = false;
-            // WB7b.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.HebrewLetter) && (fWordBreakBuffer.NextWordBreak == WordBreak.DoubleQuote)
-                && (fWordBreakBuffer.NextOfNextWordBreak == WordBreak.HebrewLetter))
-                result = false;
-            // WB7c.
-            else if ((fWordBreakBuffer.PreviousWordBreak == WordBreak.HebrewLetter) && (fWordBreakBuffer.CurrentWordBreak == WordBreak.DoubleQuote)
-                && (fWordBreakBuffer.NextWordBreak == WordBreak.HebrewLetter))
-                result = false;
-            // WB8.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.Numeric) && (fWordBreakBuffer.NextWordBreak == WordBreak.Numeric))
-                result = false;
-            // WB9.
-            else if (IsAlphabeticOrHebrewLetter(fWordBreakBuffer.CurrentWordBreak) && fWordBreakBuffer.NextWordBreak == WordBreak.Numeric)
-                result = false;
-            // WB10.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.Numeric) && IsAlphabeticOrHebrewLetter(fWordBreakBuffer.NextWordBreak))
-                result = false;
-            // WB13.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.Katakana) && (fWordBreakBuffer.NextWordBreak == WordBreak.Katakana))
-                result = false;
-            // WB13a.
-            else if ((IsAlphabeticOrHebrewLetter(fWordBreakBuffer.CurrentWordBreak) || (fWordBreakBuffer.CurrentWordBreak == WordBreak.Numeric)
-                || (fWordBreakBuffer.CurrentWordBreak == WordBreak.Katakana) || (fWordBreakBuffer.CurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters))
-                && (fWordBreakBuffer.NextWordBreak == WordBreak.ExtenderForNumbersAndLetters))
-                result = false;
-            // WB13b.
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.ExtenderForNumbersAndLetters) && (IsAlphabeticOrHebrewLetter(fWordBreakBuffer.NextWordBreak)
-                || (fWordBreakBuffer.NextWordBreak == WordBreak.Numeric) || (fWordBreakBuffer.NextWordBreak == WordBreak.Katakana)))
-                result = false;
-            // custom: do not break between whitespaces
-            else if ((fWordBreakBuffer.CurrentWordBreak == WordBreak.Whitespace) && (fWordBreakBuffer.NextWordBreak == WordBreak.Whitespace))
-                result = false;
-            // WB14.
-            else
-                result = true;
-            return result;
-        }
-
-        private void ShiftBuffers()
-        {
-            fCharacterBuffer.ShiftBuffer();
-            fWordBreakBuffer.ShiftBuffer();
-        }
-
-        private bool IsEnoughCharacters()
-        {
-            return (fWordBreakBuffer.NextWordBreak != WordBreak.Empty) && (fWordBreakBuffer.CurrentWordBreak != WordBreak.Empty);
-        }
-
-        private bool IsLastCharacter()
-        {
-            return (fWordBreakBuffer.CurrentWordBreak != WordBreak.Empty) && (fWordBreakBuffer.NextWordBreak == WordBreak.Empty);
-        }
-
-        private bool IsEmptyBuffer()
-        {
-            return (fWordBreakBuffer.CurrentWordBreak == WordBreak.Empty) && (fWordBreakBuffer.NextWordBreak == WordBreak.Empty) && (fWordBreakBuffer.NextOfNextWordBreak == WordBreak.Empty);
-        }
-
-        private bool IsFirstCharacter()
-        {
-            return (fWordBreakBuffer.PreviousWordBreak == WordBreak.Empty) && (fWordBreakBuffer.NextOfNextWordBreak == WordBreak.Empty);
-        }
-
-        private bool ShoudIgnore(WordBreak wordBreak)
-        {
-            return ((wordBreak == WordBreak.Extender) || (wordBreak == WordBreak.Format)) && !IsFirstCharacter();
-        }
 
         private void SaveToken()
         {
@@ -189,17 +93,5 @@ namespace TextParser
             fTokenStartXhtmlIndex = fXhtmlIndex;
             fTokenClassifier.Reset();
         }
-
-        // Static internals        
-
-        private static bool IsAlphabeticOrHebrewLetter(WordBreak wordBreak)
-        {
-            return (wordBreak == WordBreak.AlphabeticLetter) || (wordBreak == WordBreak.HebrewLetter);
-        }
-
-        private static bool IsLineBreak(WordBreak wordBreak)
-        {
-            return (wordBreak == WordBreak.Newline) || (wordBreak == WordBreak.LineFeed) || (wordBreak == WordBreak.CarriageReturn);
-        }        
     }
 }
