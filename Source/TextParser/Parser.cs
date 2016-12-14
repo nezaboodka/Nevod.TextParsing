@@ -9,6 +9,7 @@ namespace TextParser
         private readonly WordBreaker fWordBreaker = new WordBreaker();
         private int fTokenStartPosition;
         private int fTokenStartXhtmlIndex;
+        private int fCurrentTokenLength;
 
         protected int fXhtmlIndex;
         protected int fCurrentPosition;        
@@ -35,8 +36,10 @@ namespace TextParser
         private ParsedText Parse()
         {
             InitializeBuffer();
+            fTokenStartXhtmlIndex = fCharacterBuffer.NextOfNextCharacterInfo.XhtmlIndex;
             while (NextCharacter())
-            {                
+            {
+                fCurrentTokenLength++;
                 fTokenClassifier.AddCharacter(fCharacterBuffer.CurrentCharacterInfo.Character);
                 if (fWordBreaker.IsBreak())
                 {
@@ -78,17 +81,17 @@ namespace TextParser
 
         private void SaveToken()
         {
-            int currentCharacterPosition = fCharacterBuffer.CurrentCharacterInfo.StringPosition;
             var token = new Token
             {
                 TokenKind = fTokenClassifier.TokenKind,
                 XhtmlIndex = fTokenStartXhtmlIndex,
                 StringPosition = fTokenStartPosition,
-                StringLength = currentCharacterPosition - fTokenStartPosition + 1
+                StringLength = fCurrentTokenLength
             };
             fParsedText.AddToken(token);
             fTokenStartPosition = fCharacterBuffer.NextCharacterInfo.StringPosition;
             fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            fCurrentTokenLength = 0;
             fTokenClassifier.Reset();
         }
 
@@ -97,7 +100,12 @@ namespace TextParser
         private static ParsedText ParseText(IParserFactory parserFactory, string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
-            return parserFactory.CreateParser(text).Parse();
+            ParsedText result;
+            using (var parser = parserFactory.CreateParser(text))
+            {
+                result = parser.Parse();
+            }
+            return result;
         }
     }
 }
