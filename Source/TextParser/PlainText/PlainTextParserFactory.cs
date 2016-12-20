@@ -1,4 +1,6 @@
-﻿namespace TextParser
+﻿using TextParser.Common;
+
+namespace TextParser.PlainText
 {
     internal class PlainTextParserFactory : IParserFactory
     {

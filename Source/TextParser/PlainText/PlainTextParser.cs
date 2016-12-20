@@ -1,6 +1,6 @@
-﻿using System;
+﻿using TextParser.Common;
 
-namespace TextParser
+namespace TextParser.PlainText
 {
     internal class PlainTextParser : Parser
     {

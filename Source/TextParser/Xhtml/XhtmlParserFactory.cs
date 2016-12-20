@@ -1,4 +1,6 @@
-﻿namespace TextParser
+﻿using TextParser.Common;
+
+namespace TextParser.Xhtml
 {
     internal class XhtmlParserFactory : IParserFactory
     {

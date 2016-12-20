@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml;
+using TextParser.Common;
 
-namespace TextParser
+namespace TextParser.Xhtml
 {
     internal class XhtmlParser : Parser
     {
         private readonly XmlReader fXmlReader;
-        private string fCurrentPlainTextElement;
+        private string fCurrentPlainTextElement;        
 
         // Public
 

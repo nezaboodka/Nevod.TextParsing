@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TextParser
+namespace TextParser.Common
 {
     internal struct CharacterInfo
     {

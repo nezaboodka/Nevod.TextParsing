@@ -1,6 +1,6 @@
-﻿using System;
+﻿using TextParser.Common.WordBreak;
 
-namespace TextParser
+namespace TextParser.Common
 {
     internal class TokenClassifier
     {
@@ -80,7 +80,7 @@ namespace TextParser
 
         private void ProcessWhiteSpace(char c)
         {
-            if (WordBreakTable.GetCharacterWordBreak(c) != WordBreak.Whitespace)
+            if (WordBreakTable.GetCharacterWordBreak(c) != WordBreak.WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.Symbol;                
             }
@@ -95,7 +95,7 @@ namespace TextParser
             } else if (char.IsLetter(c))
             {
                 TokenKind = TokenKind.Alphabetic;
-            } else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.Whitespace)
+            } else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.WhiteSpace;
             } else if (IsLineSeparator(c))

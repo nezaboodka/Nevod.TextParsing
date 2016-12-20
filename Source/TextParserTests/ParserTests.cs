@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using TextParser.Common;
 
 namespace TextParser.Tests
 {

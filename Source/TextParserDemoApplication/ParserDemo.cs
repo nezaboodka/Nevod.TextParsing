@@ -1,5 +1,6 @@
 ﻿using System;
 using TextParser;
+using TextParser.Common;
 
 namespace TextParserDemoApplication
 {

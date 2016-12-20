@@ -1,4 +1,4 @@
-﻿namespace TextParser
+﻿namespace TextParser.Common
 {
     internal interface IParserFactory
     {

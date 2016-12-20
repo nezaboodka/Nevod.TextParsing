@@ -1,6 +1,9 @@
 ﻿using System;
+using TextParser.Common.WordBreak;
+using TextParser.PlainText;
+using TextParser.Xhtml;
 
-namespace TextParser
+namespace TextParser.Common
 {
     public abstract class Parser : IDisposable
     {
@@ -62,7 +65,7 @@ namespace TextParser
             if (result)
             {
                 fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCurrentPosition));
-                WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
+                WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
                 fWordBreaker.AddWordBreak(wordBreak);                
             }
             else
