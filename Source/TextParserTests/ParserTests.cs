@@ -140,11 +140,11 @@ namespace TextParser.Tests
             Tuple<string, TokenKind>[] expectedResult =
             {
                 new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("\n", TokenKind.LineSeparator),
+                new Tuple<string, TokenKind>("\n", TokenKind.LineFeed),
                 new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("\r\n", TokenKind.LineSeparator),
+                new Tuple<string, TokenKind>("\r\n", TokenKind.LineFeed),
                 new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("\r", TokenKind.LineSeparator), 
+                new Tuple<string, TokenKind>("\r", TokenKind.LineFeed), 
                 new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
             };
             ParsePlainTextAndTest(testString, expectedResult);

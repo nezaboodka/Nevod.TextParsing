@@ -100,7 +100,7 @@ namespace TextParser
                 TokenKind = TokenKind.WhiteSpace;
             } else if (IsLineSeparator(c))
             {
-                TokenKind = TokenKind.LineSeparator;                
+                TokenKind = TokenKind.LineFeed;                
             }
             else
             {
