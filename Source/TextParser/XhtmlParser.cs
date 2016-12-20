@@ -9,6 +9,8 @@ namespace TextParser
         private readonly XmlReader fXmlReader;
         private string fCurrentPlainTextElement;
 
+        // Public
+
         public XhtmlParser(string xhtmlText)
         {
             fCurrentPosition = 0;

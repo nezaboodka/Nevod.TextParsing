@@ -15,7 +15,7 @@ namespace TextParser
         protected int fCurrentPosition;        
         protected readonly ParsedText fParsedText = new ParsedText();
         
-        // Public static
+        // Static public
 
         public static ParsedText ParsePlainText(string plainText)
         {
