@@ -152,7 +152,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void Xhtml()
+        public void XhtmlTokens()
         {
             string testString = "<p>Hello, <b>w</b>orld!</p>";
             Tuple<string, TokenKind>[] expectedTokens =
@@ -164,7 +164,19 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("!", TokenKind.Symbol)
             };
             string[] expectedXhtmlElements = {"<p>", "Hello, ", "<b>", "w", "</b>", "orld!", "</p>"};
-            ParseXhtmlAndTest(testString, expectedTokens, expectedXhtmlElements);
+            ParseXhtmlAndTestTokens(testString, expectedTokens, expectedXhtmlElements);
+        }
+
+        [TestMethod]
+        public void XhtmlTags()
+        {
+            string testString = "<html><p>Paragraph1</p>\n<p>Paragraph2</p></html>";
+            string[] expectedTags =
+            {
+                "Paragraph1",
+                "Paragraph2"
+            };
+            ParseXhtmlAndTestTags(testString, expectedTags);
         }
 
         // Static internals
@@ -175,13 +187,20 @@ namespace TextParser.Tests
             CollectionAssert.AreEqual(result, expectedResult);
         }        
 
-        private static void ParseXhtmlAndTest(string testString, Tuple<string, TokenKind>[] expectedTokens, string[] expectedXhtmlElements)
+        private static void ParseXhtmlAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedTokens, string[] expectedXhtmlElements)
         {
             ParsedText parsedText = Parser.ParseXhtmlText(testString);
             Tuple<string, TokenKind>[] actualTokens = GetTokensFromParsedText(parsedText);
             List<string> actualXhtmlElements = parsedText.XhtmlElements;
             CollectionAssert.AreEqual(expectedTokens, actualTokens);
             CollectionAssert.AreEqual(expectedXhtmlElements, actualXhtmlElements);
+        }
+
+        private static void ParseXhtmlAndTestTags(string testString, string[] expectedTags)
+        {
+            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            string[] actualTags = parsedText.Tags.Select(x => parsedText.GetPlainText(x)).ToArray();
+            CollectionAssert.AreEqual(expectedTags, actualTags);
         }
 
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
