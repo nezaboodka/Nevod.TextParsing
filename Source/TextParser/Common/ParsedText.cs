@@ -7,7 +7,8 @@ namespace TextParser.Common
     {
 
         private readonly List<Token> fTokens;
-        private readonly List<Tag> fTags;        
+        private readonly List<Tag> fTags;
+        private readonly List<DocumentTag> fDocumentTags;
         private readonly List<string> fXhtmlElements;
         private readonly List<int> fPlainTextInXhtml;
 
@@ -15,6 +16,7 @@ namespace TextParser.Common
 
         public List<Token> Tokens => fTokens;
         public IEnumerable<Tag> Tags => fTags;
+        public IEnumerable<DocumentTag> DocumentTags => fDocumentTags;
         public List<string> XhtmlElements => fXhtmlElements;
 
         public ParsedText()
@@ -23,6 +25,7 @@ namespace TextParser.Common
             fTags = new List<Tag>();
             fXhtmlElements = new List<string>();
             fPlainTextInXhtml = new List<int>();
+            fDocumentTags = new List<DocumentTag>();
         }
 
         public string GetAllPlainText()
@@ -71,6 +74,11 @@ namespace TextParser.Common
         internal void AddTag(Tag tag)
         {
             fTags.Add(tag);
+        }
+
+        internal void AddDocumentTag(DocumentTag documentTag)
+        {
+            fDocumentTags.Add(documentTag);
         }
 
         internal void AddXhtmlElement(string xhtmlElement)

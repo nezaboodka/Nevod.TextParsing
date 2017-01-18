@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CharacterBuffer.cs" />
+    <Compile Include="Common\DocumentTag.cs" />
     <Compile Include="Common\ParserFactory.cs" />
     <Compile Include="PlainText\PlainTextParser.cs" />
     <Compile Include="PlainText\PlainTextParserFactory.cs" />
