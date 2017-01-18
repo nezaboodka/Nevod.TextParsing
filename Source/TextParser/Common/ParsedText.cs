@@ -49,7 +49,17 @@ namespace TextParser.Common
             }
 
             return result;
-        }        
+        }
+
+        public string GetPlainText(Tag tag)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int tokenIndex = tag.TokenPosition; tokenIndex < tag.TokenLength; tokenIndex++)
+            {
+                result.Append(GetPlainText(Tokens[tokenIndex]));
+            }
+            return result.ToString();
+        }
 
         // Internals
 
