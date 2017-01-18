@@ -44,7 +44,7 @@ namespace TextParser.Common
             {
                 fCurrentTokenLength++;
                 fTokenClassifier.AddCharacter(fCharacterBuffer.CurrentCharacterInfo.Character);
-                if (fWordBreaker.IsBreak())
+                if (IsBreak())
                 {
                     SaveToken();
                 }                
@@ -64,19 +64,13 @@ namespace TextParser.Common
             bool result = Read(out c);
             if (result)
             {
-                fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCurrentPosition));
-                WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-                fWordBreaker.AddWordBreak(wordBreak);                
+                AddCharacter(c);                            
             }
-            else
+            else if (HasCharacters())
             {
-                if (!fWordBreaker.IsEmptyBuffer())
-                {
-                    fCharacterBuffer.NextCharacter();
-                    fWordBreaker.NextWordBreak();
-                    result = true;
-                }
-            }            
+                MoveNext();
+                result = true;
+            }                    
             return result;
         }
 
@@ -97,6 +91,29 @@ namespace TextParser.Common
             fCurrentTokenLength = 0;
             fTokenClassifier.Reset();
         }
+
+        protected virtual bool IsBreak()
+        {
+            return fWordBreaker.IsBreak();
+        }
+
+        private void AddCharacter(char c)
+        {
+            fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCurrentPosition));
+            WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
+            fWordBreaker.AddWordBreak(wordBreak);
+        }
+
+        private void MoveNext()
+        {
+            fCharacterBuffer.NextCharacter();
+            fWordBreaker.NextWordBreak();
+        }
+
+        private bool HasCharacters()
+        {
+            return !fWordBreaker.IsEmptyBuffer();
+        } 
 
         // Static internals
 
