@@ -11,7 +11,7 @@ namespace TextParser.PlainText
         public PlainTextParser(string text)
         {
             fText = text;
-            fCurrentPosition = -1;
+            fCharacterIndex = -1;
             fXhtmlIndex = 0;      
             fParsedText.AddPlainTextElement(text);
         }
@@ -24,10 +24,10 @@ namespace TextParser.PlainText
         {
             bool result;
             c = default(char);
-            if (fCurrentPosition < fText.Length - 1)
+            if (fCharacterIndex < fText.Length - 1)
             {
-                fCurrentPosition++;
-                c = fText[fCurrentPosition];
+                fCharacterIndex++;
+                c = fText[fCharacterIndex];
                 result = true;
             }
             else
@@ -36,5 +36,7 @@ namespace TextParser.PlainText
             }
             return result;
         }
+
+        protected override void ProcessTags() { }
     }
 }

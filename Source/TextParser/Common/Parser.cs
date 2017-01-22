@@ -15,8 +15,11 @@ namespace TextParser.Common
         private int fCurrentTokenLength;
 
         protected int fXhtmlIndex;
-        protected int fCurrentPosition;        
+        protected int fCharacterIndex;        
         protected readonly ParsedText fParsedText = new ParsedText();
+
+        protected int ProcessingXhtmlIndex => fCharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
+        protected int ProcessingCharacterIndex => fCharacterBuffer.CurrentCharacterInfo.StringPosition;
         
         // Static public
 
@@ -34,12 +37,13 @@ namespace TextParser.Common
 
         public abstract void Dispose();
 
-        // Internals
+        // Internals 
 
-        private ParsedText Parse()
+        protected virtual ParsedText Parse()
         {
             InitializeBuffer();
-            fTokenStartXhtmlIndex = fCharacterBuffer.NextOfNextCharacterInfo.XhtmlIndex;
+            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            ProcessTags();
             while (NextCharacter())
             {
                 fCurrentTokenLength++;
@@ -47,6 +51,7 @@ namespace TextParser.Common
                 if (IsBreak())
                 {
                     SaveToken();
+                    ProcessTags();
                 }                
             }
             return fParsedText;
@@ -76,6 +81,8 @@ namespace TextParser.Common
 
         protected abstract bool Read(out char c);
 
+        protected abstract void ProcessTags();
+
         private void SaveToken()
         {
             var token = new Token
@@ -99,7 +106,7 @@ namespace TextParser.Common
 
         private void AddCharacter(char c)
         {
-            fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCurrentPosition));
+            fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCharacterIndex));
             WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
             fWordBreaker.AddWordBreak(wordBreak);
         }

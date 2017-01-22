@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Xml;
 using TextParser.Common;
+using TextParser.Xhtml.Tagging;
 
 namespace TextParser.Xhtml
 {
@@ -8,14 +11,18 @@ namespace TextParser.Xhtml
     {
         private readonly XmlReader fXmlReader;
         private string fCurrentPlainTextElement;        
+        private readonly XhtmlTagger fXhtmlTagger;
+        private int CurrentTokenIndex => fParsedText.Tokens.Count - 1; //fParsedText.Tokens.Count == 0 ? 0 : fParsedText.Tokens.Count - 1;
+        private int fPlainTextXhtmlIndex = 0;
 
         // Public
 
         public XhtmlParser(string xhtmlText)
         {
-            fCurrentPosition = 0;
+            fCharacterIndex = 0;
             fXhtmlIndex = -1;
-            fXmlReader = XmlReader.Create(new StringReader(xhtmlText));            
+            fXmlReader = XmlReader.Create(new StringReader(xhtmlText));
+            fXhtmlTagger = new XhtmlTagger(fParsedText);
         }
 
         public override void Dispose()
@@ -29,9 +36,9 @@ namespace TextParser.Xhtml
         {
             bool result;
             c = default(char);
-            if (HasPlainText)
+            if (HasPlainText())
             {
-                fCurrentPosition++;
+                fCharacterIndex++;
                 c = CurrentCharacter;
                 result = true;
             }
@@ -46,9 +53,22 @@ namespace TextParser.Xhtml
             return result;
         }
 
-        private bool HasPlainText => (fCurrentPlainTextElement != null) && (fCurrentPosition < fCurrentPlainTextElement.Length - 1);
+        protected override void ProcessTags()
+        {
+            fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, ProcessingCharacterIndex, CurrentTokenIndex);
+        }        
 
-        private char CurrentCharacter => fCurrentPlainTextElement[fCurrentPosition];
+        protected override bool IsBreak()
+        {
+            return base.IsBreak() || fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex);
+        }
+
+        private bool HasPlainText()
+        {
+            return (fCurrentPlainTextElement != null) && (fCharacterIndex < fCurrentPlainTextElement.Length - 1);
+        } 
+
+        private char CurrentCharacter => fCurrentPlainTextElement[fCharacterIndex];
 
         private bool ReadXhtmlToPlainText()
         {
@@ -58,37 +78,49 @@ namespace TextParser.Xhtml
                 fXhtmlIndex++;
                 switch (fXmlReader.NodeType)
                 {
-                    case XmlNodeType.Element:                        
-                        ProcessElement(fXmlReader.Name, fXmlReader.IsEmptyElement);
+                    case XmlNodeType.Element:
+                        TagKind tagKind = (fXmlReader.IsEmptyElement) ? TagKind.Empty : TagKind.Open;
+                        ProcessElement(fXmlReader.Name, tagKind);
                         break;
                     case XmlNodeType.EndElement:
-                        ProcessEndElement(fXmlReader.Name);
+                        ProcessElement(fXmlReader.Name, TagKind.Close);
                         break;
                     case XmlNodeType.Text:
                         plainTextFound = true;
                         ProcessText(fXmlReader.Value);
+                        fPlainTextXhtmlIndex = fXhtmlIndex;
+                        break;
+                    default:
+                        fXhtmlIndex--; // in case of XmlNodeType, that is not handled
                         break;
                 }
             }
             return plainTextFound;
         }
 
-        private void ProcessElement(string name, bool isEmptyElement)
+        private void ProcessElement(string elementName, TagKind tagKind)
         {
-            string xhtmlElement = isEmptyElement ? $"<{name}/>" : $"<{name}>";
-            fParsedText.AddXhtmlElement(xhtmlElement);
-        }
-
-        private void ProcessEndElement(string name)
-        {
-            string xhtmlElements = $"</{name}>";
-            fParsedText.AddXhtmlElement(xhtmlElements);
+            string elementRepresentation;
+            if (tagKind == TagKind.Open)
+            {
+                elementRepresentation = (tagKind == TagKind.Empty) ? $"<{fXmlReader.Name}/>" : $"<{fXmlReader.Name}>";
+                
+            }
+            else
+            {
+                elementRepresentation = $"</{elementName}>";
+            }
+            fParsedText.AddXhtmlElement(elementRepresentation);
+            if (tagKind != TagKind.Empty)
+            {
+                fXhtmlTagger.ProcessXhtmlTag(elementName, tagKind, fPlainTextXhtmlIndex, fCharacterIndex);
+            }
         }
 
         private void ProcessText(string value)
         {
             fCurrentPlainTextElement = value;            
-            fCurrentPosition = 0;
+            fCharacterIndex = 0;
             fParsedText.AddPlainTextElement(value);
         }
     }

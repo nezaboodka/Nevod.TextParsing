@@ -57,7 +57,7 @@ namespace TextParser.Common
         public string GetPlainText(Tag tag)
         {
             StringBuilder result = new StringBuilder();
-            for (int tokenIndex = tag.TokenPosition; tokenIndex < tag.TokenLength; tokenIndex++)
+            for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
             {
                 result.Append(GetPlainText(Tokens[tokenIndex]));
             }
@@ -74,6 +74,14 @@ namespace TextParser.Common
         internal void AddTag(Tag tag)
         {
             fTags.Add(tag);
+        }
+
+        internal void AddTags(IEnumerable<Tag> tags)
+        {
+            foreach (Tag tag in tags)
+            {
+                AddTag(tag);
+            }
         }
 
         internal void AddDocumentTag(DocumentTag documentTag)

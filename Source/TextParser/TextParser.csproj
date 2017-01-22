@@ -79,7 +79,9 @@
     <Compile Include="Common\Parser.cs" />
     <Compile Include="Xhtml\XhtmlParser.cs" />
     <Compile Include="Xhtml\XhtmlParserFactory.cs" />
-    <Compile Include="Xhtml\XhtmlTagger.cs" />
+    <Compile Include="Xhtml\Tagging\XhtmlTagger.cs" />
+    <Compile Include="Xhtml\Tagging\TagState.cs" />
+    <Compile Include="Xhtml\Tagging\TagBufferItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

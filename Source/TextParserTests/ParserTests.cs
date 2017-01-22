@@ -152,7 +152,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTokens()
+        public void XhtmlTokensCompoundTokens()
         {
             string testString = "<p>Hello, <b>w</b>orld!</p>";
             Tuple<string, TokenKind>[] expectedTokens =
@@ -168,12 +168,68 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTags()
+        public void XhtmlTokensOneSymbolTokens()
+        {
+            string testString = "<html><p>a</p><p>b</p><p>c</p><p>d</p></html>";
+            Tuple<string, TokenKind>[] expectedTokens =
+            {
+                new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),               
+                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic)               
+            };
+            string[] expectedXhtmlElements = { "<html>", "<p>", "a", "</p>", "<p>", "b", "</p>", "<p>", "c", "</p>","<p>", "d", "</p>", "</html>" };
+            ParseXhtmlAndTestTokens(testString, expectedTokens, expectedXhtmlElements);
+        }
+
+        [TestMethod]
+        public void XhtmlTagsParagraphs()
         {
             string testString = "<html><p>Paragraph1</p>\n<p>Paragraph2</p></html>";
             string[] expectedTags =
             {
                 "Paragraph1",
+                "Paragraph2"
+            };
+            ParseXhtmlAndTestTags(testString, expectedTags);
+        }
+
+        [TestMethod]
+        public void XhtmlTagsOneSymbolTokens()
+        {
+            string testString = "<html><p>a</p><p>b</p><p>c</p></html>";
+            string[] expectedTags =
+            {
+                "a",
+                "b",
+                "c"
+            };
+            ParseXhtmlAndTestTags(testString, expectedTags);
+        }
+
+        [TestMethod]
+        public void XhtmlTagsEmptyTag()
+        {
+            string testString = "<html><p></p></html>";
+            string[] expectedTags = { };
+            ParseXhtmlAndTestTags(testString, expectedTags);
+        }
+
+        [TestMethod]
+        public void XhtmlTagsSelfClosingTag()
+        {
+            string testString = "<html><p/></html>";
+            string[] expectedTags = { };
+            ParseXhtmlAndTestTags(testString, expectedTags);
+        }
+
+        [TestMethod]
+        public void XhtmlTagsCompoundTokens()
+        {
+            string testString = "<html><p>Paragraph<b>1</b>\nstill paragraph1</p>\n<p>Paragraph2</p></html>";
+            string[] expectedTags =
+            {
+                "Paragraph1\nstill paragraph1",
                 "Paragraph2"
             };
             ParseXhtmlAndTestTags(testString, expectedTags);
