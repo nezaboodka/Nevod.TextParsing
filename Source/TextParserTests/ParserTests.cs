@@ -10,7 +10,7 @@ namespace TextParser.Tests
     public class ParserTests
     {
         [TestMethod]
-        public void Latin()
+        public void LatinTest()
         {
             string testString = "The (\"brown\") can't 32.3 feet, right?";
             Tuple<string, TokenKind>[] expectedResult =
@@ -41,7 +41,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void OneWord()
+        public void OneWordTest()
         {
             string testString = "word";
             Tuple<string, TokenKind>[] expectedResult =
@@ -52,7 +52,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void Whitespaces()
+        public void WhitespacesTest()
         {
             string testString = "  \t";
             Tuple<string, TokenKind>[] expectedResult =
@@ -65,7 +65,7 @@ namespace TextParser.Tests
 
 
         [TestMethod]
-        public void EmptyString()
+        public void EmptyStringTest()
         {
             string testString = "";
             Tuple<string, TokenKind>[] expectedResult = { };
@@ -74,14 +74,14 @@ namespace TextParser.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Null()
+        public void NullTest()
         {
             string testString = null;
             Parser.ParsePlainText(testString);
         }
 
         [TestMethod]
-        public void Cyrillic()
+        public void CyrillicTest()
         {
             string testString = "1А класс; 56,31 светового, 45.1 дня!";
             Tuple<string, TokenKind>[] expectedResult =
@@ -109,7 +109,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void OneSymbol()
+        public void OneSymbolTest()
         {
             string testString = "L";
             Tuple<string, TokenKind>[] expectedResult =
@@ -120,7 +120,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void FormatCharacters()
+        public void FormatCharactersTest()
         {
             string testString = "a\u0308b\u0308cd 3.4";
             Tuple<string, TokenKind>[] expectedResult =
@@ -135,7 +135,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void LineSeparator()
+        public void LineSeparatorTest()
         {
             string testString = "a\nb\r\nc\rd";
             Tuple<string, TokenKind>[] expectedResult =
@@ -152,7 +152,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTokensCompoundTokens()
+        public void XhtmlTokensCompoundTokensTest()
         {
             string testString = "<p>Hello, <b>w</b>orld!</p>";
             Tuple<string, TokenKind>[] expectedTokens =
@@ -168,7 +168,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTokensOneSymbolTokens()
+        public void XhtmlTokensOneSymbolTokensTest()
         {
             string testString = "<html><p>a</p><p>b</p><p>c</p><p>d</p></html>";
             Tuple<string, TokenKind>[] expectedTokens =
@@ -183,7 +183,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTagsParagraphs()
+        public void XhtmlTagsParagraphsTest()
         {
             string testString = "<html><p>Paragraph1</p>\n<p>Paragraph2</p></html>";
             string[] expectedTags =
@@ -195,7 +195,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTagsOneSymbolTokens()
+        public void XhtmlTagsOneSymbolTokensTest()
         {
             string testString = "<html><p>a</p><p>b</p><p>c</p></html>";
             string[] expectedTags =
@@ -208,7 +208,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTagsEmptyTag()
+        public void XhtmlTagsEmptyTagTest()
         {
             string testString = "<html><p></p></html>";
             string[] expectedTags = { };
@@ -216,7 +216,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTagsSelfClosingTag()
+        public void XhtmlTagsSelfClosingTagTest()
         {
             string testString = "<html><p/></html>";
             string[] expectedTags = { };
@@ -224,7 +224,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlTagsCompoundTokens()
+        public void XhtmlTagsCompoundTokensTest()
         {
             string testString = "<html><p>Paragraph<b>1</b>\nstill paragraph1</p>\n<p>Paragraph2</p></html>";
             string[] expectedTags =

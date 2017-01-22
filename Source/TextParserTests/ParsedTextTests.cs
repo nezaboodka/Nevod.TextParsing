@@ -15,7 +15,7 @@ namespace TextParser.Tests
         // Public
 
         [TestMethod]
-        public void PlainTextForTokenInSinglePlainTextElement()
+        public void PlainTextForTokenInSinglePlainTextElementTest()
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
             Token testToken = new Token
@@ -33,7 +33,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void PlainTextForCompoundToken()
+        public void PlainTextForCompoundTokenTest()
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
             Token testToken = new Token
@@ -50,7 +50,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void AllPlainText()
+        public void AllPlainTextTest()
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
 
@@ -61,7 +61,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void PlainTextForTag()
+        public void PlainTextForTagTest()
         {
             string[] xhtml = { "<html>", "<p>", "First paragraph", "</p>", "<p>", "Second paragraph", "</p>", "</html>" };
             HashSet<int> plainTextInXhtml = new HashSet<int> { 2, 5 };
