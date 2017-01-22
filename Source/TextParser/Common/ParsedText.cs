@@ -28,7 +28,7 @@ namespace TextParser.Common
             fDocumentTags = new List<DocumentTag>();
         }
 
-        public string GetAllPlainText()
+        public string GetPlainText()
         {
             StringBuilder plainTextBuilder = new StringBuilder();
             foreach (int plainTextElementIndex in fPlainTextInXhtml)
@@ -38,7 +38,7 @@ namespace TextParser.Common
             return plainTextBuilder.ToString();
         }
 
-        public string GetPlainText(Token token)
+        public string GetTokenText(Token token)
         {
             string result;
 
@@ -54,12 +54,12 @@ namespace TextParser.Common
             return result;
         }
 
-        public string GetPlainText(Tag tag)
+        public string GetTagText(Tag tag)
         {
             StringBuilder result = new StringBuilder();
             for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
             {
-                result.Append(GetPlainText(Tokens[tokenIndex]));
+                result.Append(GetTokenText(Tokens[tokenIndex]));
             }
             return result.ToString();
         }

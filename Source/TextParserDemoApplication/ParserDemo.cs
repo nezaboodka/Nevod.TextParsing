@@ -13,7 +13,7 @@ namespace TextParserDemoApplication
                 ParsedText parsedText = Parser.ParsePlainText(arg);
                 foreach (Token token in parsedText.Tokens)
                 {
-                    Console.WriteLine("\"" + parsedText.GetPlainText(token) + "\"");
+                    Console.WriteLine("\"" + parsedText.GetTokenText(token) + "\"");
                 }
             }
         }

@@ -255,13 +255,13 @@ namespace TextParser.Tests
         private static void ParseXhtmlAndTestTags(string testString, string[] expectedTags)
         {
             ParsedText parsedText = Parser.ParseXhtmlText(testString);
-            string[] actualTags = parsedText.Tags.Select(x => parsedText.GetPlainText(x)).ToArray();
+            string[] actualTags = parsedText.Tags.Select(x => parsedText.GetTagText(x)).ToArray();
             CollectionAssert.AreEqual(expectedTags, actualTags);
         }
 
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
-            return parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetPlainText(x), x.TokenKind)).ToArray();
+            return parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind)).ToArray();
         }
     }
 }

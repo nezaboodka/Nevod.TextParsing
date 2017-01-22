@@ -27,7 +27,7 @@ namespace TextParser.Tests
             };
 
             string expected = "Hello";
-            string actual = parsedText.GetPlainText(testToken);
+            string actual = parsedText.GetTokenText(testToken);
 
             Assert.AreEqual(expected, actual);
         }
@@ -44,7 +44,7 @@ namespace TextParser.Tests
             };
 
             string expected = "world";
-            string actual = parsedText.GetPlainText(testToken);
+            string actual = parsedText.GetTokenText(testToken);
 
             Assert.AreEqual(expected, actual);
         }
@@ -55,7 +55,7 @@ namespace TextParser.Tests
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
 
             string expected = "Hello, my world!";
-            string actual = parsedText.GetAllPlainText();
+            string actual = parsedText.GetPlainText();
 
             Assert.AreEqual(expected, actual);;
         }
@@ -96,7 +96,7 @@ namespace TextParser.Tests
             }
 
             string[] expected = { "First paragraph", "Second paragraph" };
-            string[] actual = testTags.Select(tag => parsedText.GetPlainText(tag)).ToArray();
+            string[] actual = testTags.Select(tag => parsedText.GetTagText(tag)).ToArray();
 
             CollectionAssert.AreEqual(expected, actual);
 
