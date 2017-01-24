@@ -10,7 +10,6 @@ namespace TextParser.Xhtml
     internal class XhtmlParser : Parser
     {
         private readonly XmlReader fXmlReader;
-        private string fCurrentPlainTextElement;        
         private readonly XhtmlTagger fXhtmlTagger;
         private int CurrentTokenIndex => fParsedText.Tokens.Count - 1; //fParsedText.Tokens.Count == 0 ? 0 : fParsedText.Tokens.Count - 1;
         private int fPlainTextXhtmlIndex = 0;
@@ -32,25 +31,9 @@ namespace TextParser.Xhtml
 
         // Internal
 
-        protected override bool Read(out char c)
+        protected override bool FillBuffer()
         {
-            bool result;
-            c = default(char);
-            if (HasPlainText())
-            {
-                fCharacterIndex++;
-                c = CurrentCharacter;
-                result = true;
-            }
-            else
-            {
-                result = ReadXhtmlToPlainText();
-                if (result)
-                {
-                    c = CurrentCharacter;
-                }
-            }
-            return result;
+            return ReadXhtmlToPlainText();
         }
 
         protected override void ProcessTags()
@@ -65,10 +48,8 @@ namespace TextParser.Xhtml
 
         private bool HasPlainText()
         {
-            return (fCurrentPlainTextElement != null) && (fCharacterIndex < fCurrentPlainTextElement.Length - 1);
+            return (fBuffer != null) && (fCharacterIndex < fBuffer.Length - 1);
         } 
-
-        private char CurrentCharacter => fCurrentPlainTextElement[fCharacterIndex];
 
         private bool ReadXhtmlToPlainText()
         {
@@ -119,7 +100,7 @@ namespace TextParser.Xhtml
 
         private void ProcessText(string value)
         {
-            fCurrentPlainTextElement = value;            
+            fBuffer = value;            
             fCharacterIndex = 0;
             fParsedText.AddPlainTextElement(value);
         }

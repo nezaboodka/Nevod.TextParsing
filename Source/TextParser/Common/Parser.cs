@@ -13,10 +13,12 @@ namespace TextParser.Common
         private int fTokenStartPosition;
         private int fTokenStartXhtmlIndex;
         private int fCurrentTokenLength;
+        
 
         protected int fXhtmlIndex;
         protected int fCharacterIndex;        
         protected readonly ParsedText fParsedText = new ParsedText();
+        protected string fBuffer;
 
         protected int ProcessingXhtmlIndex => fCharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
         protected int ProcessingCharacterIndex => fCharacterBuffer.CurrentCharacterInfo.StringPosition;
@@ -65,21 +67,36 @@ namespace TextParser.Common
 
         private bool NextCharacter()
         {
+            bool hasNext;
             char c;
-            bool result = Read(out c);
-            if (result)
+            if ((fBuffer != null) && (fCharacterIndex < fBuffer.Length - 1))
             {
+                fCharacterIndex++;
+                hasNext = true;
+            }
+            else
+            {
+                hasNext = FillBuffer();
+                if (hasNext)
+                {
+                    fCharacterIndex = 0;
+                }
+            }
+            
+            if (hasNext)
+            {
+                c = fBuffer[fCharacterIndex];
                 AddCharacter(c);                            
             }
             else if (HasCharacters())
             {
                 MoveNext();
-                result = true;
+                hasNext = true;
             }                    
-            return result;
+            return hasNext;
         }
 
-        protected abstract bool Read(out char c);
+        protected abstract bool FillBuffer();
 
         protected abstract void ProcessTags();
 

@@ -4,37 +4,21 @@ namespace TextParser.PlainText
 {
     internal class PlainTextParser : Parser
     {
-        private readonly string fText;        
-
-        // Public
-
         public PlainTextParser(string text)
         {
-            fText = text;
             fCharacterIndex = -1;
             fXhtmlIndex = 0;      
             fParsedText.AddPlainTextElement(text);
+            fBuffer = text;
         }
 
         public override void Dispose() { }
 
         // Internal
 
-        protected override bool Read(out char c)
+        protected override bool FillBuffer()
         {
-            bool result;
-            c = default(char);
-            if (fCharacterIndex < fText.Length - 1)
-            {
-                fCharacterIndex++;
-                c = fText[fCharacterIndex];
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-            return result;
+            return false;
         }
 
         protected override void ProcessTags() { }
