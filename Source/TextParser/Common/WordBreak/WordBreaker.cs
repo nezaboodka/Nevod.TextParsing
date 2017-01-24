@@ -87,7 +87,7 @@
             return (fWordBreakBuffer.CurrentWordBreak == WordBreak.Empty) && (fWordBreakBuffer.NextWordBreak == WordBreak.Empty) && (fWordBreakBuffer.NextOfNextWordBreak == WordBreak.Empty);
         }
 
-        // Internals
+        // Internal
 
         private bool IsEnoughCharacters()
         {
@@ -109,7 +109,7 @@
             return ((wordBreak == WordBreak.Extender) || (wordBreak == WordBreak.Format)) && !IsFirstCharacter();
         }
 
-        // Static internals        
+        // Static internal       
 
         private static bool IsAlphabeticOrHebrewLetter(WordBreak wordBreak)
         {

@@ -57,7 +57,6 @@ namespace TextParser.Xhtml.Tagging
                             {
                                 SaveTag(tagState, tokenLength);
                             }
-                            
                             break;
                     }
                     fTagsBuffer.Dequeue();
@@ -80,7 +79,7 @@ namespace TextParser.Xhtml.Tagging
             return result;
         }
 
-        // Internals        
+        // Internal        
 
         private void SaveTag(TagState tagState, int tokenLength)
         {            

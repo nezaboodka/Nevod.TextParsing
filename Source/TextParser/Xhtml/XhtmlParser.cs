@@ -30,7 +30,7 @@ namespace TextParser.Xhtml
             fXmlReader.Dispose();
         }
 
-        // Internals
+        // Internal
 
         protected override bool Read(out char c)
         {

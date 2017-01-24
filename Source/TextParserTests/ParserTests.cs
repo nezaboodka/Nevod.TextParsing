@@ -59,7 +59,6 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace)
             };
-
             ParsePlainTextAndTest(testString, expectedResult);
         }
 
@@ -235,7 +234,7 @@ namespace TextParser.Tests
             ParseXhtmlAndTestTags(testString, expectedTags);
         }
 
-        // Static internals
+        // Static internal
 
         private static void ParsePlainTextAndTest(string testString, Tuple<string, TokenKind>[] expectedResult)
         {

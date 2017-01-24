@@ -64,7 +64,7 @@ namespace TextParser.Common
             return result.ToString();
         }
 
-        // Internals
+        // Internal
 
         internal void AddToken(Token token)
         {

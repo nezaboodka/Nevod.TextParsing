@@ -37,7 +37,7 @@ namespace TextParser.Common
 
         public abstract void Dispose();
 
-        // Internals 
+        // Internal
 
         protected virtual ParsedText Parse()
         {
@@ -122,7 +122,7 @@ namespace TextParser.Common
             return !fWordBreaker.IsEmptyBuffer();
         } 
 
-        // Static internals
+        // Static internal
 
         private static ParsedText ParseText(IParserFactory parserFactory, string text)
         {

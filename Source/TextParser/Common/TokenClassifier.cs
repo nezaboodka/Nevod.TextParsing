@@ -43,7 +43,7 @@ namespace TextParser.Common
             }
         }
 
-        // Internals
+        // Internal
 
         private void ProcessAlphabetic(char c)
         {
@@ -108,7 +108,7 @@ namespace TextParser.Common
             }            
         }
 
-        // Static internals
+        // Static internal
 
         private static bool IsLineSeparator(char c)
         {

@@ -18,7 +18,7 @@ namespace TextParser.PlainText
 
         public override void Dispose() { }
 
-        // Internals
+        // Internal
 
         protected override bool Read(out char c)
         {
