@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using TextParser;
 using TextParser.Common;
 
@@ -8,14 +10,14 @@ namespace TextParserDemoApplication
     {
         static void Main(string[] args)
         {
-            foreach (string arg in args)
-            {
-                ParsedText parsedText = Parser.ParsePlainText(arg);
-                foreach (Token token in parsedText.Tokens)
-                {
-                    Console.WriteLine("\"" + parsedText.GetTokenText(token) + "\"");
-                }
-            }
+            string fileName = args[0];
+            string text = File.ReadAllText(fileName);
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Parser.ParsePlainText(text);
+            stopwatch.Stop();
+            FileInfo fileInfo = new FileInfo(fileName);           
+            Console.WriteLine($"{fileInfo.Length} bytes, {stopwatch.ElapsedMilliseconds} ms");
         }
     }
 }
