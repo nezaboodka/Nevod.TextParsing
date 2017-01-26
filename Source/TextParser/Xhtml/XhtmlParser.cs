@@ -12,13 +12,12 @@ namespace TextParser.Xhtml
         private readonly XmlReader fXmlReader;
         private readonly XhtmlTagger fXhtmlTagger;
         private int CurrentTokenIndex => fParsedText.Tokens.Count - 1; //fParsedText.Tokens.Count == 0 ? 0 : fParsedText.Tokens.Count - 1;
-        private int fPlainTextXhtmlIndex = 0;
+        private int fPlainTextXhtmlIndex;
 
         // Public
 
         public XhtmlParser(string xhtmlText)
         {
-            fCharacterIndex = 0;
             fXhtmlIndex = -1;
             fXmlReader = XmlReader.Create(new StringReader(xhtmlText));
             fXhtmlTagger = new XhtmlTagger(fParsedText);
@@ -31,9 +30,9 @@ namespace TextParser.Xhtml
 
         // Internal
 
-        protected override bool FillBuffer()
+        protected override bool FillBuffer(out string buffer)
         {
-            return ReadXhtmlToPlainText();
+            return ReadXhtmlToPlainText(out buffer);
         }
 
         protected override void ProcessTags()
@@ -46,14 +45,10 @@ namespace TextParser.Xhtml
             return base.IsBreak() || fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex);
         }
 
-        private bool HasPlainText()
-        {
-            return (fBuffer != null) && (fCharacterIndex < fBuffer.Length - 1);
-        } 
-
-        private bool ReadXhtmlToPlainText()
+        private bool ReadXhtmlToPlainText(out string plainText)
         {
             bool plainTextFound = false;
+            plainText = default(string);
             while (!plainTextFound && fXmlReader.Read())
             {
                 fXhtmlIndex++;
@@ -68,7 +63,8 @@ namespace TextParser.Xhtml
                         break;
                     case XmlNodeType.Text:
                         plainTextFound = true;
-                        ProcessText(fXmlReader.Value);
+                        plainText = fXmlReader.Value;
+                        ProcessText(plainText);
                         fPlainTextXhtmlIndex = fXhtmlIndex;
                         break;
                     default:
@@ -94,15 +90,13 @@ namespace TextParser.Xhtml
             fParsedText.AddXhtmlElement(elementRepresentation);
             if (tagKind != TagKind.Empty)
             {
-                fXhtmlTagger.ProcessXhtmlTag(elementName, tagKind, fPlainTextXhtmlIndex, fCharacterIndex);
+                fXhtmlTagger.ProcessXhtmlTag(elementName, tagKind, fPlainTextXhtmlIndex, CharacterBuffer.NextOfNextCharacterInfo.StringPosition);
             }
         }
 
         private void ProcessText(string value)
         {
-            fBuffer = value;            
-            fCharacterIndex = 0;
             fParsedText.AddPlainTextElement(value);
-        }
+        }        
     }
 }

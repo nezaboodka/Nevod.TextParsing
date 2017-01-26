@@ -2,40 +2,55 @@
 
 namespace TextParser.Common
 {
-    internal struct CharacterInfo
+    internal struct CharacterPosition
     {
+        public string Buffer;
         public int XhtmlIndex;
         public int StringPosition;
-        public char Character;
-
-        public CharacterInfo(char character, int xhtmlIndex, int stringPosition)
-        {
-            XhtmlIndex = xhtmlIndex;
-            StringPosition = stringPosition;
-            Character = character;
-        }
+        public char Character => Buffer[StringPosition];
     }
 
     internal class CharacterBuffer
-    {
-        private const int BufferSize = 3;
-        private readonly CharacterInfo[] fCharacters = new CharacterInfo[BufferSize];
+    {        
+        private CharacterPosition fCurrentCharacterPosition;
+        private CharacterPosition fNextCharacterPosition;
+        private CharacterPosition fPosition;
 
         // Public
 
-        public CharacterInfo CurrentCharacterInfo => fCharacters[BufferSize - 1];
-        public CharacterInfo NextCharacterInfo => fCharacters[BufferSize - 2];
-        public CharacterInfo NextOfNextCharacterInfo => fCharacters[0];
+        public CharacterPosition CurrentCharacterInfo => fCurrentCharacterPosition;
+        public CharacterPosition NextCharacterInfo => fNextCharacterPosition;
+        public CharacterPosition NextOfNextCharacterInfo => fPosition;
 
-        public void AddCharacter(CharacterInfo characterInfo)
+        public void SetBuffer(string buffer, int xhtmlIndex)
         {
-            NextCharacter();
-            fCharacters[0] = characterInfo;
+            MoveNext();
+            fPosition.Buffer = buffer;
+            fPosition.StringPosition = 0;
+            fPosition.XhtmlIndex = xhtmlIndex;
         }
 
-        public void NextCharacter()
+        public bool NextCharacter()
         {
-            Array.Copy(fCharacters, 0, fCharacters, 1, BufferSize - 1);            
-        }        
+            bool result;
+            
+            if ((!string.IsNullOrEmpty(fPosition.Buffer)) && (fPosition.StringPosition < fPosition.Buffer.Length - 1))
+            {
+                result = true;
+                MoveNext();
+                fPosition.StringPosition++;
+            }
+            else
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public void MoveNext()
+        {
+            fCurrentCharacterPosition = NextCharacterInfo;
+            fNextCharacterPosition = fPosition;            
+        }
     }
 }

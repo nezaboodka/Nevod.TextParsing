@@ -8,21 +8,18 @@ namespace TextParser.Common
     public abstract class Parser : IDisposable
     {
         private readonly TokenClassifier fTokenClassifier = new TokenClassifier();                
-        private readonly CharacterBuffer fCharacterBuffer = new CharacterBuffer();
         private readonly WordBreaker fWordBreaker = new WordBreaker();
         private int fTokenStartPosition;
         private int fTokenStartXhtmlIndex;
         private int fCurrentTokenLength;
         
-
         protected int fXhtmlIndex;
-        protected int fCharacterIndex;        
-        protected readonly ParsedText fParsedText = new ParsedText();
-        protected string fBuffer;
+        protected readonly ParsedText fParsedText = new ParsedText();        
+        protected int ProcessingXhtmlIndex => CharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
+        protected int ProcessingCharacterIndex => CharacterBuffer.CurrentCharacterInfo.StringPosition;
 
-        protected int ProcessingXhtmlIndex => fCharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
-        protected int ProcessingCharacterIndex => fCharacterBuffer.CurrentCharacterInfo.StringPosition;
-        
+        internal CharacterBuffer CharacterBuffer { get; } = new CharacterBuffer();
+
         // Static public
 
         public static ParsedText ParsePlainText(string plainText)
@@ -44,12 +41,12 @@ namespace TextParser.Common
         protected virtual ParsedText Parse()
         {
             InitializeBuffer();
-            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            fTokenStartXhtmlIndex = CharacterBuffer.NextCharacterInfo.XhtmlIndex;
             ProcessTags();
             while (NextCharacter())
             {
                 fCurrentTokenLength++;
-                fTokenClassifier.AddCharacter(fCharacterBuffer.CurrentCharacterInfo.Character);
+                fTokenClassifier.AddCharacter(CharacterBuffer.CurrentCharacterInfo.Character);
                 if (IsBreak())
                 {
                     SaveToken();
@@ -65,38 +62,38 @@ namespace TextParser.Common
             NextCharacter();
         }
 
-        private bool NextCharacter()
+        protected virtual bool NextCharacter()
         {
             bool hasNext;
-            char c;
-            if ((fBuffer != null) && (fCharacterIndex < fBuffer.Length - 1))
+            if (CharacterBuffer.NextCharacter())
             {
-                fCharacterIndex++;
                 hasNext = true;
             }
             else
             {
-                hasNext = FillBuffer();
-                if (hasNext)
+                string newBuffer;
+                hasNext = FillBuffer(out newBuffer);
+                if (hasNext && newBuffer.Length > 0)
                 {
-                    fCharacterIndex = 0;
+                    CharacterBuffer.SetBuffer(newBuffer, fXhtmlIndex);
                 }
             }
-            
+
             if (hasNext)
             {
-                c = fBuffer[fCharacterIndex];
-                AddCharacter(c);                            
+                char c = CharacterBuffer.NextOfNextCharacterInfo.Character;
+                WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
+                fWordBreaker.AddWordBreak(wordBreak);
             }
             else if (HasCharacters())
             {
                 MoveNext();
                 hasNext = true;
-            }                    
+            }
             return hasNext;
         }
 
-        protected abstract bool FillBuffer();
+        protected abstract bool FillBuffer(out string buffer);
 
         protected abstract void ProcessTags();
 
@@ -110,8 +107,8 @@ namespace TextParser.Common
                 StringLength = fCurrentTokenLength
             };
             fParsedText.AddToken(token);
-            fTokenStartPosition = fCharacterBuffer.NextCharacterInfo.StringPosition;
-            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            fTokenStartPosition = CharacterBuffer.NextCharacterInfo.StringPosition;
+            fTokenStartXhtmlIndex = CharacterBuffer.NextCharacterInfo.XhtmlIndex;
             fCurrentTokenLength = 0;
             fTokenClassifier.Reset();
         }
@@ -121,16 +118,15 @@ namespace TextParser.Common
             return fWordBreaker.IsBreak();
         }
 
-        private void AddCharacter(char c)
-        {
-            fCharacterBuffer.AddCharacter(new CharacterInfo(c, fXhtmlIndex, fCharacterIndex));
-            WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-            fWordBreaker.AddWordBreak(wordBreak);
-        }
+        //private void AddCharacter(char c)
+        //{
+        //    WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
+        //    fWordBreaker.AddWordBreak(wordBreak);
+        //}
 
         private void MoveNext()
         {
-            fCharacterBuffer.NextCharacter();
+            CharacterBuffer.MoveNext();
             fWordBreaker.NextWordBreak();
         }
 

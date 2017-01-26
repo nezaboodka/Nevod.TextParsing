@@ -1,26 +1,44 @@
 ﻿using TextParser.Common;
+using TextParser.Common.WordBreak;
 
 namespace TextParser.PlainText
 {
     internal class PlainTextParser : Parser
     {
+        private string fText;
+        private bool fHasNext;
+
+        // Public
+
         public PlainTextParser(string text)
         {
-            fCharacterIndex = -1;
             fXhtmlIndex = 0;      
             fParsedText.AddPlainTextElement(text);
-            fBuffer = text;
+            fText = text;
+            fHasNext = true;
         }
 
         public override void Dispose() { }
 
         // Internal
 
-        protected override bool FillBuffer()
+        protected override bool FillBuffer(out string buffer)
         {
-            return false;
+            bool result;
+            buffer = default(string);
+            if (fHasNext && fText.Length > 0)
+            {
+                buffer = fText;
+                fHasNext = false;
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+            return result;
         }
 
-        protected override void ProcessTags() { }
+        protected override void ProcessTags() { }        
     }
 }
