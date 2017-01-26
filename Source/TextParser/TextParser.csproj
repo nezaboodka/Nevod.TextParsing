@@ -101,6 +101,11 @@
       <Name>Sharik.System</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Tools\TablesGenerator.py">
+      <Link>TablesGenerator.py</Link>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
