@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TextParser.Common.WordBreak
+﻿namespace TextParser.Common.WordBreak
 {
    internal enum WordBreak
     {
@@ -45,7 +43,7 @@ namespace TextParser.Common.WordBreak
         private const WordBreak MNL = WordBreak.MidNumberAndLetter;
         private static readonly WordBreak[] AlphabeticLetterArray = {};
         private static readonly WordBreak[] AnyArray = {};
-
+        
         private static readonly WordBreak[][] WordBreaks =
         {
             new[]
@@ -902,8 +900,7 @@ namespace TextParser.Common.WordBreak
             }
         };
 
-
-            // Public
+        // Public
 
         public static WordBreak GetCharacterWordBreak(char c)
         {
@@ -923,33 +920,5 @@ namespace TextParser.Common.WordBreak
             }            
             return result;
         }
-
-        // Private
-
-        private struct WordBreakInfo : IComparable<WordBreakInfo>
-        {
-            public char LowBound;
-            public char HighBound;
-            public WordBreak WordBreak;
-
-            public WordBreakInfo(char lowBound, char highBound, WordBreak wordBreak)
-            {
-                this.LowBound = lowBound;
-                this.HighBound = highBound;
-                this.WordBreak = wordBreak;
-            }
-
-            public int CompareTo(WordBreakInfo other)
-            {
-                int result;
-                if (this.HighBound < other.LowBound)
-                    result = -1;
-                else if (other.HighBound < this.LowBound)
-                    result = 1;
-                else
-                    result = 0;
-                return result;
-            }
-        }        
     }
 }
