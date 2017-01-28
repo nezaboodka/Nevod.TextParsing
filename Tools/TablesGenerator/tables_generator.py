@@ -10,17 +10,12 @@ from os import path, system, sys
 import re
 from collections import defaultdict
 import argparse
-
+from output_formatter import *
 
 UNICODE_VERSION = '6.3.0' 
 BASE_URL = r'http://www.unicode.org/Public/{}/ucd/auxiliary/'.format(UNICODE_VERSION)
 WORD_BREAK_PROPERTY_FILENAME = 'WordBreakProperty.txt'
 
-HEXADECIMAL = r'[0-9A-F]+'
-SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
-RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
-
-WORD_BREAK_PROPERTY_TEMPLATE = "new WordBreakInfo('{}', '{}', WordBreak.{})"
 NAMES_REPLACEMENTS = {
     'ALetter': 'AlphabeticLetter', 
     'CR': 'CarriageReturn', 
@@ -31,14 +26,64 @@ NAMES_REPLACEMENTS = {
     'MidNumLet': 'MidNumberAndLetter'
 }
 
-TAB_LENGTH = 4
+
+HEXADECIMAL = r'[0-9A-F]+'
+SINGLE_PROPERTY = r'^ *({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
+RANGE_PROPERTY = r'^ *({HEXADECIMAL})\.\.({HEXADECIMAL}) *; *(\w+)'.format(HEXADECIMAL=HEXADECIMAL)
 
 
-def main():
-    property_values, property_types = get_properties(WORD_BREAK_PROPERTY_FILENAME)
-    properties_table = generate_table(property_values)
-    types_table = generate_types_table(property_types)
-    write_result(properties_table, types_table, get_output_filename())
+def get_properties(filename):
+    property_values, property_types = load_properties(filename)
+    add_custom_values(property_values, property_types )
+    return merge_ranges(property_values), sorted(property_types)
+
+
+def expand_property_values(property_values):
+    result = ['Any']*65536
+    for property, ranges in property_values.items():
+        for bound in ranges:
+            for i in range(bound[0], bound[1] + 1):
+                result[i] = property
+    return result
+
+
+def get_gaps_for(expanded_table, property_name):
+    result = []
+    for high in range(256):
+        for low in range(256):
+            current_index = (high << 8) + low            
+            current_property = expanded_table[current_index]
+            if current_property != property_name:
+                break
+        else:            
+            result.append(high)
+        
+    return result
+
+
+def compress_table(expanded_table):
+    compressing_values = {'Any':'AnyArray', 'AlphabeticLetter':'AlphabeticLetterArray'}
+
+    result = [None] * 256
+    gaps_groups = {}
+    for compressing_property in compressing_values:
+        gaps_groups[compressing_values[compressing_property]] = get_gaps_for(expanded_table, compressing_property)
+      
+    for high in range(256):
+        current_array_name = ''
+        for array_name, gaps in gaps_groups.items():
+            if high in gaps:
+                current_array_name = array_name
+        if not current_array_name:
+            sub_array = [None]*256
+            for low in range(256):
+                index = (high << 8) + low
+                sub_array[low] = expanded_table[index]
+            result[high] = sub_array
+        else:
+            result[high] = current_array_name
+    return result
+    
 
 def get_output_filename():
     argument_parser = argparse.ArgumentParser(description='Generate C# code from WordBreakProperty.txt.')
@@ -46,10 +91,6 @@ def get_output_filename():
     args = argument_parser.parse_args()
     return args.output_filename
 
-def get_properties(filename):
-    property_values, property_types = load_properties(filename)
-    add_custom_values(property_values, property_types )
-    return merge_ranges(property_values), sorted(property_types)
     
 def load_properties(filename):
     fetch_file(filename)
@@ -98,58 +139,10 @@ def add_custom_values(property_values, property_types):
         (TAB_CODE, TAB_CODE)
     ])
 
-def generate_table(properties):
-    properties_sequence = []
-    properties_sequence.sort(key=lambda x: x[0])
-    
-    for property, ranges in properties.items():
-        for low_bound, high_bound in ranges:
-            properties_sequence.append((low_bound, high_bound, property))
-    properties_sequence.sort(key=lambda x: x[0])
-    return format_table(properties_sequence, format_func=format_property, count_in_line=2, indent=TAB_LENGTH * 3, init_position=1)
-
-
-def generate_types_table(property_types):
-    return format_table(list(property_types), count_in_line=1, indent=TAB_LENGTH * 2)
-
-
-def write_result(array_elements, word_break_values, output_filename):
-    with open(output_filename, 'w') as output:
-        output.write('Word break values (for enum):\n{}'.format(word_break_values))
-        output.write('\n\n')
-        output.write('Array elements:\n{}'.format(array_elements))
-
 
 def format_property_type(property_type):
     property_type = property_type.replace('_', '')
     return NAMES_REPLACEMENTS.get(property_type, property_type)
-
-
-def format_char(c):
-    return r"\x{:x}".format(c)
-
-
-def format_property(property):
-    return WORD_BREAK_PROPERTY_TEMPLATE.format(format_char(property[0]), format_char(property[1]), property[2])
-
-
-def format_table(items, count_in_line, indent, format_func=lambda x:x, init_position=0):
-    result = ''
-    i = init_position
-    for item in items:
-        i += 1
-
-        item_string = format_func(item) + ','
-
-        if i == 1:
-            item_string = ' ' * indent + item_string + ' '
-        if i == count_in_line:
-            item_string += '\n'
-            i = 0
-
-        result += item_string
-    
-    return result
 
 
 def fetch_file(filename):
@@ -181,5 +174,4 @@ def merge_ranges(properties):
     return result
 
 
-if __name__ == '__main__':
-    main()
+

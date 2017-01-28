@@ -102,8 +102,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Tools\TablesGenerator.py">
-      <Link>TablesGenerator.py</Link>
+    <Content Include="..\..\Tools\output_formatter.py">
+      <Link>output_formatter.py</Link>
+    </Content>
+    <Content Include="..\..\Tools\TablesGenerator\main.py">
+      <Link>main.py</Link>
+    </Content>
+    <Content Include="..\..\Tools\TablesGenerator\tables_generator.py">
+      <Link>tables_generator.py</Link>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
