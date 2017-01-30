@@ -155,7 +155,7 @@ namespace TextParser.Tests
         {
             string testString = "<p>Hello, <b>w</b>orld!</p>";
             Tuple<string, TokenKind>[] expectedTokens =
-            {
+            {                
                 new Tuple<string, TokenKind>("Hello", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>(",", TokenKind.Symbol),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
@@ -173,9 +173,15 @@ namespace TextParser.Tests
             Tuple<string, TokenKind>[] expectedTokens =
             {
                 new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
                 new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),               
-                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic)               
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
+                new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
+                new Tuple<string, TokenKind>("", TokenKind.LineFeed),
+                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),                
             };
             string[] expectedXhtmlElements = { "<html>", "<p>", "a", "</p>", "<p>", "b", "</p>", "<p>", "c", "</p>","<p>", "d", "</p>", "</html>" };
             ParseXhtmlAndTestTokens(testString, expectedTokens, expectedXhtmlElements);

@@ -17,6 +17,7 @@ namespace TextParser.Common
         protected readonly ParsedText fParsedText = new ParsedText();        
         protected int ProcessingXhtmlIndex => CharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
         protected int ProcessingCharacterIndex => CharacterBuffer.CurrentCharacterInfo.StringPosition;
+        protected int fLastXhtmlElement = -1;
 
         internal CharacterBuffer CharacterBuffer { get; } = new CharacterBuffer();
 
@@ -89,6 +90,10 @@ namespace TextParser.Common
             {
                 MoveNext();
                 hasNext = true;
+                if (fLastXhtmlElement == -1)
+                {
+                    fLastXhtmlElement = CharacterBuffer.NextOfNextCharacterInfo.XhtmlIndex;
+                }
             }
             return hasNext;
         }
@@ -117,12 +122,6 @@ namespace TextParser.Common
         {
             return fWordBreaker.IsBreak();
         }
-
-        //private void AddCharacter(char c)
-        //{
-        //    WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-        //    fWordBreaker.AddWordBreak(wordBreak);
-        //}
 
         private void MoveNext()
         {

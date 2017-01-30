@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace TextParser.Common
@@ -41,16 +42,21 @@ namespace TextParser.Common
         public string GetTokenText(Token token)
         {
             string result;
-
-            if (token.StringPosition + token.StringLength <= fXhtmlElements[token.XhtmlIndex].Length)
+            if (!IsZeroToken(token))
             {
-                result = fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, token.StringLength);
+                if (token.StringPosition + token.StringLength <= fXhtmlElements[token.XhtmlIndex].Length)
+                {
+                    result = fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, token.StringLength);
+                }
+                else
+                {
+                    result = GetCompoundTokenText(token);
+                }
             }
             else
             {
-                result = GetCompoundTokenText(token);
+                result = string.Empty;
             }
-
             return result;
         }
 
@@ -58,7 +64,7 @@ namespace TextParser.Common
         {
             StringBuilder result = new StringBuilder();
             for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
-            {
+            {                
                 result.Append(GetTokenText(Tokens[tokenIndex]));
             }
             return result.ToString();
@@ -126,6 +132,30 @@ namespace TextParser.Common
             }
 
             return tokenTextBuilder.ToString();
-        }      
+        }
+
+        // Static internal
+
+        private bool IsZeroToken(Token token)
+        {
+            return token.StringLength == 0;
+        }
+
+        private string GetZeroTokenText(Token token)
+        {
+            string result = string.Empty;            
+            if (IsZeroToken(token))
+            {
+                if (token.TokenKind == TokenKind.LineFeed)
+                {
+                    result = "\n";
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Not zero token");
+            }
+            return result;
+        }
     }
 }

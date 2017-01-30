@@ -9,15 +9,19 @@ namespace TextParser.Tests
     [TestClass]
     public class ParsedTextTests
     {
-        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "my w", "</b>", "orld!", "</p>" };        
-        private static readonly ISet<int> PlainTextInXhtml = new HashSet<int> { 1, 3, 5 };        
+        private static readonly Token ZeroToken = new Token()
+        {
+            XhtmlIndex = 0,
+            StringPosition = 0,
+            StringLength = 0,
+            TokenKind = TokenKind.LineFeed
+        };
 
         // Public
 
-        [TestMethod]
         public void PlainTextForTokenInSinglePlainTextElementTest()
         {
-            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+            ParsedText parsedText = CreateDefaultParsedText();
             Token testToken = new Token
             {
                 XhtmlIndex = 1,
@@ -33,7 +37,7 @@ namespace TextParser.Tests
         [TestMethod]
         public void PlainTextForCompoundTokenTest()
         {
-            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+            ParsedText parsedText = CreateDefaultParsedText();
             Token testToken = new Token
             {
                 XhtmlIndex = 3,
@@ -48,7 +52,7 @@ namespace TextParser.Tests
         [TestMethod]
         public void AllPlainTextTest()
         {
-            ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
+            ParsedText parsedText = CreateDefaultParsedText();
             string expected = "Hello, my world!";
             string actual = parsedText.GetPlainText();
             Assert.AreEqual(expected, actual);;
@@ -57,22 +61,48 @@ namespace TextParser.Tests
         [TestMethod]
         public void PlainTextForTagTest()
         {
+            ParsedText parsedText = CreateParsedTextWithTags();
+            string[] expected = { "First paragraph", "Second paragraph" };
+            string[] actual = parsedText.Tags.Select(tag => parsedText.GetTagText(tag)).ToArray();
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AllPlainTextZeroTokensTest()
+        {
+            ParsedText parsedText = CreateParsedTextWithTags();
+            string expected = "First paragraph\n\nSecondParagraph";
+            string actual = parsedText.GetPlainText();
+            Assert.AreEqual(expected, actual);
+        }
+
+        // Static internal
+
+        private static ParsedText CreateDefaultParsedText()
+        {
+            string[] xhtml = { "<p>", "Hello, ", "<b>", "my w", "</b>", "orld!", "</p>" };
+            ISet<int> plainTextInXhtml = new HashSet<int> { 1, 3, 5 };            
+            return CreateParsedTextWithXhtml(xhtml, plainTextInXhtml);
+        }
+
+        private static ParsedText CreateParsedTextWithTags()
+        {
             string[] xhtml = { "<html>", "<p>", "First paragraph", "</p>", "<p>", "Second paragraph", "</p>", "</html>" };
             HashSet<int> plainTextInXhtml = new HashSet<int> { 2, 5 };
-            ParsedText parsedText = CreateParsedText(xhtml, plainTextInXhtml);
-            Tag[] testTags = {
+            ParsedText parsedText = CreateParsedTextWithXhtml(xhtml, plainTextInXhtml);
+            Tag[] tags = {
                 new Tag
                 {
                     TagName = string.Empty,
                     TokenPosition = 0,
-                    TokenLength = 3
+                    TokenLength = 4
 
                 },
                 new Tag
                 {
                     TagName = string.Empty,
-                    TokenPosition = 3,
-                    TokenLength = 3
+                    TokenPosition = 4,
+                    TokenLength = 4
                 }
             };
             Token[] tokens =
@@ -80,6 +110,8 @@ namespace TextParser.Tests
                 new Token {XhtmlIndex = 2, StringPosition = 0, StringLength = 5, TokenKind = TokenKind.Alphabetic},
                 new Token {XhtmlIndex = 2, StringPosition = 5, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
                 new Token {XhtmlIndex = 2, StringPosition = 6, StringLength = 9, TokenKind = TokenKind.Alphabetic},
+                ZeroToken,
+                ZeroToken,
                 new Token {XhtmlIndex = 5, StringPosition = 0, StringLength = 6, TokenKind = TokenKind.Alphabetic},
                 new Token {XhtmlIndex = 5, StringPosition = 6, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
                 new Token {XhtmlIndex = 5, StringPosition = 7, StringLength = 9, TokenKind = TokenKind.Alphabetic}
@@ -88,18 +120,18 @@ namespace TextParser.Tests
             {
                 parsedText.AddToken(token);
             }
-            string[] expected = { "First paragraph", "Second paragraph" };
-            string[] actual = testTags.Select(tag => parsedText.GetTagText(tag)).ToArray();
-            CollectionAssert.AreEqual(expected, actual);
+            foreach (Tag tag in tags)
+            {
+                parsedText.AddTag(tag);
+            }
+            return parsedText;
         }
 
-        // Internal
-
-        private ParsedText CreateParsedText(string[] xhtml, ISet<int> plainTextInXhtml)
+        private static ParsedText CreateParsedTextWithXhtml(string[] xhtml, ISet<int> plainTextInXhtml)
         {
-            var result = new ParsedText();
-            result.SetXhtml(xhtml, plainTextInXhtml);            
-            return result;
+            var parsedText = new ParsedText();
+            parsedText.SetXhtml(xhtml, plainTextInXhtml);
+            return parsedText;
         }
     }
 }

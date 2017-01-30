@@ -19,6 +19,14 @@ namespace TextParser.Xhtml.Tagging
             {"h6", new TagState("Heading") }
         };
         private bool IsEmptyBuffer => fTagsBuffer.Count == 0;
+        private int TokenPosition => fParsedText.Tokens.Count - 1;
+        private static readonly Token ZeroToken = new Token()
+        {
+            XhtmlIndex = 0,
+            StringPosition = 0,
+            StringLength = 0,
+            TokenKind = TokenKind.LineFeed
+        };
 
         // Public
 
@@ -37,27 +45,32 @@ namespace TextParser.Xhtml.Tagging
             }            
         }
         
-        public void ProcessTagsBuffer(int xhtmlIndex, int characterIndex, int tokenPosition)
+        public void ProcessTagsBuffer(int xhtmlIndex, int stringPosition, bool isLastXhtmlElement)
         {
             bool hasUnprocessedTags = true;
             while (!IsEmptyBuffer && hasUnprocessedTags)
             {
                 TagBufferItem tagBufferItem = fTagsBuffer.Peek();
-                if ((tagBufferItem.PlainTextXhtmlIndex == xhtmlIndex) && (tagBufferItem.CharacterIndex == characterIndex))
+                if ((tagBufferItem.PlainTextXhtmlIndex == xhtmlIndex) && (tagBufferItem.CharacterIndex == stringPosition))
                 {
                     TagState tagState = tagBufferItem.TagState;
+                    bool needToAddToken = !(isLastXhtmlElement || (TokenPosition == -1));
                     switch (tagBufferItem.TagKind)
                     {
                         case TagKind.Open:                            
-                            tagState.StartTokenPosition = tokenPosition + 1;
+                            tagState.StartTokenPosition = TokenPosition + 1;
                             break;
                         case TagKind.Close:
-                            int tokenLength = tokenPosition - tagState.StartTokenPosition + 1;
+                            int tokenLength = TokenPosition - tagState.StartTokenPosition + (needToAddToken ? 2: 1);
                             if (tokenLength > 0)
                             {
                                 SaveTag(tagState, tokenLength);
                             }
                             break;
+                    }
+                    if (needToAddToken)
+                    {
+                        fParsedText.AddToken(ZeroToken);
                     }
                     fTagsBuffer.Dequeue();
                 }
@@ -91,6 +104,6 @@ namespace TextParser.Xhtml.Tagging
             };
             fParsedText.AddTag(tag);
             tagState.Close();
-        }               
+        }
     }
 }

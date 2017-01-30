@@ -11,7 +11,6 @@ namespace TextParser.Xhtml
     {
         private readonly XmlReader fXmlReader;
         private readonly XhtmlTagger fXhtmlTagger;
-        private int CurrentTokenIndex => fParsedText.Tokens.Count - 1; //fParsedText.Tokens.Count == 0 ? 0 : fParsedText.Tokens.Count - 1;
         private int fPlainTextXhtmlIndex;
 
         // Public
@@ -37,7 +36,7 @@ namespace TextParser.Xhtml
 
         protected override void ProcessTags()
         {
-            fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, ProcessingCharacterIndex, CurrentTokenIndex);
+            fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, ProcessingCharacterIndex, fLastXhtmlElement == ProcessingXhtmlIndex);
         }        
 
         protected override bool IsBreak()
