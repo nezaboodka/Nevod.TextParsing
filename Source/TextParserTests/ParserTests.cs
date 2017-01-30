@@ -151,6 +151,32 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
+        public void PlainTextMultipleParagraphTagsTest()
+        {
+            string testString = "First paragraph\n\nSecond paragraph\n\nThird paragraph";
+            string[] expectedTags =
+            {
+                "First paragraph",
+                "Second paragraph",
+                "Third paragraph"
+            };
+            ParsedText parsedText = Parser.ParsePlainText(testString);
+            string[] actualTags = parsedText.Tags.Select(tag => parsedText.GetTagText(tag)).ToArray();
+            CollectionAssert.AreEqual(expectedTags, actualTags);
+        }
+
+        [TestMethod]
+        public void PlainTextSingleParapgraphTagTest()
+        {
+            string testString = "Single\nparagraph";
+            string[] expectedResult =
+            {
+                "Single\nparagraph"
+            };
+            ParsePlainTextAndTestTags(testString, expectedResult);
+        }
+
+        [TestMethod]
         public void XhtmlTokensCompoundTokensTest()
         {
             string testString = "<p>Hello, <b>w</b>orld!</p>";
@@ -240,7 +266,13 @@ namespace TextParser.Tests
         {
             Tuple<string, TokenKind>[] result = GetTokensFromParsedText(Parser.ParsePlainText(testString));
             CollectionAssert.AreEqual(result, expectedResult);
-        }        
+        }
+
+        private static void ParsePlainTextAndTestTags(string testString, string[] expectedTags)
+        {
+            string[] actualTags = GetTagsFromParsedText(Parser.ParsePlainText(testString));
+            CollectionAssert.AreEqual(expectedTags, actualTags);
+        }
 
         private static void ParseXhtmlAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedTokens, string[] expectedXhtmlElements)
         {
@@ -254,8 +286,13 @@ namespace TextParser.Tests
         private static void ParseXhtmlAndTestTags(string testString, string[] expectedTags)
         {
             ParsedText parsedText = Parser.ParseXhtmlText(testString);
-            string[] actualTags = parsedText.Tags.Select(x => parsedText.GetTagText(x)).ToArray();
+            string[] actualTags = GetTagsFromParsedText(parsedText);
             CollectionAssert.AreEqual(expectedTags, actualTags);
+        }
+
+        private static string[] GetTagsFromParsedText(ParsedText parsedText)
+        {
+            return parsedText.Tags.Select(parsedText.GetTagText).ToArray();
         }
 
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
