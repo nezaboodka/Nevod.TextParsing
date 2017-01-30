@@ -75,6 +75,7 @@
     <Compile Include="Common\WordBreak\WordBreakBuffer.cs" />
     <Compile Include="Common\WordBreak\WordBreaker.cs" />
     <Compile Include="Common\WordBreak\WordBreakTable.cs" />
+    <Compile Include="PlainText\PlainTextParapraphsTagger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Parser.cs" />
     <Compile Include="Xhtml\XhtmlParser.cs" />

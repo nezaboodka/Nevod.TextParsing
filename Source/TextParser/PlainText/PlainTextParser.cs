@@ -5,8 +5,9 @@ namespace TextParser.PlainText
 {
     internal class PlainTextParser : Parser
     {
-        private string fText;
+        private readonly string fText;
         private bool fHasNext;
+        private readonly PlainTextParapraphsTagger fPlainTextParapraphsTagger;        
 
         // Public
 
@@ -16,6 +17,7 @@ namespace TextParser.PlainText
             fParsedText.AddPlainTextElement(text);
             fText = text;
             fHasNext = true;
+            fPlainTextParapraphsTagger = new PlainTextParapraphsTagger(fParsedText);
         }
 
         public override void Dispose() { }
@@ -39,6 +41,21 @@ namespace TextParser.PlainText
             return result;
         }
 
-        protected override void ProcessTags() { }        
+        protected override void ProcessTags()
+        {
+            if (fParsedText.Tokens.Count > 0)
+            {
+                if (CharacterBuffer.CurrentCharacterInfo.StringPosition < fText.Length - 1)
+                {
+                    TokenKind lastTokenKind = fParsedText.Tokens[fParsedText.Tokens.Count - 1].TokenKind;
+                    fPlainTextParapraphsTagger.ProcessToken(lastTokenKind);
+                }
+                else
+                {
+                    fPlainTextParapraphsTagger.ProcessEndOfText();
+                }
+                
+            }
+        }        
     }
 }
