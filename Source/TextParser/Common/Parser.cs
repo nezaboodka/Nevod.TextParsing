@@ -11,8 +11,8 @@ namespace TextParser.Common
         private readonly WordBreaker fWordBreaker = new WordBreaker();
         private int fTokenStartPosition;
         private int fTokenStartXhtmlIndex;
-        private int fCurrentTokenLength;
-        
+        private int fCurrentTokenLength;        
+
         protected int fXhtmlIndex;
         protected readonly ParsedText fParsedText = new ParsedText();        
         protected int ProcessingXhtmlIndex => CharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
@@ -38,10 +38,9 @@ namespace TextParser.Common
 
         // Internal
 
-        protected virtual ParsedText Parse()
+        private ParsedText Parse()
         {
-            InitializeBuffer();
-            fTokenStartXhtmlIndex = CharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            InitializeLookahead();            
             ProcessTags();
             while (NextCharacter())
             {
@@ -56,13 +55,14 @@ namespace TextParser.Common
             return fParsedText;
         }
 
-        private void InitializeBuffer()
+        private void InitializeLookahead()
         {
             NextCharacter();
             NextCharacter();
+            fTokenStartXhtmlIndex = CharacterBuffer.NextCharacterInfo.XhtmlIndex;
         }
 
-        protected virtual bool NextCharacter()
+        protected bool NextCharacter()
         {
             bool hasNext;
             if (CharacterBuffer.NextCharacter())
@@ -117,12 +117,6 @@ namespace TextParser.Common
         {
             return fWordBreaker.IsBreak();
         }
-
-        //private void AddCharacter(char c)
-        //{
-        //    WordBreak.WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
-        //    fWordBreaker.AddWordBreak(wordBreak);
-        //}
 
         private void MoveNext()
         {

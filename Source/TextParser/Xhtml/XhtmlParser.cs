@@ -11,7 +11,7 @@ namespace TextParser.Xhtml
     {
         private readonly XmlReader fXmlReader;
         private readonly XhtmlTagger fXhtmlTagger;
-        private int CurrentTokenIndex => fParsedText.Tokens.Count - 1; //fParsedText.Tokens.Count == 0 ? 0 : fParsedText.Tokens.Count - 1;
+        private int CurrentTokenIndex => fParsedText.Tokens.Count - 1;
         private int fPlainTextXhtmlIndex;
 
         // Public
