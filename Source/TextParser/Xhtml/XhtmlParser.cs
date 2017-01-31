@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using TextParser.Common;
 using TextParser.Common.Contract;
@@ -133,15 +134,18 @@ namespace TextParser.Xhtml
 
         private void ProcessElement(string elementName, TagKind tagKind)
         {
-            string elementRepresentation;
-            if (tagKind == TagKind.Open)
+            string elementRepresentation = string.Empty;
+            switch (tagKind)
             {
-                elementRepresentation = (tagKind == TagKind.Empty) ? $"<{fXmlReader.Name}/>" : $"<{fXmlReader.Name}>";
-                
-            }
-            else
-            {
-                elementRepresentation = $"</{elementName}>";
+                case TagKind.Open:
+                    elementRepresentation = $"<{fXmlReader.Name}>";
+                    break;
+                case TagKind.Empty:
+                    elementRepresentation = $"<{fXmlReader.Name}/>";
+                    break;
+                case TagKind.Close:
+                    elementRepresentation = $"</{elementName}>";
+                    break;
             }
             fParsedText.AddXhtmlElement(elementRepresentation);
             if (tagKind != TagKind.Empty)
