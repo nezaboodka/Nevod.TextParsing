@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParser", "TextParser\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParserDemoApplication", "TextParserDemoApplication\TextParserDemoApplication.csproj", "{06C5207A-124F-4520-8E25-30C4D2A374BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParserTests", "TextParserTests\TextParserTests.csproj", "{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextParser.Tests", "Tests\TextParser.Tests.csproj", "{61C5B010-8B3B-49AF-9EFA-DE1BA710A548}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
