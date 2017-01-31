@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using TextParser.Common;
+using TextParser.Common.Contract;
 
 namespace TextParser.Tests
 {
@@ -153,25 +154,23 @@ namespace TextParser.Tests
         [TestMethod]
         public void PlainTextMultipleParagraphTagsTest()
         {
-            string testString = "First paragraph\n\nSecond paragraph\n\nThird paragraph";
-            string[] expectedTags =
+            string testString = "First paragraph\n\nSecond paragraph\n\nThird paragraph ab";
+            string[] expectedResult =
             {
                 "First paragraph",
                 "Second paragraph",
-                "Third paragraph"
+                "Third paragraph ab"
             };
-            ParsedText parsedText = Parser.ParsePlainText(testString);
-            string[] actualTags = parsedText.Tags.Select(tag => parsedText.GetTagText(tag)).ToArray();
-            CollectionAssert.AreEqual(expectedTags, actualTags);
+            ParsePlainTextAndTestTags(testString, expectedResult);
         }
 
         [TestMethod]
         public void PlainTextSingleParapgraphTagTest()
         {
-            string testString = "A\nsingle\nparagraph";
+            string testString = "A\nsingle\nparagraph ab";
             string[] expectedResult =
             {
-                "A\nsingle\nparagraph"
+                "A\nsingle\nparagraph ab"
             };
             ParsePlainTextAndTestTags(testString, expectedResult);
         }

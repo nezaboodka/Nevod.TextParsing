@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using TextParser;
 using TextParser.Common;
+using TextParser.Common.Contract;
 
 namespace TextParserDemoApplication
 {

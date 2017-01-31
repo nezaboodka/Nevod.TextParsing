@@ -1,4 +1,6 @@
-﻿namespace TextParser.Common
+﻿using TextParser.Common.Contract;
+
+namespace TextParser.Common
 {
     internal interface IParserFactory
     {

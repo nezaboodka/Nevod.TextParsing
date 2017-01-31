@@ -1,4 +1,4 @@
-﻿namespace TextParser.Common
+﻿namespace TextParser.Common.Contract
 {
     public enum TokenKind
     {

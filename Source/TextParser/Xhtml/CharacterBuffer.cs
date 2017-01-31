@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TextParser.Common
+﻿namespace TextParser.Xhtml
 {
     internal struct CharacterPosition
     {

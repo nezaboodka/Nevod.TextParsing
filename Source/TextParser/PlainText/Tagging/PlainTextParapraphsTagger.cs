@@ -1,6 +1,7 @@
 ﻿using TextParser.Common;
+using TextParser.Common.Contract;
 
-namespace TextParser.PlainText
+namespace TextParser.PlainText.Tagging
 {
     internal class PlainTextParapraphsTagger
     {

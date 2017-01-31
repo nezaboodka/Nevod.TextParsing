@@ -1,4 +1,4 @@
-﻿namespace TextParser.Common.WordBreak
+﻿namespace TextParser.Common.WordBreaking
 {
     internal class WordBreakBuffer
     {

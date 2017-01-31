@@ -1,22 +1,25 @@
 ﻿using TextParser.Common;
-using TextParser.Common.WordBreak;
+using TextParser.Common.Contract;
+using TextParser.Common.WordBreaking;
+using TextParser.PlainText.Tagging;
 
 namespace TextParser.PlainText
 {
     internal class PlainTextParser : Parser
     {
+        private const int LookAheadSize = 2;
         private readonly string fText;
-        private bool fHasNext;
-        private readonly PlainTextParapraphsTagger fPlainTextParapraphsTagger;        
+        private readonly PlainTextParapraphsTagger fPlainTextParapraphsTagger;
+        private int fLookAheadPosition = -1;
+
+        private int CurrentPosition => fLookAheadPosition - LookAheadSize;
 
         // Public
 
         public PlainTextParser(string text)
         {
-            fXhtmlIndex = 0;      
             fParsedText.AddPlainTextElement(text);
             fText = text;
-            fHasNext = true;
             fPlainTextParapraphsTagger = new PlainTextParapraphsTagger(fParsedText);
         }
 
@@ -24,30 +27,72 @@ namespace TextParser.PlainText
 
         // Internal
 
-        protected override bool FillBuffer(out string buffer)
+        protected override ParsedText Parse()
+        {
+            InitializeLookahead();
+            while (NextCharacter())
+            {
+                fTokenClassifier.AddCharacter(fText[CurrentPosition]);
+                if (fWordBreaker.IsBreak())
+                {
+                    SaveToken();
+                    ProcessTags();
+                }
+            }
+            return fParsedText;
+        }
+
+        private void InitializeLookahead()
+        {
+            NextCharacter();
+            NextCharacter();
+        }
+
+        private void SaveToken()
+        {
+            var token = new Token
+            {
+                TokenKind = fTokenClassifier.TokenKind,
+                XhtmlIndex = 0,
+                StringPosition = fTokenStartPosition,
+                StringLength = CurrentPosition - fTokenStartPosition + 1
+            };
+            fParsedText.AddToken(token);
+            fTokenStartPosition = CurrentPosition + 1;
+            fTokenClassifier.Reset();
+        }
+
+        private bool NextCharacter()
         {
             bool result;
-            buffer = default(string);
-            if (fHasNext && fText.Length > 0)
+            if (CurrentPosition < fText.Length - 1)
             {
-                buffer = fText;
-                fHasNext = false;
+                fLookAheadPosition++;
                 result = true;
             }
             else
             {
                 result = false;
             }
+            if (fLookAheadPosition < fText.Length)
+            {
+                WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(fText[fLookAheadPosition]);
+                fWordBreaker.AddWordBreak(wordBreak);
+            }
+            else
+            {
+                fWordBreaker.NextWordBreak();
+            }
             return result;
         }
 
-        protected override void ProcessTags()
+        private void ProcessTags()
         {
-            if (fParsedText.Tokens.Count > 0)
+            if (CurrentTokenIndex >= 0)
             {
-                if (CharacterBuffer.CurrentCharacterInfo.StringPosition < fText.Length - 1)
+                if (CurrentPosition < fText.Length - 1)
                 {
-                    TokenKind lastTokenKind = fParsedText.Tokens[fParsedText.Tokens.Count - 1].TokenKind;
+                    TokenKind lastTokenKind = fParsedText.Tokens[CurrentTokenIndex].TokenKind;
                     fPlainTextParapraphsTagger.ProcessToken(lastTokenKind);
                 }
                 else
@@ -56,6 +101,6 @@ namespace TextParser.PlainText
                 }
                 
             }
-        }        
+        }
     }
 }

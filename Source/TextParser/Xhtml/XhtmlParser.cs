@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Xml;
 using TextParser.Common;
+using TextParser.Common.Contract;
+using TextParser.Common.WordBreaking;
 using TextParser.Xhtml.Tagging;
 
 namespace TextParser.Xhtml
@@ -11,8 +11,13 @@ namespace TextParser.Xhtml
     {
         private readonly XmlReader fXmlReader;
         private readonly XhtmlTagger fXhtmlTagger;
-        private int CurrentTokenIndex => fParsedText.Tokens.Count - 1;
+        private readonly CharacterBuffer fCharacterBuffer = new CharacterBuffer();
         private int fPlainTextXhtmlIndex;
+        private int fTokenStartXhtmlIndex;
+        private int fXhtmlIndex;
+
+        private int ProcessingXhtmlIndex => fCharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
+        private int ProcessingCharacterIndex => fCharacterBuffer.CurrentCharacterInfo.StringPosition;
 
         // Public
 
@@ -30,19 +35,70 @@ namespace TextParser.Xhtml
 
         // Internal
 
-        protected override bool FillBuffer(out string buffer)
+        protected override ParsedText Parse()
         {
-            return ReadXhtmlToPlainText(out buffer);
+            int currentTokenLength = 0;
+            InitializeLookahead();
+            ProcessTags();
+            while (NextCharacter())
+            {
+                currentTokenLength++;
+                fTokenClassifier.AddCharacter(fCharacterBuffer.CurrentCharacterInfo.Character);
+                if (IsBreak())
+                {
+                    SaveToken(currentTokenLength);
+                    currentTokenLength = 0;
+                    ProcessTags();
+                }
+            }
+            return fParsedText;
         }
 
-        protected override void ProcessTags()
+        private void InitializeLookahead()
+        {
+            NextCharacter();
+            NextCharacter();
+            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+        }
+
+        private void ProcessTags()
         {
             fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, ProcessingCharacterIndex, CurrentTokenIndex);
-        }        
+        }
 
-        protected override bool IsBreak()
+        private bool NextCharacter()
         {
-            return base.IsBreak() || fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex);
+            bool hasNext;
+            if (fCharacterBuffer.NextCharacter())
+            {
+                hasNext = true;
+            }
+            else
+            {
+                string newBuffer;
+                hasNext = ReadXhtmlToPlainText(out newBuffer);
+                if (hasNext && newBuffer.Length > 0)
+                {
+                    fCharacterBuffer.SetBuffer(newBuffer, fXhtmlIndex);
+                }
+            }
+            if (hasNext)
+            {
+                char c = fCharacterBuffer.NextOfNextCharacterInfo.Character;
+                WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(c);
+                fWordBreaker.AddWordBreak(wordBreak);
+            }
+            else if (HasCharacters())
+            {
+                MoveNext();
+                hasNext = true;
+            }
+            return hasNext;
+        }
+        
+        private bool IsBreak()
+        {
+            return fWordBreaker.IsBreak() || fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex);
         }
 
         private bool ReadXhtmlToPlainText(out string plainText)
@@ -90,13 +146,39 @@ namespace TextParser.Xhtml
             fParsedText.AddXhtmlElement(elementRepresentation);
             if (tagKind != TagKind.Empty)
             {
-                fXhtmlTagger.ProcessXhtmlTag(elementName, tagKind, fPlainTextXhtmlIndex, CharacterBuffer.NextOfNextCharacterInfo.StringPosition);
+                fXhtmlTagger.ProcessXhtmlTag(elementName, tagKind, fPlainTextXhtmlIndex, fCharacterBuffer.NextOfNextCharacterInfo.StringPosition);
             }
         }
 
         private void ProcessText(string value)
         {
             fParsedText.AddPlainTextElement(value);
+        }
+
+        private void MoveNext()
+        {
+            fCharacterBuffer.MoveNext();
+            fWordBreaker.NextWordBreak();
+        }
+
+        private bool HasCharacters()
+        {
+            return !fWordBreaker.IsEmptyBuffer();
+        }
+
+        private void SaveToken(int currentTokenLength)
+        {
+            var token = new Token
+            {
+                TokenKind = fTokenClassifier.TokenKind,
+                XhtmlIndex = fTokenStartXhtmlIndex,
+                StringPosition = fTokenStartPosition,
+                StringLength = currentTokenLength
+            };
+            fParsedText.AddToken(token);
+            fTokenStartPosition = fCharacterBuffer.NextCharacterInfo.StringPosition;
+            fTokenStartXhtmlIndex = fCharacterBuffer.NextCharacterInfo.XhtmlIndex;
+            fTokenClassifier.Reset();
         }        
     }
 }

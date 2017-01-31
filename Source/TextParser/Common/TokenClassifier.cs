@@ -1,4 +1,5 @@
-﻿using TextParser.Common.WordBreak;
+﻿using TextParser.Common.Contract;
+using TextParser.Common.WordBreaking;
 
 namespace TextParser.Common
 {
@@ -80,7 +81,7 @@ namespace TextParser.Common
 
         private void ProcessWhiteSpace(char c)
         {
-            if (WordBreakTable.GetCharacterWordBreak(c) != WordBreak.WordBreak.Whitespace)
+            if (WordBreakTable.GetCharacterWordBreak(c) != WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.Symbol;                
             }
@@ -95,7 +96,7 @@ namespace TextParser.Common
             } else if (char.IsLetter(c))
             {
                 TokenKind = TokenKind.Alphabetic;
-            } else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.WordBreak.Whitespace)
+            } else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.Whitespace)
             {
                 TokenKind = TokenKind.WhiteSpace;
             } else if (IsLineSeparator(c))

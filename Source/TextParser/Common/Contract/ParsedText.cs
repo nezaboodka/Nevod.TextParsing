@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace TextParser.Common
+namespace TextParser.Common.Contract
 {
     public class ParsedText
     {
-
         private readonly List<Token> fTokens;
         private readonly List<Tag> fTags;
         private readonly List<DocumentTag> fDocumentTags;

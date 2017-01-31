@@ -1,4 +1,5 @@
 ﻿using TextParser.Common;
+using TextParser.Common.Contract;
 
 namespace TextParser.PlainText
 {
