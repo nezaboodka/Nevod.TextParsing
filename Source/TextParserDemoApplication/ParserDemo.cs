@@ -12,19 +12,30 @@ namespace TextParserDemoApplication
         {
             string fileName = args[0];
             string text = File.ReadAllText(fileName);
-            long fileSize = new FileInfo(fileName).Length;
-            Stopwatch stopwatch = new Stopwatch();
+            long fileSize = new FileInfo(fileName).Length;            
+            Console.WriteLine($"{fileSize} bytes");
+            MeasurePlainTextParsing(text);
+            MeasureXhtmlParsing(text);
+        }
+
+        // Static internal
+
+        private static void MeasurePlainTextParsing(string text)
+        {
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
             Parser.ParsePlainText(text);
             stopwatch.Stop();
-            long elapsedPlainText = stopwatch.ElapsedMilliseconds;
-            stopwatch.Restart();
+            Console.WriteLine($"As plain text: {stopwatch.ElapsedMilliseconds} ms");
+        }
+
+        private static void MeasureXhtmlParsing(string text)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Parser.ParseXhtmlText(text);
-            stopwatch.Stop();;
-            long elapsedXhtml = stopwatch.ElapsedMilliseconds;
-            Console.WriteLine($"{fileSize} bytes");
-            Console.WriteLine($"As plain text: {elapsedPlainText} ms");
-            Console.WriteLine($"As xhtml: {elapsedXhtml} ms");
+            stopwatch.Stop();
+            Console.WriteLine($"As xhtml: {stopwatch.ElapsedMilliseconds} ms");
         }
     }
 }
