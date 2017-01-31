@@ -168,10 +168,10 @@ namespace TextParser.Tests
         [TestMethod]
         public void PlainTextSingleParapgraphTagTest()
         {
-            string testString = "Single\nparagraph";
+            string testString = "A\nsingle\nparagraph";
             string[] expectedResult =
             {
-                "Single\nparagraph"
+                "A\nsingle\nparagraph"
             };
             ParsePlainTextAndTestTags(testString, expectedResult);
         }

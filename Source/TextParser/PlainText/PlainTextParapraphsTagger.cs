@@ -37,6 +37,10 @@ namespace TextParser.PlainText
                     fPreviousTokenKind = TokenKind.LineFeed;
                 }
             }
+            else
+            {
+                fPreviousTokenKind = TokenKind.Empty;
+            }
         }
 
         public void ProcessEndOfText()
