@@ -270,12 +270,12 @@ namespace TextParser.Tests
         public void XhtmlDocumentTags()
         {
             string testString =
-                @"<?xml version=\""1.0\"" encoding=\""UTF-8\""?><html>
+                @"<?xml version=""1.0"" encoding=""UTF-8""?><html>
                 <head>
-                <meta name=\""Author\"" content=\""Иван Шимко\""/>
-                <meta name=\""publisher\"" content=\""Home\""/>
-                <meta name=\""meta:page-count\"" content=\""1\""/>
-                <meta name=\""dc:publisher\"" content=\""Home\""/>
+                <meta name=""Author"" content=""Иван Шимко""/>
+                <meta name=""publisher"" content=""Home""/>
+                <meta name=""meta:page-count"" content=""1""/>
+                <meta name=""dc:publisher"" content=""Home""/>
                 <title>Title</title>
                 </head>
                 <body><h1>Title</h1>                                                                
