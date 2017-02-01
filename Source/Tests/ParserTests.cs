@@ -266,6 +266,31 @@ namespace TextParser.Tests
             ParseXhtmlAndTestTags(testString, expectedTags);
         }
 
+        [TestMethod]
+        public void XhtmlDocumentTags()
+        {
+            string testString =
+                @"<?xml version=\""1.0\"" encoding=\""UTF-8\""?><html>
+                <head>
+                <meta name=\""Author\"" content=\""Иван Шимко\""/>
+                <meta name=\""publisher\"" content=\""Home\""/>
+                <meta name=\""meta:page-count\"" content=\""1\""/>
+                <meta name=\""dc:publisher\"" content=\""Home\""/>
+                <title>Title</title>
+                </head>
+                <body><h1>Title</h1>                                                                
+                <p>First paragraph.</p>                                
+                </body></html>";
+            Tuple<string, string>[] expectedResult = 
+            {
+                new Tuple<string, string>("Author", "Иван Шимко"), 
+                new Tuple<string, string>("publisher", "Home"), 
+                new Tuple<string, string>("meta:page-count", "1"), 
+                new Tuple<string, string>("dc:publisher", "Home")
+            };
+            ParseXhtmlAndTestDocumentTags(testString, expectedResult);
+        }
+
         // Static internal
 
         private static void ParsePlainTextAndTest(string testString, Tuple<string, TokenKind>[] expectedResult)
@@ -295,6 +320,13 @@ namespace TextParser.Tests
             CollectionAssert.AreEqual(expectedTags, actualTags);
         }
 
+        private static void ParseXhtmlAndTestDocumentTags(string testString, Tuple<string, string>[] expectedResult)
+        {
+            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            Tuple<string, string>[] actualResult = GetDocumentTagsFromParsedText(parsedText);
+            CollectionAssert.AreEqual(expectedResult, actualResult);
+        }
+
         private static string[] GetTagsFromParsedText(ParsedText parsedText)
         {
             return parsedText.Tags.Select(parsedText.GetTagText).ToArray();
@@ -303,6 +335,11 @@ namespace TextParser.Tests
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
             return parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind)).ToArray();
+        }
+
+        private static Tuple<string, string>[] GetDocumentTagsFromParsedText(ParsedText parsedText)
+        {
+            return parsedText.DocumentTags.Select(tag => new Tuple<string, string>(tag.TagName, tag.Content)).ToArray();
         }
     }
 }
