@@ -33,18 +33,18 @@ namespace TextParser.Xhtml.Tagging
             TagState tagState;
             if (fTagsInfo.TryGetValue(xhtmlTagName, out tagState))
             {
-                var tagBufferItem = new TagBufferItem(tagState, tagKind, plainTextXhtmlIndex, characterIndex);
+                var tagBufferItem = new TagBufferItem(tagState, tagKind, plainTextXhtmlIndex);
                 fTagsBuffer.Enqueue(tagBufferItem);
             }            
         }
         
-        public void ProcessTagsBuffer(int xhtmlIndex, int characterIndex, int tokenPosition)
+        public void ProcessTagsBuffer(int xhtmlIndex, int tokenPosition)
         {
             bool hasUnprocessedTags = true;
             while (!IsEmptyBuffer && hasUnprocessedTags)
             {
                 TagBufferItem tagBufferItem = fTagsBuffer.Peek();
-                if ((tagBufferItem.PlainTextXhtmlIndex == xhtmlIndex) && (tagBufferItem.CharacterIndex == characterIndex))
+                if (tagBufferItem.PlainTextXhtmlIndex == xhtmlIndex)
                 {
                     TagState tagState = tagBufferItem.TagState;
                     switch (tagBufferItem.TagKind)
@@ -75,7 +75,7 @@ namespace TextParser.Xhtml.Tagging
             if (!IsEmptyBuffer)
             {
                 TagBufferItem lastBufferItem = fTagsBuffer.Peek();
-                result = (lastBufferItem.PlainTextXhtmlIndex == plainTextXhtmlIndex) && (lastBufferItem.CharacterIndex == characterIndex);
+                result = (lastBufferItem.PlainTextXhtmlIndex == plainTextXhtmlIndex);
             }
             return result;
         }

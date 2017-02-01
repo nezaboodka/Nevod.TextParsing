@@ -11,15 +11,13 @@
     {
         public TagState TagState { get; }
         public int PlainTextXhtmlIndex { get; }
-        public int CharacterIndex { get; }
         public TagKind TagKind { get; }
 
-        public TagBufferItem(TagState tagState, TagKind tagKind, int plainTextXhtmlIndex, int characterIndex)
+        public TagBufferItem(TagState tagState, TagKind tagKind, int plainTextXhtmlIndex)
         {
             TagState = tagState;
             TagKind = tagKind;
             PlainTextXhtmlIndex = plainTextXhtmlIndex;
-            CharacterIndex = characterIndex;
         }
     }
 }

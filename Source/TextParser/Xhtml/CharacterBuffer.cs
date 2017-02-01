@@ -6,6 +6,7 @@
         public int XhtmlIndex;
         public int StringPosition;
         public char Character => Buffer[StringPosition];
+        public bool IsLastCharacterInBuffer => Buffer == null || StringPosition == Buffer.Length - 1;
     }
 
     internal class CharacterBuffer

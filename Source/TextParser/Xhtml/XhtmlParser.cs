@@ -19,6 +19,7 @@ namespace TextParser.Xhtml
 
         private int ProcessingXhtmlIndex => fCharacterBuffer.CurrentCharacterInfo.XhtmlIndex;
         private int ProcessingCharacterIndex => fCharacterBuffer.CurrentCharacterInfo.StringPosition;
+        private bool IsLastCharacterInBuffer => fCharacterBuffer.CurrentCharacterInfo.IsLastCharacterInBuffer;
 
         // Public
 
@@ -64,8 +65,11 @@ namespace TextParser.Xhtml
 
         private void ProcessTags()
         {
-            fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, ProcessingCharacterIndex, CurrentTokenIndex);
-        }
+            if (IsLastCharacterInBuffer)
+            {
+                fXhtmlTagger.ProcessTagsBuffer(ProcessingXhtmlIndex, CurrentTokenIndex);
+            }
+        }        
 
         private bool NextCharacter()
         {
@@ -99,7 +103,7 @@ namespace TextParser.Xhtml
         
         private bool IsBreak()
         {
-            return fWordBreaker.IsBreak() || fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex);
+            return fWordBreaker.IsBreak() || (IsLastCharacterInBuffer && fXhtmlTagger.IsBreak(ProcessingCharacterIndex, ProcessingXhtmlIndex));
         }
 
         private bool ReadXhtmlToPlainText(out string plainText)
