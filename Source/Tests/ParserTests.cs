@@ -38,7 +38,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("right", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("?", TokenKind.Symbol),
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("word", TokenKind.Alphabetic)
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace)
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
 
@@ -69,7 +69,7 @@ namespace TextParser.Tests
         {
             string testString = "";
             Tuple<string, TokenKind>[] expectedResult = { };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("дня", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("!", TokenKind.Symbol),
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace TextParser.Tests
             {
                 new Tuple<string, TokenKind>("L", TokenKind.Alphabetic),
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -131,7 +131,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>(".", TokenKind.Symbol),
                 new Tuple<string, TokenKind>("4", TokenKind.Numeric),
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("\r", TokenKind.LineFeed), 
                 new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
             };
-            ParsePlainTextAndTest(testString, expectedResult);
+            ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
         [TestMethod]
@@ -176,12 +176,53 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlElementsTest()
+        public void XhtmlElementsTagAfterRootTagTest()
         {
             string testString = "<html><body>Test <empty/><b>string</b></body></html>";
             string[] expectedResult = { "<html>", "<body>", "Test ", "<empty/>", "<b>", "string", "</b>", "</body>", "</html>" };
-            string[] actualResult = Parser.ParseXhtmlText(testString).XhtmlElements.ToArray();
-            CollectionAssert.AreEqual(expectedResult, actualResult);
+            ParsePlainTextAndTestXhtmlElements(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void XhtmlElementsTextAfterRootTagTest()
+        {
+            string testString = "<html>Some text</html>";
+            string[] expectedResult = {"<html>", "Some text", "</html>" };
+            ParsePlainTextAndTestXhtmlElements(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void XhtmlElementsSingleRootTagTest()
+        {
+            string testString = "<html></html>";
+            string[] expectedResult = {"<html>", "</html>"};
+            ParsePlainTextAndTestXhtmlElements(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void XhtmlElementsDocumentTagsTest()
+        {
+            string testString = @"<?xml version=""1.0"" encoding=""UTF-8""?><html>
+                <head>
+                <meta name=""Author"" content=""Иван Шимко""/>                
+                <title>Title</title>
+                </head><body><p>First paragraph.</p>                                
+                </body></html>";
+            string[] expectedRestult = { "<body>", "<p>", "First paragraph.","</p>", "</body>" };
+            ParsePlainTextAndTestXhtmlElements(testString, expectedRestult);
+        }
+
+        [TestMethod]
+        public void XhtmlElementsDocumentTagsEmptyTitleTest()
+        {
+            string testString = @"<?xml version=""1.0"" encoding=""UTF-8""?><html>
+                <head>
+                <meta name=""Author"" content=""Иван Шимко""/>                
+                <title/>
+                </head><body><p>First paragraph.</p>                                
+                </body></html>";
+            string[] expectedRestult = { "<body>", "<p>", "First paragraph.", "</p>", "</body>" };
+            ParsePlainTextAndTestXhtmlElements(testString, expectedRestult);
         }
 
         [TestMethod]
@@ -267,7 +308,7 @@ namespace TextParser.Tests
         }
 
         [TestMethod]
-        public void XhtmlDocumentTags()
+        public void XhtmlDocumentTagsTest()
         {
             string testString =
                 @"<?xml version=""1.0"" encoding=""UTF-8""?><html>
@@ -286,14 +327,34 @@ namespace TextParser.Tests
                 new Tuple<string, string>("Author", "Иван Шимко"), 
                 new Tuple<string, string>("publisher", "Home"), 
                 new Tuple<string, string>("meta:page-count", "1"), 
-                new Tuple<string, string>("dc:publisher", "Home")
+                new Tuple<string, string>("dc:publisher", "Home"),
+                new Tuple<string, string>("title", "Title"),
+            };
+            ParseXhtmlAndTestDocumentTags(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void XhtmlDocumentTagsEmptyTitleTest()
+        {
+            string testString =
+                @"<?xml version=""1.0"" encoding=""UTF-8""?><html>
+                <head>
+                <meta name=""Author"" content=""Иван Шимко""/>
+                <title/>
+                </head>
+                <body><h1>Title</h1>                                                                
+                <p>First paragraph.</p>                                
+                </body></html>";
+            Tuple<string, string>[] expectedResult =
+            {
+                new Tuple<string, string>("Author", "Иван Шимко"),
             };
             ParseXhtmlAndTestDocumentTags(testString, expectedResult);
         }
 
         // Static internal
 
-        private static void ParsePlainTextAndTest(string testString, Tuple<string, TokenKind>[] expectedResult)
+        private static void ParsePlainTextAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedResult)
         {
             Tuple<string, TokenKind>[] result = GetTokensFromParsedText(Parser.ParsePlainText(testString));
             CollectionAssert.AreEqual(result, expectedResult);
@@ -305,11 +366,16 @@ namespace TextParser.Tests
             CollectionAssert.AreEqual(expectedTags, actualTags);
         }
 
+        private static void ParsePlainTextAndTestXhtmlElements(string testString, string[] expectedRestult)
+        {
+            string[] actualResult = Parser.ParseXhtmlText(testString).XhtmlElements.ToArray();
+            CollectionAssert.AreEqual(expectedRestult, actualResult);
+        }
+
         private static void ParseXhtmlAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedTokens)
         {
             ParsedText parsedText = Parser.ParseXhtmlText(testString);
             Tuple<string, TokenKind>[] actualTokens = GetTokensFromParsedText(parsedText);
-            List<string> actualXhtmlElements = parsedText.XhtmlElements;
             CollectionAssert.AreEqual(expectedTokens, actualTokens);
         }
 
@@ -318,7 +384,7 @@ namespace TextParser.Tests
             ParsedText parsedText = Parser.ParseXhtmlText(testString);
             string[] actualTags = GetTagsFromParsedText(parsedText);
             CollectionAssert.AreEqual(expectedTags, actualTags);
-        }
+        }        
 
         private static void ParseXhtmlAndTestDocumentTags(string testString, Tuple<string, string>[] expectedResult)
         {
