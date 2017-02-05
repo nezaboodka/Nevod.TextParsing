@@ -11,7 +11,6 @@ namespace TextParser.Xhtml.Tagging
         private readonly Dictionary<string, TagState> fTagsInfo = new Dictionary<string, TagState>()
         {
             {"p", new TagState("Paragraph") },
-            {"title", new TagState("Title") },
             {"h1", new TagState("Heading") },
             {"h2", new TagState("Heading") },
             {"h3", new TagState("Heading") },
