@@ -88,13 +88,9 @@ namespace TextParser
                     if (!IsIgnorableNode(nodeType))
                     {                            
                         if (nodeType == XmlNodeType.Element)
-                        {
                             TryParseSingleDocumentTag();
-                        }
                         else if (nodeType == XmlNodeType.EndElement)
-                        {
                             endOfHead = fXmlReader.Name.Equals(HeadTag, StringComparison.InvariantCultureIgnoreCase);
-                        }                                                            
                     }
                 }
             }
@@ -111,13 +107,9 @@ namespace TextParser
                 {
                     SaveXhtmlElement(RepresentOpenTag(HtmlTag));
                     if ((fXmlReader.NodeType == XmlNodeType.Element) || (fXmlReader.NodeType == XmlNodeType.EndElement))
-                    {
                         ProcessElement();
-                    }
                     else if (fXmlReader.NodeType == XmlNodeType.Text)
-                    {
                         ProcessText();
-                    }
                 }
             }
             else
@@ -223,26 +215,18 @@ namespace TextParser
             string elementRepresentation = ElementRepresentation(tagKind, tagName);
             SaveXhtmlElement(elementRepresentation);
             if (tagKind != TagKind.Empty)
-            {
                 fXhtmlTagger.ProcessXhtmlTag(tagName, tagKind, fPlainTextXhtmlIndex, fCharacterBuffer.NextOfNextCharacterInfo.StringPosition);
-            }
             if (fDocumentTagsMode)
-            {
                 fEndOfFile = (tagKind == TagKind.Close) && tagName.Equals(BodyTag);
-            }
         }
 
         private TagKind GetCurrentTagKind()
         {
             TagKind result;
             if (fXmlReader.NodeType == XmlNodeType.Element)
-            {
                 result = (fXmlReader.IsEmptyElement) ? TagKind.Empty : TagKind.Open;
-            }
             else
-            {
                 result = TagKind.Close;
-            }
             return result;
         }
 
@@ -347,7 +331,6 @@ namespace TextParser
         public bool NextCharacter()
         {
             bool result;
-
             if ((!string.IsNullOrEmpty(fPosition.Buffer)) && (fPosition.StringPosition < fPosition.Buffer.Length - 1))
             {
                 result = true;
@@ -355,9 +338,7 @@ namespace TextParser
                 fPosition.StringPosition++;
             }
             else
-            {
                 result = false;
-            }
             return result;
         }
 

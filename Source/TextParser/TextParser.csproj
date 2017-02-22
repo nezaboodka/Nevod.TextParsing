@@ -63,17 +63,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlainText\PlainTextParser.cs" />
+    <Compile Include="PlainTextParser.cs" />
     <Compile Include="ParsedText.cs" />
     <Compile Include="TokenClassifier.cs" />
     <Compile Include="WordBreakBuffer.cs" />
     <Compile Include="WordBreaker.cs" />
     <Compile Include="WordBreakTable.cs" />
-    <Compile Include="PlainText\PlainTextParapraphsTagger.cs" />
+    <Compile Include="PlainTextParapraphsTagger.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="Xhtml\XhtmlParser.cs" />
-    <Compile Include="Xhtml\XhtmlTagger.cs" />
+    <Compile Include="XhtmlParser.cs" />
+    <Compile Include="XhtmlTagger.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

@@ -83,18 +83,14 @@ namespace TextParser
                 result = true;
             }
             else
-            {
                 result = false;
-            }
             if (fLookAheadPosition < fText.Length)
             {
                 WordBreak wordBreak = WordBreakTable.GetCharacterWordBreak(fText[fLookAheadPosition]);
                 fWordBreaker.AddWordBreak(wordBreak);
             }
             else
-            {
                 fWordBreaker.NextWordBreak();
-            }
             return result;
         }
 
@@ -108,10 +104,7 @@ namespace TextParser
                     fPlainTextParapraphsTagger.ProcessToken(lastTokenKind);
                 }
                 else
-                {
                     fPlainTextParapraphsTagger.ProcessEndOfText();
-                }
-                
             }
         }
     }
