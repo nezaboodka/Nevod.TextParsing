@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
-using TextParser.Common.Contract;
-using TextParser.Common.WordBreaking;
-using TextParser.Xhtml.Tagging;
 
-namespace TextParser.Xhtml
+namespace TextParser
 {
-    internal class XhtmlParser : Parser
+    public class XhtmlParser : Parser
     {
         private const string HtmlTag = "html";
         private const string HeadTag = "head";
@@ -32,10 +29,23 @@ namespace TextParser.Xhtml
 
         // Public
 
+        public static ParsedText Parse(string xhtmlText)
+        {
+            ParsedText result;
+            using (var parser = new XhtmlParser(xhtmlText))
+                result = parser.Parse();
+            return result;
+        }
+
         public XhtmlParser(string xhtmlText)
-        {            
-            fXmlReader = XmlReader.Create(new StringReader(xhtmlText));
-            fXhtmlTagger = new XhtmlTagger(fParsedText);
+        {
+            if (xhtmlText != null)
+            {
+                fXmlReader = XmlReader.Create(new StringReader(xhtmlText));
+                fXhtmlTagger = new XhtmlTagger(fParsedText);
+            }
+            else
+                throw new ArgumentNullException(nameof(xhtmlText));
         }
 
         public override void Dispose()
@@ -43,9 +53,7 @@ namespace TextParser.Xhtml
             fXmlReader.Dispose();
         }
 
-        // Internal
-
-        protected override ParsedText Parse()
+        public override ParsedText Parse()
         {
             int currentTokenLength = 0;
             fDocumentTagsMode = TryParseDocumentTags();
@@ -64,6 +72,8 @@ namespace TextParser.Xhtml
             }
             return fParsedText;
         }
+
+        // Internal
 
         private bool TryParseDocumentTags()
         {
@@ -274,8 +284,6 @@ namespace TextParser.Xhtml
         {
             fParsedText.AddXhtmlElement(element);
         }
-    
-        // Static internal
 
         private static bool IsIgnorableNode(XmlNodeType nodeType)
         {
@@ -314,5 +322,58 @@ namespace TextParser.Xhtml
             }
             return result;
         }        
+    }
+
+    internal class CharacterBuffer
+    {
+        private CharacterPosition fCurrentCharacterPosition;
+        private CharacterPosition fNextCharacterPosition;
+        private CharacterPosition fPosition;
+
+        // Public
+
+        public CharacterPosition CurrentCharacterInfo => fCurrentCharacterPosition;
+        public CharacterPosition NextCharacterInfo => fNextCharacterPosition;
+        public CharacterPosition NextOfNextCharacterInfo => fPosition;
+
+        public void SetBuffer(string buffer, int xhtmlIndex)
+        {
+            MoveNext();
+            fPosition.Buffer = buffer;
+            fPosition.StringPosition = 0;
+            fPosition.XhtmlIndex = xhtmlIndex;
+        }
+
+        public bool NextCharacter()
+        {
+            bool result;
+
+            if ((!string.IsNullOrEmpty(fPosition.Buffer)) && (fPosition.StringPosition < fPosition.Buffer.Length - 1))
+            {
+                result = true;
+                MoveNext();
+                fPosition.StringPosition++;
+            }
+            else
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public void MoveNext()
+        {
+            fCurrentCharacterPosition = NextCharacterInfo;
+            fNextCharacterPosition = fPosition;
+        }
+    }
+
+    internal struct CharacterPosition
+    {
+        public string Buffer;
+        public int XhtmlIndex;
+        public int StringPosition;
+        public char Character => Buffer[StringPosition];
+        public bool IsLastCharacterInBuffer => Buffer == null || StringPosition == Buffer.Length - 1;
     }
 }

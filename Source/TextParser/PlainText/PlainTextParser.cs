@@ -1,11 +1,8 @@
-﻿using TextParser.Common;
-using TextParser.Common.Contract;
-using TextParser.Common.WordBreaking;
-using TextParser.PlainText.Tagging;
+﻿using System;
 
-namespace TextParser.PlainText
+namespace TextParser
 {
-    internal class PlainTextParser : Parser
+    public class PlainTextParser : Parser
     {
         private const int LookAheadSize = 2;
         private readonly string fText;
@@ -16,18 +13,31 @@ namespace TextParser.PlainText
 
         // Public
 
-        public PlainTextParser(string text)
+        public static ParsedText Parse(string plainText)
         {
-            fParsedText.AddPlainTextElement(text);
-            fText = text;
-            fPlainTextParapraphsTagger = new PlainTextParapraphsTagger(fParsedText);
+            ParsedText result;
+            using (var parser = new PlainTextParser(plainText))
+                result = parser.Parse();
+            return result;
         }
 
-        public override void Dispose() { }
+        public PlainTextParser(string plainText)
+        {
+            if (plainText != null)
+            {
+                fParsedText.AddPlainTextElement(plainText);
+                fText = plainText;
+                fPlainTextParapraphsTagger = new PlainTextParapraphsTagger(fParsedText);
+            }
+            else
+                throw new ArgumentNullException(nameof(plainText));
+        }
 
-        // Internal
+        public override void Dispose()
+        {
+        }
 
-        protected override ParsedText Parse()
+        public override ParsedText Parse()
         {
             InitializeLookahead();
             while (NextCharacter())
@@ -41,6 +51,8 @@ namespace TextParser.PlainText
             }
             return fParsedText;
         }
+
+        // Internal
 
         private void InitializeLookahead()
         {

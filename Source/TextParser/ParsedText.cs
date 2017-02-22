@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace TextParser.Common.Contract
+namespace TextParser
 {
     public class ParsedText
     {
@@ -40,16 +40,10 @@ namespace TextParser.Common.Contract
         public string GetTokenText(Token token)
         {
             string result;
-
             if (token.StringPosition + token.StringLength <= fXhtmlElements[token.XhtmlIndex].Length)
-            {
                 result = fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, token.StringLength);
-            }
             else
-            {
                 result = GetCompoundTokenText(token);
-            }
-
             return result;
         }
 
@@ -57,9 +51,7 @@ namespace TextParser.Common.Contract
         {
             StringBuilder result = new StringBuilder();
             for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
-            {
                 result.Append(GetTokenText(Tokens[tokenIndex]));
-            }
             return result.ToString();
         }
 
@@ -106,25 +98,51 @@ namespace TextParser.Common.Contract
             tokenTextBuilder.Append(fXhtmlElements[token.XhtmlIndex].Substring(token.StringPosition, currentSubstringLength));
             int copiedLength = currentSubstringLength;            
             int plainTextElement = fPlainTextInXhtml.BinarySearch(token.XhtmlIndex) + 1;
-
             while (copiedLength < token.StringLength)
             {
                 int xhtmlElement = fPlainTextInXhtml[plainTextElement];
                 int remainedLength = token.StringLength - copiedLength;                
                 if (fXhtmlElements[xhtmlElement].Length <= remainedLength)
-                {
                     currentSubstringLength = fXhtmlElements[xhtmlElement].Length;
-                }
                 else
-                {
                     currentSubstringLength = remainedLength;
-                }
                 tokenTextBuilder.Append(fXhtmlElements[xhtmlElement].Substring(0, currentSubstringLength));
                 copiedLength += currentSubstringLength;
                 plainTextElement++;
             }
-
             return tokenTextBuilder.ToString();
         }      
+    }
+
+    public struct Token
+    {
+        public int XhtmlIndex;
+        public int StringPosition;
+        public int StringLength;
+        public TokenKind TokenKind;
+    }
+
+    public enum TokenKind
+    {
+        Alphabetic,
+        Alphanumeric,
+        LineFeed,
+        Numeric,
+        Symbol,
+        WhiteSpace,
+        Empty
+    }
+
+    public struct Tag
+    {
+        public int TokenPosition;
+        public int TokenLength;
+        public string TagName;
+    }
+
+    public struct DocumentTag
+    {
+        public string TagName;
+        public string Content;
     }
 }

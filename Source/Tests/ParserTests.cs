@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using TextParser.Common;
-using TextParser.Common.Contract;
 
 namespace TextParser.Tests
 {
@@ -77,7 +75,7 @@ namespace TextParser.Tests
         public void NullTest()
         {
             string testString = null;
-            Parser.ParsePlainText(testString);
+            PlainTextParser.Parse(testString);
         }
 
         [TestMethod]
@@ -356,39 +354,39 @@ namespace TextParser.Tests
 
         private static void ParsePlainTextAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedResult)
         {
-            Tuple<string, TokenKind>[] result = GetTokensFromParsedText(Parser.ParsePlainText(testString));
+            Tuple<string, TokenKind>[] result = GetTokensFromParsedText(PlainTextParser.Parse(testString));
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
         private static void ParsePlainTextAndTestTags(string testString, string[] expectedTags)
         {
-            string[] actualTags = GetTagsFromParsedText(Parser.ParsePlainText(testString));
+            string[] actualTags = GetTagsFromParsedText(PlainTextParser.Parse(testString));
             CollectionAssert.AreEqual(expectedTags, actualTags);
         }
 
         private static void ParsePlainTextAndTestXhtmlElements(string testString, string[] expectedRestult)
         {
-            string[] actualResult = Parser.ParseXhtmlText(testString).XhtmlElements.ToArray();
+            string[] actualResult = XhtmlParser.Parse(testString).XhtmlElements.ToArray();
             CollectionAssert.AreEqual(expectedRestult, actualResult);
         }
 
         private static void ParseXhtmlAndTestTokens(string testString, Tuple<string, TokenKind>[] expectedTokens)
         {
-            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            ParsedText parsedText = XhtmlParser.Parse(testString);
             Tuple<string, TokenKind>[] actualTokens = GetTokensFromParsedText(parsedText);
             CollectionAssert.AreEqual(expectedTokens, actualTokens);
         }
 
         private static void ParseXhtmlAndTestTags(string testString, string[] expectedTags)
         {
-            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            ParsedText parsedText = XhtmlParser.Parse(testString);
             string[] actualTags = GetTagsFromParsedText(parsedText);
             CollectionAssert.AreEqual(expectedTags, actualTags);
         }        
 
         private static void ParseXhtmlAndTestDocumentTags(string testString, Tuple<string, string>[] expectedResult)
         {
-            ParsedText parsedText = Parser.ParseXhtmlText(testString);
+            ParsedText parsedText = XhtmlParser.Parse(testString);
             Tuple<string, string>[] actualResult = GetDocumentTagsFromParsedText(parsedText);
             CollectionAssert.AreEqual(expectedResult, actualResult);
         }

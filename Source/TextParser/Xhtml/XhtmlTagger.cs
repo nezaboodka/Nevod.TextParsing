@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using TextParser.Common;
-using TextParser.Common.Contract;
 
-namespace TextParser.Xhtml.Tagging
+namespace TextParser
 {
     internal class XhtmlTagger
     {
@@ -92,5 +90,44 @@ namespace TextParser.Xhtml.Tagging
             fParsedText.AddTag(tag);
             tagState.Close();
         }               
+    }
+
+    internal class TagBufferItem
+    {
+        public TagState TagState { get; }
+        public int PlainTextXhtmlIndex { get; }
+        public TagKind TagKind { get; }
+
+        public TagBufferItem(TagState tagState, TagKind tagKind, int plainTextXhtmlIndex)
+        {
+            TagState = tagState;
+            TagKind = tagKind;
+            PlainTextXhtmlIndex = plainTextXhtmlIndex;
+        }
+    }
+
+    internal enum TagKind
+    {
+        Open,
+        Close,
+        Empty
+    }
+
+    internal class TagState
+    {
+        public string TagName { get; }
+        public int StartTokenPosition { get; set; }
+        public bool IsOpen => StartTokenPosition != -1;
+
+        public TagState(string tagName)
+        {
+            TagName = tagName;
+            StartTokenPosition = -1;
+        }
+
+        public void Close()
+        {
+            StartTokenPosition = -1;
+        }
     }
 }

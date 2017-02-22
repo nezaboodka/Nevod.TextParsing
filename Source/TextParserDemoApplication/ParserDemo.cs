@@ -2,12 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using TextParser;
-using TextParser.Common;
-using TextParser.Common.Contract;
 
 namespace TextParserDemoApplication
 {
-    class ParserDemo
+    public class ParserDemo
     {
         static void Main(string[] args)
         {
@@ -25,7 +23,7 @@ namespace TextParserDemoApplication
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            Parser.ParsePlainText(text);
+            PlainTextParser.Parse(text);
             stopwatch.Stop();
             Console.WriteLine($"As plain text: {stopwatch.ElapsedMilliseconds} ms");
         }
@@ -34,7 +32,7 @@ namespace TextParserDemoApplication
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            Parser.ParseXhtmlText(text);
+            XhtmlParser.Parse(text);
             stopwatch.Stop();
             Console.WriteLine($"As xhtml: {stopwatch.ElapsedMilliseconds} ms");
         }

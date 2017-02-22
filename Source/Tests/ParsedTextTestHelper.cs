@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using TextParser.Common;
-using TextParser.Common.Contract;
 
 namespace TextParser.Tests
 {
