@@ -1,6 +1,6 @@
 ﻿namespace TextParser
 {
-    internal class PlainTextParapraphsTagger // Tagging of paragraphs in plain text. Double line feed is treated as a new paragraph.
+    internal class PlainTextTagger // Tagging of paragraphs in plain text. Double line feed is treated as a new paragraph.
     {
         private readonly ParsedText fParsedText;
         private TokenKind fPreviousTokenKind = TokenKind.Empty;
@@ -10,7 +10,7 @@
 
         // Public
 
-        public PlainTextParapraphsTagger(ParsedText parsedText)
+        public PlainTextTagger(ParsedText parsedText)
         {
             fParsedText = parsedText;
         }

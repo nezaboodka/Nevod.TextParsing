@@ -6,7 +6,7 @@ namespace TextParser
     {
         private const int LookAheadSize = 2;
         private readonly string fText;
-        private readonly PlainTextParapraphsTagger fPlainTextParapraphsTagger;
+        private readonly PlainTextTagger fPlainTextParapraphsTagger;
         private int fLookAheadPosition = -1;
 
         private int CurrentPosition => fLookAheadPosition - LookAheadSize;
@@ -27,7 +27,7 @@ namespace TextParser
             {
                 fParsedText.AddPlainTextElement(plainText);
                 fText = plainText;
-                fPlainTextParapraphsTagger = new PlainTextParapraphsTagger(fParsedText);
+                fPlainTextParapraphsTagger = new PlainTextTagger(fParsedText);
             }
             else
                 throw new ArgumentNullException(nameof(plainText));

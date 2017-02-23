@@ -69,7 +69,7 @@
     <Compile Include="WordBreakBuffer.cs" />
     <Compile Include="WordBreaker.cs" />
     <Compile Include="WordBreakTable.cs" />
-    <Compile Include="PlainTextParapraphsTagger.cs" />
+    <Compile Include="PlainTextTagger.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="XhtmlParser.cs" />
