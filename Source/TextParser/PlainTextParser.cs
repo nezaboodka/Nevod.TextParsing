@@ -100,7 +100,7 @@ namespace TextParser
             {
                 if (CurrentPosition < fText.Length - 1)
                 {
-                    TokenKind lastTokenKind = fParsedText.Tokens[CurrentTokenIndex].TokenKind;
+                    TokenKind lastTokenKind = fParsedText.TextTokens[CurrentTokenIndex].TokenKind;
                     fPlainTextParapraphsTagger.ProcessToken(lastTokenKind);
                 }
                 else

@@ -393,12 +393,12 @@ namespace TextParser.Tests
 
         private static string[] GetTagsFromParsedText(ParsedText parsedText)
         {
-            return parsedText.Tags.Select(parsedText.GetTagText).ToArray();
+            return parsedText.FormattingTags.Select(parsedText.GetTagText).ToArray();
         }
 
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
-            return parsedText.Tokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind)).ToArray();
+            return parsedText.TextTokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind)).ToArray();
         }
 
         private static Tuple<string, string>[] GetDocumentTagsFromParsedText(ParsedText parsedText)

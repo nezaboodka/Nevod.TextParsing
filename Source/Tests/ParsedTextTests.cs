@@ -59,15 +59,15 @@ namespace TextParser.Tests
             string[] xhtml = { "<html>", "<p>", "First paragraph", "</p>", "<p>", "Second paragraph", "</p>", "</html>" };
             HashSet<int> plainTextInXhtml = new HashSet<int> { 2, 5 };
             ParsedText parsedText = CreateParsedText(xhtml, plainTextInXhtml);
-            Tag[] testTags = {
-                new Tag
+            FormattingTag[] testTags = {
+                new FormattingTag
                 {
                     TagName = string.Empty,
                     TokenPosition = 0,
                     TokenLength = 3
 
                 },
-                new Tag
+                new FormattingTag
                 {
                     TagName = string.Empty,
                     TokenPosition = 3,

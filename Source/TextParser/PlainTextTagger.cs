@@ -5,7 +5,7 @@
         private readonly ParsedText fParsedText;
         private TokenKind fPreviousTokenKind = TokenKind.Empty;
         private int fTagStart = 0;
-        private int TokenPosition => fParsedText.Tokens.Count - 1;
+        private int TokenPosition => fParsedText.TextTokens.Count - 1;
         private const string TagName = "Parapraph";
 
         // Public
@@ -21,7 +21,7 @@
             {
                 if (fPreviousTokenKind == TokenKind.LineFeed)
                 {
-                    fParsedText.AddTag(new Tag
+                    fParsedText.AddTag(new FormattingTag
                     {
                         TagName = TagName,
                         TokenPosition = fTagStart,
@@ -39,7 +39,7 @@
 
         public void ProcessEndOfText()
         {
-            fParsedText.AddTag(new Tag
+            fParsedText.AddTag(new FormattingTag
             {
                 TokenPosition = fTagStart,
                 TokenLength = TokenPosition - fTagStart + 1,

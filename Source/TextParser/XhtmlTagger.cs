@@ -81,7 +81,7 @@ namespace TextParser
 
         private void SaveTag(TagState tagState, int tokenLength)
         {            
-            var tag = new Tag
+            var tag = new FormattingTag
             {
                 TagName = tagState.TagName,
                 TokenPosition = tagState.StartTokenPosition,

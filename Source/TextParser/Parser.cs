@@ -9,7 +9,7 @@ namespace TextParser
         internal readonly TokenClassifier fTokenClassifier = new TokenClassifier();
         internal readonly WordBreaker fWordBreaker = new WordBreaker();
 
-        protected int CurrentTokenIndex => fParsedText.Tokens.Count - 1;
+        protected int CurrentTokenIndex => fParsedText.TextTokens.Count - 1;
 
         // Public
 

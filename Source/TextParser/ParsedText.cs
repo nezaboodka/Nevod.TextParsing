@@ -5,23 +5,23 @@ namespace TextParser
 {
     public class ParsedText
     {
-        private readonly List<Token> fTokens;
-        private readonly List<Tag> fTags;
+        private readonly List<Token> fTextTokens;
+        private readonly List<FormattingTag> fFormattingTags;
         private readonly List<DocumentTag> fDocumentTags;
         private readonly List<string> fXhtmlElements;
         private readonly List<int> fPlainTextInXhtml;
 
         // Public
 
-        public List<Token> Tokens => fTokens;
-        public IEnumerable<Tag> Tags => fTags;
+        public List<Token> TextTokens => fTextTokens;
+        public IEnumerable<FormattingTag> FormattingTags => fFormattingTags;
         public IEnumerable<DocumentTag> DocumentTags => fDocumentTags;
         public List<string> XhtmlElements => fXhtmlElements;
 
         public ParsedText()
         {
-            fTokens = new List<Token>();
-            fTags = new List<Tag>();
+            fTextTokens = new List<Token>();
+            fFormattingTags = new List<FormattingTag>();
             fXhtmlElements = new List<string>();
             fPlainTextInXhtml = new List<int>();
             fDocumentTags = new List<DocumentTag>();
@@ -47,11 +47,11 @@ namespace TextParser
             return result;
         }
 
-        public string GetTagText(Tag tag)
+        public string GetTagText(FormattingTag tag)
         {
             StringBuilder result = new StringBuilder();
             for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
-                result.Append(GetTokenText(Tokens[tokenIndex]));
+                result.Append(GetTokenText(TextTokens[tokenIndex]));
             return result.ToString();
         }
 
@@ -59,17 +59,17 @@ namespace TextParser
 
         internal void AddToken(Token token)
         {
-            fTokens.Add(token);
+            fTextTokens.Add(token);
         }
 
-        internal void AddTag(Tag tag)
+        internal void AddTag(FormattingTag tag)
         {
-            fTags.Add(tag);
+            fFormattingTags.Add(tag);
         }
 
-        internal void AddTags(IEnumerable<Tag> tags)
+        internal void AddTags(IEnumerable<FormattingTag> tags)
         {
-            foreach (Tag tag in tags)
+            foreach (FormattingTag tag in tags)
             {
                 AddTag(tag);
             }
@@ -133,7 +133,7 @@ namespace TextParser
         Empty
     }
 
-    public struct Tag
+    public struct FormattingTag
     {
         public int TokenPosition;
         public int TokenLength;
