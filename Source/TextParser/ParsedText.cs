@@ -124,10 +124,13 @@ namespace TextParser
 
     public enum TokenKind
     {
+        Start,
+        End,
         Alphabetic,
         Alphanumeric,
         LineFeed,
         Numeric,
+        Punctuation,
         Symbol,
         WhiteSpace,
         Empty

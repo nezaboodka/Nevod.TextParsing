@@ -1,9 +1,15 @@
-﻿namespace TextParser
+﻿using System.Collections.Generic;
+
+namespace TextParser
 {
     internal class TokenClassifier
     {
         private const char CR = '\r';
         private const char LF = '\n';
+        private static readonly ISet<char> PunctuationMarks = new SortedSet<char>
+        {
+            '.', ',', '!', '?', '(', ')', '-', '\'', '"', ';', ':'
+        };
 
         // Public
 
@@ -74,13 +80,15 @@
         private void ProcessEmpty(char c)
         {
             if (char.IsDigit(c))
-                TokenKind = TokenKind.Numeric;                
+                TokenKind = TokenKind.Numeric;
             else if (char.IsLetter(c))
                 TokenKind = TokenKind.Alphabetic;
             else if (WordBreakTable.GetCharacterWordBreak(c) == WordBreak.Whitespace)
                 TokenKind = TokenKind.WhiteSpace;
             else if (IsLineSeparator(c))
-                TokenKind = TokenKind.LineFeed;                
+                TokenKind = TokenKind.LineFeed;
+            else if (PunctuationMarks.Contains(c))
+                TokenKind = TokenKind.Punctuation;
             else
                 TokenKind = TokenKind.Symbol;
         }

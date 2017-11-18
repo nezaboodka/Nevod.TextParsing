@@ -14,27 +14,29 @@ namespace TextParser.Tests
             string testString = "The (\"brown\") can't 32.3 feet, right?";
             Tuple<string, TokenKind>[] expectedResult =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("The", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
-                new Tuple<string, TokenKind>("(", TokenKind.Symbol),
-                new Tuple<string, TokenKind>("\"", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("(", TokenKind.Punctuation),
+                new Tuple<string, TokenKind>("\"", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("brown", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("\"", TokenKind.Symbol),
-                new Tuple<string, TokenKind>(")", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("\"", TokenKind.Punctuation),
+                new Tuple<string, TokenKind>(")", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("can", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("'", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("'", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("t", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("32", TokenKind.Numeric),
-                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(".", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("3", TokenKind.Numeric),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("feet", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(",", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("right", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("?", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("?", TokenKind.Punctuation),
+                new Tuple<string, TokenKind>("", TokenKind.End),
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -45,7 +47,9 @@ namespace TextParser.Tests
             string testString = "word";
             Tuple<string, TokenKind>[] expectedResult =
             {
-                new Tuple<string, TokenKind>("word", TokenKind.Alphabetic)
+                new Tuple<string, TokenKind>("", TokenKind.Start),
+                new Tuple<string, TokenKind>("word", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -56,7 +60,26 @@ namespace TextParser.Tests
             string testString = "  \t";
             Tuple<string, TokenKind>[] expectedResult =
             {
-                new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace)
+                new Tuple<string, TokenKind>("", TokenKind.Start),
+                new Tuple<string, TokenKind>("  \t", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("", TokenKind.End)
+            };
+            ParsePlainTextAndTestTokens(testString, expectedResult);
+        }
+
+        [TestMethod]
+        public void SymbolsTest()
+        {
+            string testString = "#hashtag @name";
+            Tuple<string, TokenKind>[] expectedResult =
+            {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
+                new Tuple<string, TokenKind>("#", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("hashtag", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
+                new Tuple<string, TokenKind>("@", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("name", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -66,7 +89,11 @@ namespace TextParser.Tests
         public void EmptyStringTest()
         {
             string testString = "";
-            Tuple<string, TokenKind>[] expectedResult = { };
+            Tuple<string, TokenKind>[] expectedResult = 
+            {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
+                new Tuple<string, TokenKind>("", TokenKind.End)
+            };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
 
@@ -84,24 +111,26 @@ namespace TextParser.Tests
             string testString = "1А класс; 56,31 светового, 45.1 дня!";
             Tuple<string, TokenKind>[] expectedResult =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("1А", TokenKind.Alphanumeric),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("класс", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>(";", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(";", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("56", TokenKind.Numeric),
-                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(",", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("31", TokenKind.Numeric),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("светового", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(",", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("45", TokenKind.Numeric),
-                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(".", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("1", TokenKind.Numeric),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("дня", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("!", TokenKind.Symbol),
+                new Tuple<string, TokenKind>("!", TokenKind.Punctuation),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -112,7 +141,9 @@ namespace TextParser.Tests
             string testString = "L";
             Tuple<string, TokenKind>[] expectedResult =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("L", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -123,11 +154,13 @@ namespace TextParser.Tests
             string testString = "a\u0308b\u0308cd 3.4";
             Tuple<string, TokenKind>[] expectedResult =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("a\u0308b\u0308cd", TokenKind.Symbol),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("3", TokenKind.Numeric),
-                new Tuple<string, TokenKind>(".", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(".", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>("4", TokenKind.Numeric),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -138,6 +171,7 @@ namespace TextParser.Tests
             string testString = "a\nb\r\nc\rd";
             Tuple<string, TokenKind>[] expectedResult =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("\n", TokenKind.LineFeed),
                 new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
@@ -145,6 +179,7 @@ namespace TextParser.Tests
                 new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("\r", TokenKind.LineFeed), 
                 new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParsePlainTextAndTestTokens(testString, expectedResult);
         }
@@ -229,11 +264,13 @@ namespace TextParser.Tests
             string testString = "<p>Hello, <b>w</b>orld!</p>";
             Tuple<string, TokenKind>[] expectedTokens =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("Hello", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>(",", TokenKind.Symbol),
+                new Tuple<string, TokenKind>(",", TokenKind.Punctuation),
                 new Tuple<string, TokenKind>(" ", TokenKind.WhiteSpace),
                 new Tuple<string, TokenKind>("world", TokenKind.Alphabetic),
-                new Tuple<string, TokenKind>("!", TokenKind.Symbol)
+                new Tuple<string, TokenKind>("!", TokenKind.Punctuation),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParseXhtmlAndTestTokens(testString, expectedTokens);
         }
@@ -244,10 +281,12 @@ namespace TextParser.Tests
             string testString = "<html><p>a</p><p>b</p><p>c</p><p>d</p></html>";
             Tuple<string, TokenKind>[] expectedTokens =
             {
+                new Tuple<string, TokenKind>("", TokenKind.Start),
                 new Tuple<string, TokenKind>("a", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("b", TokenKind.Alphabetic),
                 new Tuple<string, TokenKind>("c", TokenKind.Alphabetic),               
-                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic)               
+                new Tuple<string, TokenKind>("d", TokenKind.Alphabetic),
+                new Tuple<string, TokenKind>("", TokenKind.End)
             };
             ParseXhtmlAndTestTokens(testString, expectedTokens);
         }
@@ -398,7 +437,10 @@ namespace TextParser.Tests
 
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
-            return parsedText.TextTokens.Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind)).ToArray();
+            return parsedText
+                .TextTokens
+                .Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind))
+                .ToArray();
         }
 
         private static Tuple<string, string>[] GetDocumentTagsFromParsedText(ParsedText parsedText)

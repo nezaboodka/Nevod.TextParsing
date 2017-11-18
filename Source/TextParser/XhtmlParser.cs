@@ -55,6 +55,7 @@ namespace TextParser
 
         public override ParsedText Parse()
         {
+            fParsedText.AddToken(StartToken);
             int currentTokenLength = 0;
             fDocumentTagsMode = TryParseDocumentTags();
             InitializeLookahead();
@@ -70,6 +71,7 @@ namespace TextParser
                     ProcessTags();
                 }
             }
+            fParsedText.AddToken(EndToken);
             return fParsedText;
         }
 

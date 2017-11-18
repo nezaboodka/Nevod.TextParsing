@@ -39,6 +39,7 @@ namespace TextParser
 
         public override ParsedText Parse()
         {
+            fParsedText.AddToken(StartToken);
             InitializeLookahead();
             while (NextCharacter())
             {
@@ -49,6 +50,7 @@ namespace TextParser
                     ProcessTags();
                 }
             }
+            fParsedText.AddToken(EndToken);
             return fParsedText;
         }
 
