@@ -7,14 +7,40 @@ namespace TextParserDemoApplication
 {
     public class ParserDemo
     {
-        static void Main(string[] args)
+        private const int IterationsCount = 5;
+
+        static int Main(string[] args)
         {
-            string fileName = args[0];
-            string text = File.ReadAllText(fileName);
-            long fileSize = new FileInfo(fileName).Length;            
-            Console.WriteLine($"{fileSize} bytes");
-            MeasurePlainTextParsing(text);
-            MeasureXhtmlParsing(text);
+            if (args.Length == 1)
+            {
+                string fileName = args[0];
+                Console.WriteLine($"File: {fileName}");
+                try
+                {
+                    string text = File.ReadAllText(fileName);
+                    long fileSize = new FileInfo(fileName).Length;
+                    Console.WriteLine($"Size: {fileSize} bytes");
+                    Console.WriteLine();
+                    for (int i = 0; i < IterationsCount; i++)
+                    {
+                        Console.WriteLine($"Iteration: {i + 1}");
+                        MeasurePlainTextParsing(text);
+                        MeasureXhtmlParsing(text);
+                        Console.WriteLine();
+                    }
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("Error: File not found");
+                    return -1;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: File not specified");
+                return -1;
+            }
+            return 0;
         }
 
         // Static internal
