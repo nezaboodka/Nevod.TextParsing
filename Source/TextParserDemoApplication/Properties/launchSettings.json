@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TextParserDemoApplication": {
+      "commandName": "Project",
+      "commandLineArgs": "test.10Mb.txt"
+    }
+  }
+}
