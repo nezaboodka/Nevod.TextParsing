@@ -38,13 +38,13 @@ namespace Sharik.IO
             if (minPath != null)
             {
                 minPath = minPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                if (String.Compare(rootPath, 0, minPath, 0, rootPath.Length) != 0)
+                if (string.Compare(rootPath, 0, minPath, 0, rootPath.Length) != 0)
                     throw new ArgumentException("minPath should match rootPath");
             }
             if (maxPath != null)
             {
                 maxPath = maxPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                if (String.Compare(rootPath, 0, maxPath, 0, rootPath.Length) != 0)
+                if (string.Compare(rootPath, 0, maxPath, 0, rootPath.Length) != 0)
                     throw new ArgumentException("maxPath should match rootPath");
             }
             if (maxLevel < 0 && options.OmitIntermediateLevels)
@@ -133,7 +133,7 @@ namespace Sharik.IO
         private static int ComparePaths(string path1, string path2, int startFrom)
         {
             var length = Math.Min(path1.Length, path2.Length) - startFrom;
-            var result = String.Compare(path1, startFrom, path2, startFrom, length);
+            var result = string.Compare(path1, startFrom, path2, startFrom, length);
             return result;
         }
 

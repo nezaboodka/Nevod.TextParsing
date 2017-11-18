@@ -5,9 +5,24 @@ using System.Globalization;
 
 namespace Sharik.Text
 {
-
     public sealed class Slice
     {
+        // Properties
+
+        public readonly string Source;
+        public readonly int Position;
+        public readonly int Length;
+
+        public int End { get { return Position + Length - 1; } }
+
+        public bool IsUndefined { get { return Source == null; } }
+
+        public char this[int index]
+        {
+            get { if (index < Length) return Source[Position + index]; else throw new IndexOutOfRangeException(); }
+        }
+
+        // Procedures
 
         public Slice Clone()
         {
@@ -30,10 +45,10 @@ namespace Sharik.Text
             if (value != null)
             {
                 if (value is Slice)
-                    return Slice.InternalCompare(this, value as Slice, CultureInfo.CurrentCulture,
+                    return Slice.InternalCompare(this, (Slice)value, CultureInfo.CurrentCulture,
                         CompareOptions.None);
                 else if (value is String)
-                    return Slice.InternalCompare(this, (value as String).Slice(), CultureInfo.CurrentCulture,
+                    return Slice.InternalCompare(this, ((String)value).Slice(), CultureInfo.CurrentCulture,
                         CompareOptions.None);
                 else
                     throw new ArgumentException("value must be of Slice or String type");
@@ -583,25 +598,6 @@ namespace Sharik.Text
             return Source.Slice(Position + Length);
         }
 
-        // Properties
-
-        public readonly string Source;
-
-        public readonly int Position;
-
-        public readonly int Length;
-
-        public int End { get { return Position + Length - 1; } }
-
-        public bool IsUndefined { get { return Source == null; } }
-
-        public char this[int index]
-        {
-            get { if (index < Length) return Source[Position + index]; else throw new IndexOutOfRangeException(); }
-        }
-
-        // Procedures
-
         public static readonly char[] Whitespaces =
         {
             (char)0x9, (char)0xA, (char)0xB, (char)0xC, (char)0xD, (char)0x20, (char)0x85,
@@ -609,6 +605,16 @@ namespace Sharik.Text
             (char)0x2004, (char)0x2005, (char)0x2006, (char)0x2007, (char)0x2008, (char)0x2009,
             (char)0x200A, (char)0x200B, (char)0x2028, (char)0x2029, (char)0x3000, (char)0xFEFF
         };
+
+        public static bool IsNull(Slice slice)
+        {
+            return slice == null; // slice.Source == null;
+        }
+
+        public static bool IsNullOrEmpty(Slice slice)
+        {
+            return slice == null || slice.Length == 0 || slice.Source == null;
+        }
 
         public static int Compare(Slice sliceA, Slice sliceB)
         {
@@ -722,7 +728,6 @@ namespace Sharik.Text
 
         internal Slice()
         {
-            // All fields are initialized with zero.
         }
 
         internal Slice(string source)
@@ -775,7 +780,7 @@ namespace Sharik.Text
         {
             if (culture != null)
             {
-                if (value != null && value.Source != null)
+                if (!IsNull(value))
                 {
                     if (startIndex >= 0 && startIndex <= Length)
                     {
@@ -809,7 +814,7 @@ namespace Sharik.Text
         {
             if (culture != null)
             {
-                if (value != null && value.Source != null)
+                if (!IsNull(value))
                 {
                     if (Length > 0)
                     {
@@ -976,13 +981,13 @@ namespace Sharik.Text
                 for (int j = 0; j < separators.Length; j++)
                 {
                     String separator = separators[j];
-                    if (!String.IsNullOrEmpty(separator))
+                    if (!string.IsNullOrEmpty(separator))
                     {
                         int currentSepLength = separator.Length;
                         if (this[i] == separator[0] && currentSepLength <= Length - i)
                         {
                             if (currentSepLength == 1 ||
-                                String.CompareOrdinal(Source, Position + i, separator, 0, currentSepLength) == 0)
+                                string.CompareOrdinal(Source, Position + i, separator, 0, currentSepLength) == 0)
                             {
                                 sepList[foundCount] = i;
                                 lengthList[foundCount] = currentSepLength;
@@ -1007,9 +1012,9 @@ namespace Sharik.Text
             {
                 if ((Object)sliceA != (Object)sliceB)
                 {
-                    if (sliceA != null)
+                    if (!IsNull(sliceA))
                     {
-                        if (sliceB != null)
+                        if (!IsNull(sliceB))
                         {
                             return culture.CompareInfo.Compare(
                                 sliceA.Source, sliceA.Position, sliceA.Length,
@@ -1041,9 +1046,9 @@ namespace Sharik.Text
                 {
                     if ((Object)sliceA != (Object)sliceB)
                     {
-                        if (sliceA != null)
+                        if (!IsNull(sliceA))
                         {
-                            if (sliceB != null)
+                            if (!IsNull(sliceB))
                             {
                                 if (lengthA > sliceA.Length - indexA)
                                     lengthA = sliceA.Length - indexA;
@@ -1106,8 +1111,8 @@ namespace Sharik.Text
         public static Slice SliceUntil(this Slice slice, int position, bool required, bool searchFromRightToLeft,
             Slice until)
         {
-            var i = slice.Length;
-            if (until != null && until.Length > 0)
+            int i = slice.Length;
+            if (!Text.Slice.IsNullOrEmpty(until) && until.Length > 0)
             {
                 if (!searchFromRightToLeft)
                     i = slice.IndexOf(until, position);

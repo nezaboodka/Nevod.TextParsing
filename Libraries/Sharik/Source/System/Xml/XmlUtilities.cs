@@ -101,7 +101,7 @@ namespace Sharik.Xml
 
         static Slice ParseXPath(Slice patchScript, out Slice remainder)
         {
-            Slice result = null;
+            Slice result = default(Slice);
             int n = patchScript.IndexOf('\n');
             if (n >= 0)
             {

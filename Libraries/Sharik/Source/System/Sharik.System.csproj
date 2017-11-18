@@ -1,122 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{116E8E3F-811D-4014-B197-0D7D17F6CEE5}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sharik</RootNamespace>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PackageId>Sharik.System</PackageId>
     <AssemblyName>Sharik.System</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <RootNamespace>Sharik.System</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>Nezaboodka Team</Authors>
+    <Company>Nezaboodka Software Ltd</Company>
+    <Product>Nezaboodka</Product>
+    <Description />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <OutputPath>..\..\..\..\Build\Debug\bin\Sharik.System</OutputPath>
-    <IntermediateOutputPath>..\..\..\..\Build\Debug\obj\Sharik.System</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>..\..\..\..\Build\Debug\bin\Sharik.System\</OutputPath>
+    <IntermediateOutputPath>..\..\..\..\Build\Debug\obj\Sharik.System\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>True</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <OutputPath>..\..\..\..\Build\Release\bin\Sharik.System</OutputPath>
-    <IntermediateOutputPath>..\..\..\..\Build\Release\obj\Sharik.System</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>..\..\..\..\Build\Release\bin\Sharik.System\</OutputPath>
+    <IntermediateOutputPath>..\..\..\..\Build\Release\obj\Sharik.System\</IntermediateOutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\AssemblyInfo.Common.Sharik.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ConvertString.cs" />
-    <Compile Include="Holder.cs" />
-    <Compile Include="StopwatchEx.cs" />
-    <Compile Include="Security\AccessToken.cs" />
-    <Compile Include="IO\CompositeStream.cs" />
-    <Compile Include="IO\WrapperStream.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="IO\FileSystemScanner.cs" />
-    <Compile Include="MultiComparison.cs" />
-    <Compile Include="Error.cs" />
-    <Compile Include="Text.Tokenizing\Syntax.cs" />
-    <Compile Include="Text\FormatSyntax.cs" />
-    <Compile Include="Threading\LockFreeDictionary.cs" />
-    <Compile Include="Threading\LockFreeList.cs" />
-    <Compile Include="Threading\Pipe.cs" />
-    <Compile Include="Threading\Pipeline.cs" />
-    <Compile Include="Reader.cs" />
-    <Compile Include="Text\Slice.cs" />
-    <Compile Include="Text\Format.cs" />
-    <Compile Include="Threading\ThreadVariable.cs" />
-    <Compile Include="Threading\ThreadGuard.cs" />
-    <Compile Include="Text.Tokenizing\Tokenizer.cs" />
-    <Compile Include="Text.Tokenizing\NaturalTextSyntax.cs" />
-    <Compile Include="Text.Tokenizing\SourceCodeSyntax.cs" />
-    <Compile Include="Xml\XmlUtilities.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

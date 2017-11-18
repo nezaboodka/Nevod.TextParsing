@@ -10,17 +10,17 @@ namespace Sharik.UnitTests
 {
     class Program
     {
-        public static void Main(string[] args)
-        {
-            //Console.WriteLine("\n\n*** N*DEF Sample ***\n");
-            //NdefSample.Main();
-            Console.WriteLine("\n\n*** Pipeline Sample ***\n");
-            PipelineSample.Main();
-            //Console.WriteLine("\n\n*** Format Sample ***\n");
-            //FormatSample.Main();
-            //Console.WriteLine("\n\n*** XmlPatch Sample ***\n");
-            //XmlPatchSample.Main();
-            //Console.WriteLine("\n\n*** AccessToken Sample ***\n");
-        }
+        //public static void Main(string[] args)
+        //{
+        //    //Console.WriteLine("\n\n*** N*DEF Sample ***\n");
+        //    //NdefSample.Main();
+        //    Console.WriteLine("\n\n*** Pipeline Sample ***\n");
+        //    PipelineSample.Main();
+        //    //Console.WriteLine("\n\n*** Format Sample ***\n");
+        //    //FormatSample.Main();
+        //    //Console.WriteLine("\n\n*** XmlPatch Sample ***\n");
+        //    //XmlPatchSample.Main();
+        //    //Console.WriteLine("\n\n*** AccessToken Sample ***\n");
+        //}
     }
 }

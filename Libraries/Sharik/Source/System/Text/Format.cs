@@ -158,7 +158,7 @@ namespace Sharik.Text
             var token = default(FormatToken);
             while (read(out token))
             {
-                if (token.Name == null) // if token is a term
+                if (Slice.IsNull(token.Name)) // if token is a term
                 {
                     if (Slice.Compare(textSlice, position, token.Text, 0, token.Text.Length) == 0)
                     {
@@ -187,12 +187,12 @@ namespace Sharik.Text
                     {
                         var stop = default(FormatToken);
                         read(out stop); // stop = default(FormatToken) if end of text is reached
-                        if (stop.Name != null)
+                        if (!Slice.IsNull(stop.Name))
                             throw new NotImplementedException();
                         token.Text = textSlice.SliceUntil(position, fullMatch, token.Options.MaxGrabMode, stop.Text);
                         if (token.Text.IsUndefined)
                             break;
-                        position += token.Text.Length + (stop.Text != null ? stop.Text.Length : 0);
+                        position += token.Text.Length + (!Slice.IsNull(stop.Text) ? stop.Text.Length : 0);
                         yield return token;
                         if (yieldTerms)
                             yield return stop;
@@ -297,14 +297,14 @@ namespace Sharik.Text
         {
             foreach (var token in ParseFormat(format))
             {
-                if (token.Name != null) // if token is a parameter (variable)
+                if (!Slice.IsNull(token.Name)) // if token is a parameter (variable)
                 {
                     var f = token.Options.Specifiers;
                     result.Append("{");
                     result.Append(args.Count.ToString());
                     if (token.Options.Width > 0)
                         result.AppendFormat(",{0}", token.Options.Width);
-                    if (f != null && f.Length > 0)
+                    if (!Slice.IsNull(f) && f.Length > 0)
                         { result.Append(":"); result.Append(f.Source, f.Position, f.Length); }
                     result.Append("}");
                     args.Add(lookup(token));
@@ -392,10 +392,10 @@ namespace Sharik.Text
 
         public static void SetMemberValue(object target, FormatToken token, MemberTypes members, bool ignoreUnknown)
         {
-            var type = target.GetType();
-            var name = token.Name.ToString();
-            var format = token.Options.Specifiers != null ? token.Options.Specifiers.ToString() : null;
-            var prop = (members & MemberTypes.Property) != 0 ? type.GetProperty(name) : null;
+            Type type = target.GetType();
+            string name = token.Name.ToString();
+            string format = !Slice.IsNull(token.Options.Specifiers) ? token.Options.Specifiers.ToString() : null;
+            PropertyInfo prop = (members & MemberTypes.Property) != 0 ? type.GetProperty(name) : null;
             if (prop == null)
             {
                 var field = (members & MemberTypes.Field) != 0 ? type.GetField(name) : null;
@@ -447,9 +447,9 @@ namespace Sharik.Text
 
         private static void GetAttribute(Slice option, ref FormatToken token)
         {
-            if (String.Compare(option.Source, option.Position, "quoted", 0, option.Length, true) == 0)
+            if (string.Compare(option.Source, option.Position, "quoted", 0, option.Length, true) == 0)
                 token.Options.Quoted = true;
-            else if (String.Compare(option.Source, option.Position, "maxgrab", 0, option.Length, true) == 0)
+            else if (string.Compare(option.Source, option.Position, "maxgrab", 0, option.Length, true) == 0)
                 token.Options.MaxGrabMode = true;
             else
                 throw new ArgumentException(string.Format(
@@ -460,21 +460,21 @@ namespace Sharik.Text
         {
             if (name.Length == 0)
                 return null;
-            else if (String.Compare(name.Source, name.Position, "string", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "string", 0, name.Length) == 0)
                 return typeof(string);
-            else if (String.Compare(name.Source, name.Position, "int", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "int", 0, name.Length) == 0)
                 return typeof(int);
-            else if (String.Compare(name.Source, name.Position, "long", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "long", 0, name.Length) == 0)
                 return typeof(long);
-            else if (String.Compare(name.Source, name.Position, "double", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "double", 0, name.Length) == 0)
                 return typeof(double);
-            else if (String.Compare(name.Source, name.Position, "char", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "char", 0, name.Length) == 0)
                 return typeof(char);
-            else if (String.Compare(name.Source, name.Position, "DateTime", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "DateTime", 0, name.Length) == 0)
                 return typeof(DateTime);
-            else if (String.Compare(name.Source, name.Position, "DateTimeOffset", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "DateTimeOffset", 0, name.Length) == 0)
                 return typeof(DateTimeOffset);
-            else if (String.Compare(name.Source, name.Position, "Guid", 0, name.Length) == 0)
+            else if (string.Compare(name.Source, name.Position, "Guid", 0, name.Length) == 0)
                 return typeof(Guid);
             else
                 throw new ArgumentException(string.Format(
