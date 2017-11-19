@@ -244,9 +244,5 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 WordBreakProperty.txt
-/WordExtraction/scripts/__pycache__
-/WordExtraction/scripts/WordBreakProperty.txt1
-/WordExtraction/scripts/out
-/WordExtraction/scripts/WordBreakPropertyTable.cs
-/WordExtraction/WordBreakTest.txt
-/Tools/out.txt
+__pycache__
+/Tools/TablesGenerator/out.txt
