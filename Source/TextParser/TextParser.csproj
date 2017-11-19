@@ -14,6 +14,11 @@
     <IntermediateOutputPath>..\..\Build\Release\obj\TextParser\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="__pycache__\**" />
+    <EmbeddedResource Remove="__pycache__\**" />
+    <None Remove="__pycache__\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\Tools\TablesGenerator\main.py" Link="main.py" />
     <None Include="..\..\Tools\TablesGenerator\output_formatter.py" Link="output_formatter.py" />
   </ItemGroup>
