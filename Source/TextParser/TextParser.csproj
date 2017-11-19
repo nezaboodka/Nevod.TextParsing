@@ -13,6 +13,10 @@
     <OutputPath>..\..\Build\Release\bin\TextParser\</OutputPath>
     <IntermediateOutputPath>..\..\Build\Release\obj\TextParser\</IntermediateOutputPath>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\Tools\TablesGenerator\main.py" Link="main.py" />
+    <None Include="..\..\Tools\TablesGenerator\output_formatter.py" Link="output_formatter.py" />
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
