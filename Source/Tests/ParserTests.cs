@@ -438,7 +438,7 @@ namespace TextParser.Tests
         private static Tuple<string, TokenKind>[] GetTokensFromParsedText(ParsedText parsedText)
         {
             return parsedText
-                .TextTokens
+                .PlainTextTokens
                 .Select(x => new Tuple<string, TokenKind>(parsedText.GetTokenText(x), x.TokenKind))
                 .ToArray();
         }

@@ -64,7 +64,7 @@ namespace TextParser
 
         private void SaveToken()
         {
-            var token = new Token
+            var token = new TokenReference
             {
                 TokenKind = fTokenClassifier.TokenKind,
                 XhtmlIndex = 0,
@@ -102,7 +102,7 @@ namespace TextParser
             {
                 if (CurrentPosition < fText.Length - 1)
                 {
-                    TokenKind lastTokenKind = fParsedText.TextTokens[CurrentTokenIndex].TokenKind;
+                    TokenKind lastTokenKind = fParsedText.PlainTextTokens[CurrentTokenIndex].TokenKind;
                     fPlainTextParapraphsTagger.ProcessToken(lastTokenKind);
                 }
                 else

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using TextParser;
 
-namespace TextParserDemoApplication
+namespace TextParser.Demo
 {
     public class ParserDemo
     {

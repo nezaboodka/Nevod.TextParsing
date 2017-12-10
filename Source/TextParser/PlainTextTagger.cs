@@ -5,7 +5,7 @@
         private readonly ParsedText fParsedText;
         private TokenKind fPreviousTokenKind = TokenKind.Empty;
         private int fTagStart = 0;
-        private int TokenPosition => fParsedText.TextTokens.Count - 1;
+        private int TokenPosition => fParsedText.PlainTextTokens.Count - 1;
         private const string TagName = "Parapraph";
 
         // Public

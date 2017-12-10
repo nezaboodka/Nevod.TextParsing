@@ -8,16 +8,16 @@ namespace TextParser.Tests
     [TestClass]
     public class ParsedTextTests
     {
-        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "my w", "</b>", "orld!", "</p>" };        
-        private static readonly ISet<int> PlainTextInXhtml = new HashSet<int> { 1, 3, 5 };        
+        private static readonly string[] Xhtml = { "<p>", "Hello, ", "<b>", "my w", "</b>", "orld!", "</p>" };
+        private static readonly ISet<int> PlainTextInXhtml = new HashSet<int> { 1, 3, 5 };
 
         // Public
 
         [TestMethod]
-        public void PlainTextForTokenInSinglePlainTextElementTest()
+        public void PlainTextForTokenReferenceInSinglePlainTextElementTest()
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
-            Token testToken = new Token
+            TokenReference testTokenReference = new TokenReference
             {
                 XhtmlIndex = 1,
                 StringPosition = 0,
@@ -25,22 +25,22 @@ namespace TextParser.Tests
                 TokenKind = TokenKind.Alphabetic
             };
             string expected = "Hello";
-            string actual = parsedText.GetTokenText(testToken);
+            string actual = parsedText.GetTokenText(testTokenReference);
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void PlainTextForCompoundTokenTest()
+        public void PlainTextForCompoundTokenReferenceTest()
         {
             ParsedText parsedText = CreateParsedText(Xhtml, PlainTextInXhtml);
-            Token testToken = new Token
+            TokenReference testTokenReference = new TokenReference
             {
                 XhtmlIndex = 3,
                 StringPosition = 3,
                 StringLength = 5
             };
             string expected = "world";
-            string actual = parsedText.GetTokenText(testToken);
+            string actual = parsedText.GetTokenText(testTokenReference);
             Assert.AreEqual(expected, actual);
         }
 
@@ -74,18 +74,18 @@ namespace TextParser.Tests
                     TokenLength = 3
                 }
             };
-            Token[] tokens =
+            TokenReference[] TokenReferences =
             {
-                new Token {XhtmlIndex = 2, StringPosition = 0, StringLength = 5, TokenKind = TokenKind.Alphabetic},
-                new Token {XhtmlIndex = 2, StringPosition = 5, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
-                new Token {XhtmlIndex = 2, StringPosition = 6, StringLength = 9, TokenKind = TokenKind.Alphabetic},
-                new Token {XhtmlIndex = 5, StringPosition = 0, StringLength = 6, TokenKind = TokenKind.Alphabetic},
-                new Token {XhtmlIndex = 5, StringPosition = 6, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
-                new Token {XhtmlIndex = 5, StringPosition = 7, StringLength = 9, TokenKind = TokenKind.Alphabetic}
+                new TokenReference {XhtmlIndex = 2, StringPosition = 0, StringLength = 5, TokenKind = TokenKind.Alphabetic},
+                new TokenReference {XhtmlIndex = 2, StringPosition = 5, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
+                new TokenReference {XhtmlIndex = 2, StringPosition = 6, StringLength = 9, TokenKind = TokenKind.Alphabetic},
+                new TokenReference {XhtmlIndex = 5, StringPosition = 0, StringLength = 6, TokenKind = TokenKind.Alphabetic},
+                new TokenReference {XhtmlIndex = 5, StringPosition = 6, StringLength = 1, TokenKind = TokenKind.WhiteSpace},
+                new TokenReference {XhtmlIndex = 5, StringPosition = 7, StringLength = 9, TokenKind = TokenKind.Alphabetic}
             };
-            foreach (Token token in tokens)
+            foreach (TokenReference TokenReference in TokenReferences)
             {
-                parsedText.AddToken(token);
+                parsedText.AddToken(TokenReference);
             }
             string[] expected = { "First paragraph", "Second paragraph" };
             string[] actual = testTags.Select(tag => parsedText.GetTagText(tag)).ToArray();

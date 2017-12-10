@@ -4,7 +4,7 @@ namespace TextParser
 {
     public abstract class Parser : IDisposable
     {
-        protected static readonly Token StartToken = new Token
+        protected static readonly TokenReference StartToken = new TokenReference
         {
             StringPosition = 0,
             StringLength = 0,
@@ -12,7 +12,7 @@ namespace TextParser
             XhtmlIndex = 0
         };
 
-        protected Token EndToken => new Token
+        protected TokenReference EndToken => new TokenReference
         {
             StringPosition = 0,
             StringLength = 0,
@@ -25,7 +25,7 @@ namespace TextParser
         internal readonly TokenClassifier fTokenClassifier = new TokenClassifier();
         internal readonly WordBreaker fWordBreaker = new WordBreaker();
 
-        protected int CurrentTokenIndex => fParsedText.TextTokens.Count - 1;
+        protected int CurrentTokenIndex => fParsedText.PlainTextTokens.Count - 1;
 
         // Public
 

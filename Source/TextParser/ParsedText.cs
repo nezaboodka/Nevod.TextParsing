@@ -5,7 +5,7 @@ namespace TextParser
 {
     public class ParsedText
     {
-        private readonly List<Token> fTextTokens;
+        private readonly List<TokenReference> fPlainTextTokens;
         private readonly List<FormattingTag> fFormattingTags;
         private readonly List<DocumentTag> fDocumentTags;
         private readonly List<string> fXhtmlElements;
@@ -13,14 +13,14 @@ namespace TextParser
 
         // Public
 
-        public List<Token> TextTokens => fTextTokens;
+        public List<TokenReference> PlainTextTokens => fPlainTextTokens;
         public IEnumerable<FormattingTag> FormattingTags => fFormattingTags;
         public IEnumerable<DocumentTag> DocumentTags => fDocumentTags;
         public List<string> XhtmlElements => fXhtmlElements;
 
         public ParsedText()
         {
-            fTextTokens = new List<Token>();
+            fPlainTextTokens = new List<TokenReference>();
             fFormattingTags = new List<FormattingTag>();
             fXhtmlElements = new List<string>();
             fPlainTextInXhtml = new List<int>();
@@ -37,7 +37,7 @@ namespace TextParser
             return plainTextBuilder.ToString();
         }
 
-        public string GetTokenText(Token token)
+        public string GetTokenText(TokenReference token)
         {
             string result;
             if (token.StringPosition + token.StringLength <= fXhtmlElements[token.XhtmlIndex].Length)
@@ -51,15 +51,15 @@ namespace TextParser
         {
             StringBuilder result = new StringBuilder();
             for (int tokenIndex = tag.TokenPosition, i = 0; i < tag.TokenLength; i++, tokenIndex++)
-                result.Append(GetTokenText(TextTokens[tokenIndex]));
+                result.Append(GetTokenText(PlainTextTokens[tokenIndex]));
             return result.ToString();
         }
 
         // Internal
 
-        internal void AddToken(Token token)
+        internal void AddToken(TokenReference token)
         {
-            fTextTokens.Add(token);
+            fPlainTextTokens.Add(token);
         }
 
         internal void AddTag(FormattingTag tag)
@@ -91,7 +91,7 @@ namespace TextParser
             fPlainTextInXhtml.Add(fXhtmlElements.Count - 1);
         }
 
-        private string GetCompoundTokenText(Token token)
+        private string GetCompoundTokenText(TokenReference token)
         {
             StringBuilder tokenTextBuilder = new StringBuilder();
             int currentSubstringLength = fXhtmlElements[token.XhtmlIndex].Length - token.StringPosition;
@@ -114,7 +114,7 @@ namespace TextParser
         }      
     }
 
-    public struct Token
+    public struct TokenReference
     {
         public int XhtmlIndex;
         public int StringPosition;

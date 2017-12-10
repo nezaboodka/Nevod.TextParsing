@@ -253,7 +253,7 @@ namespace TextParser
 
         private void SaveToken(int currentTokenLength)
         {
-            var token = new Token
+            var token = new TokenReference
             {
                 TokenKind = fTokenClassifier.TokenKind,
                 XhtmlIndex = fTokenStartXhtmlIndex,
